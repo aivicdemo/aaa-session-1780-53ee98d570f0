@@ -1,42 +1,50 @@
-export interface User {
-  id: string;
-  role: 'admin' | 'operator' | 'viewer';
-}
+export type Role = 'admin' | 'operator' | 'viewer';
 
 export interface Permission {
-  resource: string;
-  action: 'create' | 'read' | 'update' | 'delete' | 'bulk';
+  create: boolean;
+  read: boolean;
+  update: boolean;
+  delete: boolean;
+  bulk: boolean;
 }
 
-const ROLE_PERMISSIONS: Record<string, Permission[]> = {
-  admin: [
-    { resource: '*', action: 'create' },
-    { resource: '*', action: 'read' },
-    { resource: '*', action: 'update' },
-    { resource: '*', action: 'delete' },
-    { resource: '*', action: 'bulk' }
-  ],
-  operator: [
-    { resource: '*', action: 'create' },
-    { resource: '*', action: 'read' },
-    { resource: '*', action: 'update' },
-    { resource: '*', action: 'bulk' }
-  ],
-  viewer: [
-    { resource: '*', action: 'read' }
-  ]
+export const ROLE_PERMISSIONS: Record<Role, Permission> = {
+  admin: {
+    create: true,
+    read: true,
+    update: true,
+    delete: true,
+    bulk: true
+  },
+  operator: {
+    create: true,
+    read: true,
+    update: true,
+    delete: false,
+    bulk: true
+  },
+  viewer: {
+    create: false,
+    read: true,
+    update: false,
+    delete: false,
+    bulk: false
+  }
 };
 
-export function hasPermission(user: User, resource: string, action: string): boolean {
-  const permissions = ROLE_PERMISSIONS[user.role] || [];
-  return permissions.some(p => 
-    (p.resource === '*' || p.resource === resource) && 
-    (p.action === action)
-  );
+export function hasPermission(role: Role, action: keyof Permission): boolean {
+  return ROLE_PERMISSIONS[role][action];
 }
 
-export function checkPermission(user: User, resource: string, action: string): void {
-  if (!hasPermission(user, resource, action)) {
-    throw new Error(`Access denied: ${user.role} cannot ${action} ${resource}`);
+export function extractRoleFromEvent(event: any): Role {
+  const authHeader = event.headers?.Authorization || event.headers?.authorization;
+  if (!authHeader) return 'viewer';
+  
+  try {
+    const token = authHeader.replace('Bearer ', '');
+    const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+    return payload.role || 'viewer';
+  } catch {
+    return 'viewer';
   }
 }

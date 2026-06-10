@@ -1,7 +1,7 @@
 {
   "systemId": "itg-1",
   "systemName": "生産管理システム",
-  "cssTheme": ":root {\n  --primary: #8B4513;\n  --primary-hover: #A0522D;\n  --bg-main: #F5F5DC;\n  --bg-card: #FAEBD7;\n  --bg-sidebar: #F0E68C;\n  --border: #D2B48C;\n  --text: #2F1B14;\n  --text-muted: #5D4037;\n  --top-bar-bg: #DEB887;\n  --top-bar-border: #CD853F;\n}",
+  "cssTheme": null,
   "screens": [
     {
       "id": "scr-1780995137049",

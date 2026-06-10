@@ -11,21 +11,21 @@ window.AIVIC_SYSTEM_NAME = "生産管理システム";
 window.AIVIC_TABLES = [{"tableName":"製品マスタ","purpose":"生産管理システムで製造する製品の基本情報を管理するマスタテーブル","columns":[{"name":"製品ID","type":"uuid","required":true,"description":"製品を一意に識別するID（主キー）"},{"name":"製品コード","type":"varchar(100)","required":true,"description":"製品の業務コード（ユニーク）"},{"name":"製品名","type":"varchar(100)","required":true,"description":"製品の名称"},{"name":"製品分類","type":"varchar(100)","required":true,"description":"製品の分類（完成品/半製品/部品等）"},{"name":"規格","type":"varchar(100)","required":false,"description":"製品の規格・仕様"},{"name":"単位","type":"varchar(100)","required":true,"description":"製品の管理単位（個/kg/m等）"},{"name":"標準原価","type":"integer","required":false,"description":"製品の標準原価（円）"},{"name":"標準リードタイム","type":"integer","required":false,"description":"製品の標準製造リードタイム（日）"},{"name":"有効フラグ","type":"boolean","required":true,"description":"製品の有効/無効状態"},{"name":"備考","type":"text","required":false,"description":"製品に関する補足情報"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者のユーザーID"},{"name":"更新者ID","type":"uuid","required":true,"description":"レコード最終更新者のユーザーID"}]},{"tableName":"製品仕様","purpose":"製品の技術仕様や品質基準を管理し、生産工程での仕様確認や品質管理に使用する","columns":[{"name":"仕様ID","type":"uuid","required":true,"description":"製品仕様の一意識別子（主キー）"},{"name":"製品ID","type":"uuid","required":true,"description":"製品マスタへの外部キー"},{"name":"仕様バージョン","type":"varchar(100)","required":true,"description":"仕様のバージョン番号"},{"name":"仕様名","type":"varchar(100)","required":true,"description":"仕様の名称"},{"name":"仕様詳細","type":"text","required":false,"description":"詳細な仕様内容"},{"name":"品質基準","type":"text","required":false,"description":"品質管理基準"},{"name":"材料仕様","type":"text","required":false,"description":"使用材料の仕様"},{"name":"寸法規格","type":"varchar(100)","required":false,"description":"製品の寸法規格"},{"name":"重量規格","type":"varchar(100)","required":false,"description":"製品の重量規格"},{"name":"有効開始日","type":"timestamp","required":true,"description":"仕様の有効開始日時"},{"name":"有効終了日","type":"timestamp","required":false,"description":"仕様の有効終了日時"},{"name":"承認状態","type":"varchar(100)","required":true,"description":"仕様の承認状態（下書き/承認待ち/承認済み/廃止等）"},{"name":"承認者ID","type":"uuid","required":false,"description":"仕様を承認したユーザーID"},{"name":"承認日時","type":"timestamp","required":false,"description":"仕様が承認された日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"仕様を作成したユーザーID"},{"name":"作成日時","type":"timestamp","required":true,"description":"仕様作成日時"},{"name":"更新者ID","type":"uuid","required":false,"description":"仕様を最後に更新したユーザーID"},{"name":"更新日時","type":"timestamp","required":false,"description":"仕様最終更新日時"}]},{"tableName":"工程マスタ","purpose":"製造工程の定義と管理を行うマスタテーブル","columns":[{"name":"工程ID","type":"uuid","required":true,"description":"工程の一意識別子（主キー）"},{"name":"工程コード","type":"varchar(100)","required":true,"description":"工程の業務コード（検索・表示用）"},{"name":"工程名","type":"varchar(100)","required":true,"description":"工程の名称"},{"name":"工程区分","type":"varchar(100)","required":true,"description":"工程の分類（加工/組立/検査/梱包等）"},{"name":"標準作業時間","type":"integer","required":false,"description":"標準的な作業時間（分）"},{"name":"段取時間","type":"integer","required":false,"description":"工程開始前の準備時間（分）"},{"name":"作業説明","type":"text","required":false,"description":"工程の作業内容詳細"},{"name":"品質基準","type":"text","required":false,"description":"品質管理の基準・チェック項目"},{"name":"使用可能フラグ","type":"boolean","required":true,"description":"工程が使用可能かどうか"},{"name":"表示順序","type":"integer","required":false,"description":"画面表示時の並び順"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者（ユーザーテーブル参照）"},{"name":"更新者ID","type":"uuid","required":true,"description":"レコード最終更新者（ユーザーテーブル参照）"}]},{"tableName":"製造ライン","purpose":"製造現場の生産ラインを管理し、工程の実行、資材の投入、製品の製造進捗を追跡する","columns":[{"name":"ライン_ID","type":"uuid","required":true,"description":"製造ラインの一意識別子"},{"name":"ライン名","type":"varchar(100)","required":true,"description":"製造ラインの名称"},{"name":"製品_ID","type":"uuid","required":true,"description":"製造中の製品への参照"},{"name":"工程_ID","type":"uuid","required":true,"description":"現在実行中の工程への参照"},{"name":"ライン状態","type":"varchar(100)","required":true,"description":"稼働中/停止中/メンテナンス中/故障中"},{"name":"計画生産数量","type":"integer","required":true,"description":"予定している生産数量"},{"name":"実績生産数量","type":"integer","required":true,"description":"実際に生産完了した数量"},{"name":"不良品数量","type":"integer","required":true,"description":"検査で不良と判定された数量"},{"name":"生産開始日時","type":"timestamp","required":false,"description":"実際の生産開始タイムスタンプ"},{"name":"生産完了予定日時","type":"timestamp","required":false,"description":"生産完了の予定日時"},{"name":"生産完了日時","type":"timestamp","required":false,"description":"実際の生産完了タイムスタンプ"},{"name":"担当者_ID","type":"uuid","required":false,"description":"ライン責任者のユーザーID"},{"name":"備考","type":"text","required":false,"description":"生産に関する特記事項や注意点"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者_ID","type":"uuid","required":true,"description":"レコード作成者のユーザーID"}]},{"tableName":"生産指示書","purpose":"製造現場への生産指示を管理し、製品の製造計画と実績を追跡する","columns":[{"name":"生産指示書ID","type":"uuid","required":true,"description":"生産指示書の一意識別子"},{"name":"生産指示書番号","type":"varchar(100)","required":true,"description":"業務で使用する生産指示書の管理番号"},{"name":"製品ID","type":"uuid","required":true,"description":"製造対象製品への参照"},{"name":"製造ラインID","type":"uuid","required":true,"description":"製造を行うラインへの参照"},{"name":"生産予定数量","type":"integer","required":true,"description":"製造予定の数量"},{"name":"生産実績数量","type":"integer","required":false,"description":"実際に製造された数量"},{"name":"良品数量","type":"integer","required":false,"description":"品質検査を通過した良品の数量"},{"name":"不良品数量","type":"integer","required":false,"description":"品質検査で不良と判定された数量"},{"name":"生産開始予定日時","type":"timestamp","required":true,"description":"生産開始の予定日時"},{"name":"生産完了予定日時","type":"timestamp","required":true,"description":"生産完了の予定日時"},{"name":"生産開始実績日時","type":"timestamp","required":false,"description":"実際の生産開始日時"},{"name":"生産完了実績日時","type":"timestamp","required":false,"description":"実際の生産完了日時"},{"name":"優先度","type":"integer","required":true,"description":"生産の優先順位（数値が小さいほど高優先）"},{"name":"ステータス","type":"varchar(100)","required":true,"description":"生産指示の状態（未着手/進行中/完了/中止等）"},{"name":"備考","type":"text","required":false,"description":"生産に関する特記事項や注意点"},{"name":"作成者ID","type":"uuid","required":true,"description":"生産指示書を作成したユーザー"},{"name":"承認者ID","type":"uuid","required":false,"description":"生産指示書を承認したユーザー"},{"name":"作成日時","type":"timestamp","required":true,"description":"生産指示書の作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"生産指示書の最終更新日時"}]},{"tableName":"生産指示書明細","purpose":"生産指示書の各製品別の詳細な生産指示内容を管理する","columns":[{"name":"生産指示書明細ID","type":"uuid","required":true,"description":"生産指示書明細の一意識別子"},{"name":"生産指示書ID","type":"uuid","required":true,"description":"親となる生産指示書への参照"},{"name":"明細番号","type":"integer","required":true,"description":"生産指示書内での明細の順序番号"},{"name":"製品ID","type":"uuid","required":true,"description":"生産対象製品への参照"},{"name":"製品仕様ID","type":"uuid","required":false,"description":"適用する製品仕様への参照"},{"name":"工程ID","type":"uuid","required":true,"description":"実行する工程への参照"},{"name":"製造ラインID","type":"uuid","required":true,"description":"使用する製造ラインへの参照"},{"name":"生産予定数量","type":"integer","required":true,"description":"生産予定の数量"},{"name":"単位","type":"varchar(100)","required":true,"description":"数量の単位"},{"name":"開始予定日時","type":"timestamp","required":true,"description":"生産開始予定日時"},{"name":"完了予定日時","type":"timestamp","required":true,"description":"生産完了予定日時"},{"name":"優先度","type":"integer","required":true,"description":"生産の優先度（数値が小さいほど高優先）"},{"name":"ステータス","type":"varchar(100)","required":true,"description":"明細の状態（未着手/進行中/完了/中止等）"},{"name":"実績数量","type":"integer","required":false,"description":"実際に生産された数量"},{"name":"実際開始日時","type":"timestamp","required":false,"description":"実際の生産開始日時"},{"name":"実際完了日時","type":"timestamp","required":false,"description":"実際の生産完了日時"},{"name":"備考","type":"text","required":false,"description":"明細に関する特記事項や注意点"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者への参照"},{"name":"更新者ID","type":"uuid","required":true,"description":"レコード最終更新者への参照"}]},{"tableName":"作業実績","purpose":"製造ラインでの実際の作業結果を記録し、生産指示に対する進捗管理と品質管理を行う","columns":[{"name":"作業実績ID","type":"uuid","required":true,"description":"作業実績の一意識別子"},{"name":"生産指示書ID","type":"uuid","required":true,"description":"関連する生産指示書への参照"},{"name":"生産指示書明細ID","type":"uuid","required":true,"description":"関連する生産指示書明細への参照"},{"name":"製造ラインID","type":"uuid","required":true,"description":"作業を実施した製造ラインへの参照"},{"name":"工程ID","type":"uuid","required":true,"description":"実施した工程への参照"},{"name":"作業開始日時","type":"timestamp","required":true,"description":"作業の開始日時"},{"name":"作業終了日時","type":"timestamp","required":false,"description":"作業の終了日時"},{"name":"実績数量","type":"integer","required":true,"description":"実際に完成した製品数量"},{"name":"良品数量","type":"integer","required":true,"description":"品質基準を満たした製品数量"},{"name":"不良品数量","type":"integer","required":true,"description":"品質基準を満たさなかった製品数量"},{"name":"作業者ID","type":"uuid","required":true,"description":"作業を実施した作業者（ユーザー）への参照"},{"name":"作業状況","type":"varchar(100)","required":true,"description":"作業の状況（開始、進行中、完了、中断等）"},{"name":"備考","type":"text","required":false,"description":"作業に関する特記事項や問題点"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者への参照"}]},{"tableName":"品質検査結果","purpose":"製品の品質検査結果を記録し、品質基準への適合性を管理する","columns":[{"name":"検査結果ID","type":"uuid","required":true,"description":"品質検査結果の一意識別子"},{"name":"生産指示書ID","type":"uuid","required":true,"description":"検査対象の生産指示書への参照"},{"name":"製品ID","type":"uuid","required":true,"description":"検査対象製品への参照"},{"name":"工程ID","type":"uuid","required":true,"description":"検査を実施した工程への参照"},{"name":"検査項目名","type":"varchar(100)","required":true,"description":"検査した項目の名称"},{"name":"検査基準値","type":"varchar(100)","required":false,"description":"品質基準として設定された値"},{"name":"実測値","type":"varchar(100)","required":false,"description":"実際に測定された値"},{"name":"判定結果","type":"varchar(100)","required":true,"description":"合格/不合格/要再検査等の判定"},{"name":"検査数量","type":"integer","required":true,"description":"検査を実施した数量"},{"name":"不良数量","type":"integer","required":false,"description":"不良と判定された数量"},{"name":"検査日時","type":"timestamp","required":true,"description":"検査を実施した日時"},{"name":"検査者ID","type":"uuid","required":true,"description":"検査を実施したユーザーへの参照"},{"name":"備考","type":"text","required":false,"description":"検査に関する補足情報や特記事項"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者への参照"}]},{"tableName":"工程引き継ぎ情報","purpose":"製造工程間での作業状況、品質情報、注意事項等の引き継ぎ情報を管理する","columns":[{"name":"引き継ぎID","type":"uuid","required":true,"description":"引き継ぎ情報の一意識別子"},{"name":"生産指示書ID","type":"uuid","required":true,"description":"対象の生産指示書への参照"},{"name":"引き継ぎ元工程ID","type":"uuid","required":true,"description":"引き継ぎ元工程への参照"},{"name":"引き継ぎ先工程ID","type":"uuid","required":true,"description":"引き継ぎ先工程への参照"},{"name":"製造ラインID","type":"uuid","required":true,"description":"製造ラインへの参照"},{"name":"ロット番号","type":"varchar(100)","required":true,"description":"引き継ぎ対象のロット番号"},{"name":"引き継ぎ数量","type":"integer","required":true,"description":"引き継ぎする製品数量"},{"name":"作業状況","type":"varchar(100)","required":true,"description":"前工程での作業完了状況"},{"name":"品質状況","type":"varchar(100)","required":true,"description":"品質検査結果や品質状況"},{"name":"注意事項","type":"text","required":false,"description":"次工程への注意事項や特記事項"},{"name":"引き継ぎ日時","type":"timestamp","required":true,"description":"工程間引き継ぎを行った日時"},{"name":"引き継ぎ者ID","type":"uuid","required":true,"description":"引き継ぎを行った作業者への参照"},{"name":"受け取り者ID","type":"uuid","required":false,"description":"引き継ぎを受け取った作業者への参照"},{"name":"受け取り日時","type":"timestamp","required":false,"description":"次工程で受け取りを確認した日時"},{"name":"引き継ぎ状態","type":"varchar(100)","required":true,"description":"引き継ぎ状態（引き継ぎ済み、受け取り済み等）"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者への参照"}]},{"tableName":"標準手順書","purpose":"製品の製造工程における標準的な作業手順を定義・管理するマスタテーブル","columns":[{"name":"標準手順書ID","type":"uuid","required":true,"description":"標準手順書の一意識別子（主キー）"},{"name":"手順書コード","type":"varchar(100)","required":true,"description":"標準手順書の業務コード（検索・参照用）"},{"name":"手順書名","type":"varchar(100)","required":true,"description":"標準手順書の名称"},{"name":"製品ID","type":"uuid","required":true,"description":"対象製品への外部キー"},{"name":"工程ID","type":"uuid","required":true,"description":"対象工程への外部キー"},{"name":"バージョン","type":"varchar(100)","required":true,"description":"手順書のバージョン番号"},{"name":"手順内容","type":"text","required":true,"description":"作業手順の詳細内容"},{"name":"標準作業時間","type":"integer","required":false,"description":"標準的な作業時間（分）"},{"name":"必要スキルレベル","type":"integer","required":false,"description":"作業に必要なスキルレベル"},{"name":"安全注意事項","type":"text","required":false,"description":"作業時の安全に関する注意事項"},{"name":"品質管理ポイント","type":"text","required":false,"description":"品質確保のための管理ポイント"},{"name":"有効フラグ","type":"boolean","required":true,"description":"手順書の有効/無効状態"},{"name":"承認者ID","type":"uuid","required":false,"description":"手順書を承認したユーザーID"},{"name":"承認日時","type":"timestamp","required":false,"description":"手順書が承認された日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"手順書を作成したユーザーID"},{"name":"作成日時","type":"timestamp","required":true,"description":"手順書の作成日時"},{"name":"更新者ID","type":"uuid","required":false,"description":"手順書を最後に更新したユーザーID"},{"name":"更新日時","type":"timestamp","required":false,"description":"手順書の最終更新日時"}]},{"tableName":"品質基準","purpose":"製品や工程における品質管理の基準値や検査項目を定義し、品質検査結果との照合に使用する","columns":[{"name":"品質基準ID","type":"uuid","required":true,"description":"品質基準の一意識別子（主キー）"},{"name":"基準名","type":"varchar(100)","required":true,"description":"品質基準の名称"},{"name":"製品ID","type":"uuid","required":false,"description":"対象製品の識別子（製品マスタへの外部キー）"},{"name":"工程ID","type":"uuid","required":false,"description":"対象工程の識別子（工程マスタへの外部キー）"},{"name":"検査項目名","type":"varchar(100)","required":true,"description":"検査する項目の名称"},{"name":"基準値","type":"varchar(100)","required":false,"description":"品質基準の目標値"},{"name":"上限値","type":"varchar(100)","required":false,"description":"許容される上限値"},{"name":"下限値","type":"varchar(100)","required":false,"description":"許容される下限値"},{"name":"単位","type":"varchar(100)","required":false,"description":"測定値の単位"},{"name":"検査方法","type":"text","required":false,"description":"検査の実施方法や手順"},{"name":"必須検査フラグ","type":"boolean","required":true,"description":"必須検査項目かどうかの判定フラグ"},{"name":"有効開始日","type":"timestamp","required":true,"description":"この基準が有効になる開始日時"},{"name":"有効終了日","type":"timestamp","required":false,"description":"この基準が無効になる終了日時"},{"name":"備考","type":"text","required":false,"description":"品質基準に関する補足情報"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"uuid","required":true,"description":"レコード作成者（ユーザーへの外部キー）"},{"name":"更新者","type":"uuid","required":true,"description":"レコード最終更新者（ユーザーへの外部キー）"}]},{"tableName":"作業履歴","purpose":"作業者が実施した各工程での作業内容、時間、結果を記録し、生産実績の詳細な履歴を管理する","columns":[{"name":"作業履歴ID","type":"uuid","required":true,"description":"作業履歴の一意識別子"},{"name":"生産指示書ID","type":"uuid","required":true,"description":"関連する生産指示書への参照"},{"name":"生産指示書明細ID","type":"uuid","required":true,"description":"関連する生産指示書明細への参照"},{"name":"工程ID","type":"uuid","required":true,"description":"実施した工程への参照"},{"name":"製造ラインID","type":"uuid","required":true,"description":"作業を実施した製造ラインへの参照"},{"name":"作業者ID","type":"uuid","required":true,"description":"作業を実施したユーザーへの参照"},{"name":"作業開始日時","type":"timestamp","required":true,"description":"作業を開始した日時"},{"name":"作業終了日時","type":"timestamp","required":false,"description":"作業を終了した日時"},{"name":"作業ステータス","type":"varchar(100)","required":true,"description":"作業の状態（開始、完了、中断、エラー等）"},{"name":"処理数量","type":"integer","required":false,"description":"この作業で処理した数量"},{"name":"良品数量","type":"integer","required":false,"description":"良品として判定された数量"},{"name":"不良品数量","type":"integer","required":false,"description":"不良品として判定された数量"},{"name":"作業内容","type":"text","required":false,"description":"実施した作業の詳細内容"},{"name":"備考","type":"text","required":false,"description":"作業に関する特記事項や問題点"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者"}]},{"tableName":"進捗管理","purpose":"生産指示書の各工程における作業進捗状況を管理し、計画と実績の差異を追跡する","columns":[{"name":"進捗管理ID","type":"uuid","required":true,"description":"進捗管理レコードの一意識別子"},{"name":"生産指示書ID","type":"uuid","required":true,"description":"対象となる生産指示書への参照"},{"name":"生産指示書明細ID","type":"uuid","required":true,"description":"対象となる生産指示書明細への参照"},{"name":"工程ID","type":"uuid","required":true,"description":"進捗を管理する工程への参照"},{"name":"製造ラインID","type":"uuid","required":true,"description":"作業を実施する製造ラインへの参照"},{"name":"計画開始日時","type":"timestamp","required":true,"description":"工程の計画開始日時"},{"name":"計画終了日時","type":"timestamp","required":true,"description":"工程の計画終了日時"},{"name":"実績開始日時","type":"timestamp","required":false,"description":"工程の実際の開始日時"},{"name":"実績終了日時","type":"timestamp","required":false,"description":"工程の実際の終了日時"},{"name":"計画数量","type":"integer","required":true,"description":"計画生産数量"},{"name":"完了数量","type":"integer","required":true,"description":"完了した数量"},{"name":"良品数量","type":"integer","required":true,"description":"品質検査を通過した良品数量"},{"name":"不良品数量","type":"integer","required":true,"description":"品質検査で不良と判定された数量"},{"name":"進捗率","type":"integer","required":true,"description":"工程の進捗率（0-100）"},{"name":"工程ステータス","type":"varchar(100)","required":true,"description":"工程の現在状況（未着手/進行中/完了/中断/遅延）"},{"name":"遅延フラグ","type":"boolean","required":true,"description":"計画に対して遅延が発生しているかのフラグ"},{"name":"遅延理由","type":"text","required":false,"description":"遅延が発生している場合の理由"},{"name":"備考","type":"text","required":false,"description":"進捗に関する特記事項や注意点"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者のユーザーID"},{"name":"更新者ID","type":"uuid","required":true,"description":"レコード最終更新者のユーザーID"}]},{"tableName":"アラート通知","purpose":"生産管理システムにおける各種アラート・警告・異常の通知情報を管理し、関係者への迅速な情報伝達を実現する","columns":[{"name":"アラート通知ID","type":"uuid","required":true,"description":"アラート通知の一意識別子"},{"name":"アラート種別","type":"varchar(100)","required":true,"description":"品質異常、設備故障、進捗遅延、在庫不足等のアラート分類"},{"name":"重要度","type":"varchar(100)","required":true,"description":"緊急、高、中、低等の優先度レベル"},{"name":"タイトル","type":"varchar(100)","required":true,"description":"アラートの概要を示すタイトル"},{"name":"メッセージ内容","type":"text","required":true,"description":"詳細なアラート内容・状況説明"},{"name":"発生元テーブル","type":"varchar(100)","required":false,"description":"アラートの発生源となったテーブル名"},{"name":"発生元ID","type":"varchar(100)","required":false,"description":"発生源レコードの識別子"},{"name":"製造ラインID","type":"uuid","required":false,"description":"関連する製造ラインの識別子"},{"name":"生産指示書ID","type":"uuid","required":false,"description":"関連する生産指示書の識別子"},{"name":"通知対象ユーザーID","type":"uuid","required":true,"description":"通知を受け取るユーザーの識別子"},{"name":"通知ステータス","type":"varchar(100)","required":true,"description":"未読、既読、対応中、完了等の処理状況"},{"name":"既読フラグ","type":"boolean","required":true,"description":"通知の既読・未読状態"},{"name":"既読日時","type":"timestamp","required":false,"description":"通知が既読になった日時"},{"name":"対応完了フラグ","type":"boolean","required":true,"description":"アラートへの対応完了状態"},{"name":"対応完了日時","type":"timestamp","required":false,"description":"アラートへの対応が完了した日時"},{"name":"対応者ID","type":"uuid","required":false,"description":"アラートに対応したユーザーの識別子"},{"name":"対応コメント","type":"text","required":false,"description":"対応内容・結果に関するコメント"},{"name":"有効期限","type":"timestamp","required":false,"description":"アラート通知の有効期限"},{"name":"作成日時","type":"timestamp","required":true,"description":"アラート通知の作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"アラート通知を作成したユーザーまたはシステム"}]},{"tableName":"異常値検出ログ","purpose":"生産工程で発生した異常値の検出記録を管理し、品質管理と改善活動に活用する","columns":[{"name":"異常値検出ログID","type":"uuid","required":true,"description":"異常値検出ログの一意識別子"},{"name":"製造ラインID","type":"uuid","required":true,"description":"異常値が検出された製造ライン"},{"name":"工程ID","type":"uuid","required":true,"description":"異常値が検出された工程"},{"name":"製品ID","type":"uuid","required":true,"description":"異常値が検出された製品"},{"name":"生産指示書ID","type":"uuid","required":true,"description":"関連する生産指示書"},{"name":"検出項目名","type":"varchar(100)","required":true,"description":"異常値が検出された測定項目名"},{"name":"検出値","type":"varchar(100)","required":true,"description":"実際に検出された異常値"},{"name":"基準値下限","type":"varchar(100)","required":false,"description":"品質基準の下限値"},{"name":"基準値上限","type":"varchar(100)","required":false,"description":"品質基準の上限値"},{"name":"異常レベル","type":"varchar(100)","required":true,"description":"異常の重要度レベル（軽微/注意/重大等）"},{"name":"検出方法","type":"varchar(100)","required":true,"description":"異常値の検出方法（自動検査/手動検査等）"},{"name":"対応状況","type":"varchar(100)","required":true,"description":"異常値への対応状況（未対応/対応中/完了等）"},{"name":"対応内容","type":"text","required":false,"description":"実施した対応措置の詳細"},{"name":"原因分析結果","type":"text","required":false,"description":"異常値発生原因の分析結果"},{"name":"改善措置","type":"text","required":false,"description":"再発防止のための改善措置"},{"name":"担当者ID","type":"uuid","required":true,"description":"異常値対応の担当者"},{"name":"検出日時","type":"timestamp","required":true,"description":"異常値が検出された日時"},{"name":"対応完了日時","type":"timestamp","required":false,"description":"異常値への対応が完了した日時"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者"}]}];
 window.AIVIC_PRESET_SEED = {};
 window.AIVIC_PAGE_SCREEN_ID = "scr-1780995344648";
-window.AIVIC_PAGE_INIT_JS = "function(container, apiUrl, tables) {\n  // サンプル予測データ\n  const sampleForecastData = [\n    { id: '1', productName: 'エンジン部品A', category: '部品', lastMonth: 1250, lastYear: 1180, forecast: 1320, accuracy: 89.2, trend: '+5.6%' },\n    { id: '2', productName: '制御基板B', category: '半製品', lastMonth: 850, lastYear: 920, forecast: 780, accuracy: 92.1, trend: '-8.1%' },\n    { id: '3', productName: '完成品C', category: '完成品', lastMonth: 450, lastYear: 380, forecast: 520, accuracy: 85.7, trend: '+15.6%' },\n    { id: '4', productName: 'センサー部品D', category: '部品', lastMonth: 2100, lastYear: 1950, forecast: 2250, accuracy: 91.3, trend: '+7.1%' },\n    { id: '5', productName: 'モーター組立E', category: '半製品', lastMonth: 680, lastYear: 720, forecast: 650, accuracy: 88.9, trend: '-4.4%' }\n  ];\n\n  let currentData = [...sampleForecastData];\n\n  // 再描画関数\n  function renderRows(rows) {\n    const tbody = container.querySelector('#forecast-tbody');\n    tbody.innerHTML = rows.map(r => `\n      <tr data-id=\"${r.id}\">\n        <td>${r.productName || ''}</td>\n        <td>${r.category || ''}</td>\n        <td style=\"text-align: right;\">${r.lastMonth?.toLocaleString() || ''}</td>\n        <td style=\"text-align: right;\">${r.lastYear?.toLocaleString() || ''}</td>\n        <td style=\"text-align: right; font-weight: 600; color: var(--primary);\">${r.forecast?.toLocaleString() || ''}</td>\n        <td style=\"text-align: right;\">${r.accuracy || ''}%</td>\n        <td style=\"text-align: right; color: ${r.trend?.startsWith('+') ? '#22c55e' : '#ef4444'};\">${r.trend || ''}</td>\n        <td>\n          <button class=\"action-btn secondary detail-btn\" data-id=\"${r.id}\">詳細</button>\n        </td>\n      </tr>\n    `).join('');\n  }\n\n  // 初期データ描画\n  renderRows(currentData);\n\n  // グラフ描画関数\n  function drawForecastChart() {\n    const canvas = container.querySelector('#forecast-chart');\n    const ctx = canvas.getContext('2d');\n    \n    // キャンバスサイズ調整\n    const rect = canvas.getBoundingClientRect();\n    canvas.width = rect.width * 2;\n    canvas.height = rect.height * 2;\n    ctx.scale(2, 2);\n    \n    const width = rect.width;\n    const height = rect.height;\n    \n    ctx.clearRect(0, 0, width, height);\n    \n    // 実績データ（過去6ヶ月）\n    const actualData = [1200, 1150, 1300, 1250, 1180, 1250];\n    const forecastData = [1320, 1380, 1420, 1350, 1400, 1450];\n    const months = ['7月', '8月', '9月', '10月', '11月', '12月'];\n    \n    const padding = 40;\n    const chartWidth = width - padding * 2;\n    const chartHeight = height - padding * 2;\n    \n    // 軸描画\n    ctx.strokeStyle = '#9fb0d1';\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    ctx.moveTo(padding, padding);\n    ctx.lineTo(padding, height - padding);\n    ctx.lineTo(width - padding, height - padding);\n    ctx.stroke();\n    \n    // 実績線描画\n    ctx.strokeStyle = '#3b82f6';\n    ctx.lineWidth = 2;\n    ctx.beginPath();\n    for (let i = 0; i < actualData.length; i++) {\n      const x = padding + (i / (actualData.length - 1)) * chartWidth;\n      const y = height - padding - ((actualData[i] - 1000) / 500) * chartHeight;\n      if (i === 0) ctx.moveTo(x, y);\n      else ctx.lineTo(x, y);\n    }\n    ctx.stroke();\n    \n    // 予測線描画\n    ctx.strokeStyle = '#f59e0b';\n    ctx.lineWidth = 2;\n    ctx.setLineDash([5, 5]);\n    ctx.beginPath();\n    for (let i = 0; i < forecastData.length; i++) {\n      const x = padding + (i / (forecastData.length - 1)) * chartWidth;\n      const y = height - padding - ((forecastData[i] - 1000) / 500) * chartHeight;\n      if (i === 0) ctx.moveTo(x, y);\n      else ctx.lineTo(x, y);\n    }\n    ctx.stroke();\n    ctx.setLineDash([]);\n    \n    // 凡例\n    ctx.fillStyle = '#9fb0d1';\n    ctx.font = '12px sans-serif';\n    ctx.fillText('実績', padding, 20);\n    ctx.fillText('予測', padding + 60, 20);\n  }\n\n  function drawTrendChart() {\n    const canvas = container.querySelector('#trend-chart');\n    const ctx = canvas.getContext('2d');\n    \n    const rect = canvas.getBoundingClientRect();\n    canvas.width = rect.width * 2;\n    canvas.height = rect.height * 2;\n    ctx.scale(2, 2);\n    \n    const width = rect.width;\n    const height = rect.height;\n    \n    ctx.clearRect(0, 0, width, height);\n    \n    const trendData = [2.1, 3.5, -1.2, 4.8, 2.3, 5.6];\n    const padding = 30;\n    const chartWidth = width - padding * 2;\n    const chartHeight = height - padding * 2;\n    \n    // 軸描画\n    ctx.strokeStyle = '#9fb0d1';\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    ctx.moveTo(padding, height / 2);\n    ctx.lineTo(width - padding, height / 2);\n    ctx.stroke();\n    \n    // バー描画\n    const barWidth = chartWidth / trendData.length * 0.6;\n    for (let i = 0; i < trendData.length; i++) {\n      const x = padding + (i / trendData.length) * chartWidth + chartWidth / trendData.length * 0.2;\n      const barHeight = Math.abs(trendData[i]) * 10;\n      const y = trendData[i] >= 0 ? height / 2 - barHeight : height / 2;\n      \n      ctx.fillStyle = trendData[i] >= 0 ? '#22c55e' : '#ef4444';\n      ctx.fillRect(x, y, barWidth, barHeight);\n    }\n  }\n\n  function drawSeasonalChart() {\n    const canvas = container.querySelector('#seasonal-chart');\n    const ctx = canvas.getContext('2d');\n    \n    const rect = canvas.getBoundingClientRect();\n    canvas.width = rect.width * 2;\n    canvas.height = rect.height * 2;\n    ctx.scale(2, 2);\n    \n    const width = rect.width;\n    const height = rect.height;\n    \n    ctx.clearRect(0, 0, width, height);\n    \n    const seasonalData = [0.85, 0.92, 1.15, 1.08, 0.95, 1.12, 1.25, 0.88, 0.98, 1.05, 1.18, 1.35];\n    const padding = 20;\n    const chartWidth = width - padding * 2;\n    const chartHeight = height - padding * 2;\n    \n    // 基準線\n    ctx.strokeStyle = '#9fb0d1';\n    ctx.lineWidth = 1;\n    ctx.beginPath();\n    ctx.moveTo(padding, height / 2);\n    ctx.lineTo(width - padding, height / 2);\n    ctx.stroke();\n    \n    // 季節性曲線\n    ctx.strokeStyle = '#8b5cf6';\n    ctx.lineWidth = 2;\n    ctx.beginPath();\n    for (let i = 0; i < seasonalData.length; i++) {\n      const x = padding + (i / (seasonalData.length - 1)) * chartWidth;\n      const y = height - padding - ((seasonalData[i] - 0.5) / 1) * chartHeight;\n      if (i === 0) ctx.moveTo(x, y);\n      else ctx.lineTo(x, y);\n    }\n    ctx.stroke();\n  }\n\n  // 初期グラフ描画\n  setTimeout(() => {\n    drawForecastChart();\n    drawTrendChart();\n    drawSeasonalChart();\n  }, 100);\n\n  // 検索機能\n  container.querySelector('#btn-search').addEventListener('click', () => {\n    const keyword = container.querySelector('#search-input').value.toLowerCase();\n    const filtered = currentData.filter(row => \n      row.productName.toLowerCase().includes(keyword) ||\n      row.category.toLowerCase().includes(keyword)\n    );\n    renderRows(filtered);\n  });\n\n  // 分析実行\n  container.querySelector('#btn-analyze').addEventListener('click', async () => {\n    const period = container.querySelector('#forecast-period').value;\n    const category = container.querySelector('#product-category').value;\n    const model = container.querySelector('#forecast-model').value;\n    \n    if (!period || !model) {\n      alert('予測期間と予測モデルを選択してください');\n      return;\n    }\n    \n    // 分析実行のシミュレーション\n    container.querySelector('#accuracy-value').textContent = (85 + Math.random() * 10).toFixed(1) + '%';\n    container.querySelector('#trend-value').textContent = (Math.random() > 0.5 ? '↗ +' : '↘ -') + (Math.random() * 20).toFixed(1) + '%';\n    \n    // グラフ再描画\n    drawForecastChart();\n    drawTrendChart();\n    drawSeasonalChart();\n  });\n\n  // CSVエクスポート\n  container.querySelector('#btn-export').addEventListener('click', () => {\n    const headers = ['製品名', '製品分類', '前月実績', '前年同月', '予測値', '予測精度', 'トレンド'];\n    const csvContent = '\\uFEFF' + headers.join(',') + '\\n' + \n      currentData.map(row => [\n        row.productName,\n        row.category,\n        row.lastMonth,\n        row.lastYear,\n        row.forecast,\n        row.accuracy + '%',\n        row.trend\n      ].join(',')).join('\\n');\n    \n    const blob = new Blob([csvContent], { type: 'text/csv' });\n    const url = URL.createObjectURL(blob);\n    const a = document.createElement('a');\n    a.href = url;\n    a.download = '需要予測分析_' + new Date().toISOString().slice(0, 10) + '.csv';\n    a.click();\n    URL.revokeObjectURL(url);\n  });\n\n  // アラート設定モーダル\n  container.querySelector('#btn-alert-setting').addEventListener('click', () => {\n    container.querySelector('#alert-modal').style.display = 'block';\n  });\n\n  container.querySelector('#btn-cancel-alert').addEventListener('click', () => {\n    container.querySelector('#alert-modal').style.display = 'none';\n  });\n\n  container.querySelector('#btn-save-alert').addEventListener('click', async () => {\n    const accuracyThreshold = container.querySelector('#accuracy-threshold').value;\n    const demandThreshold = container.querySelector('#demand-threshold').value;\n    \n    // アラート設定保存のシミュレーション\n    if (window.aivicApi) {\n      await window.aivicApi.save(13, {\n        アラート種別: '予測精度低下',\n        重要度: '中',\n        タイトル: '予測精度アラート設定',\n        メッセージ内容: `予測精度が${accuracyThreshold}%を下回った場合に通知`,\n        通知対象ユーザーID: 'current-user',\n        通知ステータス: '設定済み',\n        既読フラグ: false,\n        対応完了フラグ: false,\n        作成日時: new Date().toISOString(),\n        更新日時: new Date().toISOString(),\n        作成者ID: 'current-user'\n      });\n    }\n    \n    container.querySelector('#alert-modal').style.display = 'none';\n    alert('アラート設定を保存しました');\n  });\n\n  // データ更新\n  container.querySelector('#btn-update-data').addEventListener('click', async () => {\n    if (window.aivicApi) {\n      const updatedData = await window.aivicApi.list(0);\n      if (updatedData) {\n        currentData = updatedData;\n        renderRows(currentData);\n      }\n    }\n    \n    // KPI更新\n    container.querySelector('#accuracy-value').textContent = (85 + Math.random() * 10).toFixed(1) + '%';\n    container.querySelector('#trend-value').textContent = (Math.random() > 0.5 ? '↗ +' : '↘ -') + (Math.random() * 20).toFixed(1) + '%';\n    \n    drawForecastChart();\n    drawTrendChart();\n    drawSeasonalChart();\n  });\n\n  // 行クリックイベント\n  container.addEventListener('click', (e) => {\n    const detailBtn = e.target.closest('.detail-btn');\n    if (detailBtn) {\n      const id = detailBtn.dataset.id;\n      const row = currentData.find(r => r.id === id);\n      if (row) {\n        alert(`${row.productName}の詳細分析\\n予測値: ${row.forecast}\\n精度: ${row.accuracy}%\\nトレンド: ${row.trend}`);\n      }\n    }\n  });\n}";
+window.AIVIC_PAGE_INIT_JS = "function(container, apiUrl, tables) {\n  // 1. 再描画関数の定義\n  function renderHistoricalData(rows) {\n    const tbody = container.querySelector(\"#historical-tbody\");\n    tbody.innerHTML = rows.map(r => `\n      <tr data-id=\"${r.id}\">\n        <td>${r.製品名 || \"\"}</td>\n        <td>${r.年月 || \"\"}</td>\n        <td style=\"text-align: right;\">${r.実績数量 || 0}</td>\n        <td style=\"text-align: right;\">${r.予測数量 || 0}</td>\n        <td style=\"text-align: right; color: ${Math.abs(r.誤差率 || 0) > 10 ? '#ef4444' : '#10b981'};\">${r.誤差率 || 0}%</td>\n      </tr>\n    `).join(\"\");\n  }\n\n  // チャート描画関数\n  function drawForecastChart() {\n    const canvas = container.querySelector(\"#forecast-chart\");\n    const ctx = canvas.getContext(\"2d\");\n    const width = canvas.width;\n    const height = canvas.height;\n\n    ctx.clearRect(0, 0, width, height);\n    \n    // 背景グリッド\n    ctx.strokeStyle = '#374151';\n    ctx.lineWidth = 1;\n    for (let i = 0; i <= 10; i++) {\n      const x = (width / 10) * i;\n      const y = (height / 10) * i;\n      ctx.beginPath();\n      ctx.moveTo(x, 0);\n      ctx.lineTo(x, height);\n      ctx.stroke();\n      ctx.beginPath();\n      ctx.moveTo(0, y);\n      ctx.lineTo(width, y);\n      ctx.stroke();\n    }\n\n    // 実績データライン（青）\n    ctx.strokeStyle = '#3b82f6';\n    ctx.lineWidth = 2;\n    ctx.beginPath();\n    const actualData = [120, 135, 142, 138, 155, 148, 162, 158, 170, 165];\n    for (let i = 0; i < actualData.length; i++) {\n      const x = (width / (actualData.length - 1)) * i;\n      const y = height - (actualData[i] / 200) * height;\n      if (i === 0) ctx.moveTo(x, y);\n      else ctx.lineTo(x, y);\n    }\n    ctx.stroke();\n\n    // 予測データライン（オレンジ）\n    ctx.strokeStyle = '#f59e0b';\n    ctx.lineWidth = 2;\n    ctx.setLineDash([5, 5]);\n    ctx.beginPath();\n    const forecastData = [165, 172, 178, 185, 190, 195];\n    for (let i = 0; i < forecastData.length; i++) {\n      const x = width * 0.6 + (width * 0.4 / (forecastData.length - 1)) * i;\n      const y = height - (forecastData[i] / 200) * height;\n      if (i === 0) ctx.moveTo(x, y);\n      else ctx.lineTo(x, y);\n    }\n    ctx.stroke();\n    ctx.setLineDash([]);\n\n    // 凡例\n    ctx.fillStyle = '#d1d5db';\n    ctx.font = '12px sans-serif';\n    ctx.fillText('実績', 10, 20);\n    ctx.fillText('予測', 10, 35);\n    \n    ctx.fillStyle = '#3b82f6';\n    ctx.fillRect(50, 12, 20, 3);\n    ctx.fillStyle = '#f59e0b';\n    ctx.fillRect(50, 27, 20, 3);\n  }\n\n  function drawSeasonalChart() {\n    const canvas = container.querySelector(\"#seasonal-chart\");\n    const ctx = canvas.getContext(\"2d\");\n    const width = canvas.width;\n    const height = canvas.height;\n    const centerX = width / 2;\n    const centerY = height / 2;\n    const radius = Math.min(width, height) / 2 - 20;\n\n    ctx.clearRect(0, 0, width, height);\n\n    // 季節性円グラフ\n    const seasonalData = [\n      { label: '春', value: 0.25, color: '#10b981' },\n      { label: '夏', value: 0.35, color: '#f59e0b' },\n      { label: '秋', value: 0.22, color: '#ef4444' },\n      { label: '冬', value: 0.18, color: '#3b82f6' }\n    ];\n\n    let currentAngle = -Math.PI / 2;\n    seasonalData.forEach(item => {\n      const sliceAngle = item.value * 2 * Math.PI;\n      \n      ctx.beginPath();\n      ctx.moveTo(centerX, centerY);\n      ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);\n      ctx.closePath();\n      ctx.fillStyle = item.color;\n      ctx.fill();\n      \n      // ラベル\n      const labelAngle = currentAngle + sliceAngle / 2;\n      const labelX = centerX + Math.cos(labelAngle) * (radius * 0.7);\n      const labelY = centerY + Math.sin(labelAngle) * (radius * 0.7);\n      ctx.fillStyle = '#ffffff';\n      ctx.font = '12px sans-serif';\n      ctx.textAlign = 'center';\n      ctx.fillText(item.label, labelX, labelY);\n      ctx.fillText(`${(item.value * 100).toFixed(0)}%`, labelX, labelY + 15);\n      \n      currentAngle += sliceAngle;\n    });\n  }\n\n  function drawTrendChart() {\n    const canvas = container.querySelector(\"#trend-chart\");\n    const ctx = canvas.getContext(\"2d\");\n    const width = canvas.width;\n    const height = canvas.height;\n\n    ctx.clearRect(0, 0, width, height);\n    \n    // トレンドライン\n    ctx.strokeStyle = '#10b981';\n    ctx.lineWidth = 3;\n    ctx.beginPath();\n    ctx.moveTo(0, height * 0.8);\n    ctx.lineTo(width, height * 0.2);\n    ctx.stroke();\n\n    // データポイント\n    ctx.fillStyle = '#3b82f6';\n    const points = [\n      {x: width * 0.1, y: height * 0.75},\n      {x: width * 0.3, y: height * 0.65},\n      {x: width * 0.5, y: height * 0.45},\n      {x: width * 0.7, y: height * 0.35},\n      {x: width * 0.9, y: height * 0.25}\n    ];\n    \n    points.forEach(point => {\n      ctx.beginPath();\n      ctx.arc(point.x, point.y, 4, 0, 2 * Math.PI);\n      ctx.fill();\n    });\n  }\n\n  // 2. 初期データ描画\n  const historicalData = [\n    { id: '1', 製品名: 'プロダクトA', 年月: '2024-01', 実績数量: 120, 予測数量: 115, 誤差率: 4.3 },\n    { id: '2', 製品名: 'プロダクトA', 年月: '2024-02', 実績数量: 135, 予測数量: 128, 誤差率: 5.5 },\n    { id: '3', 製品名: 'プロダクトB', 年月: '2024-01', 実績数量: 85, 予測数量: 92, 誤差率: -7.6 },\n    { id: '4', 製品名: 'プロダクトB', 年月: '2024-02', 実績数量: 98, 予測数量: 95, 誤差率: 3.2 },\n    { id: '5', 製品名: 'プロダクトC', 年月: '2024-01', 実績数量: 156, 予測数量: 148, 誤差率: 5.4 }\n  ];\n  \n  renderHistoricalData(historicalData);\n  drawForecastChart();\n  drawSeasonalChart();\n  drawTrendChart();\n\n  // 3. イベントリスナー登録\n  container.querySelector(\"#btn-analyze\").addEventListener(\"click\", () => {\n    const period = container.querySelector(\"#forecast-period\").value;\n    const category = container.querySelector(\"#product-category\").value;\n    const model = container.querySelector(\"#forecast-model\").value;\n    \n    if (!period || !model) {\n      alert(\"予測期間と予測モデルを選択してください\");\n      return;\n    }\n    \n    // 予測分析実行（模擬）\n    setTimeout(() => {\n      container.querySelector(\"#accuracy-rate\").textContent = (85 + Math.random() * 10).toFixed(1) + \"%\";\n      container.querySelector(\"#mae-value\").textContent = (10 + Math.random() * 10).toFixed(1);\n      container.querySelector(\"#rmse-value\").textContent = (15 + Math.random() * 10).toFixed(1);\n      container.querySelector(\"#mape-value\").textContent = (5 + Math.random() * 10).toFixed(1) + \"%\";\n      \n      drawForecastChart();\n      drawSeasonalChart();\n      drawTrendChart();\n    }, 1000);\n  });\n\n  container.querySelector(\"#btn-production-order\").addEventListener(\"click\", () => {\n    window.showScreen(\"scr-1780995230897\");\n  });\n\n  container.querySelector(\"#btn-export\").addEventListener(\"click\", () => {\n    const csvData = [\n      ['製品名', '予測期間', '予測数量', '信頼区間下限', '信頼区間上限'],\n      ['プロダクトA', '2024-03', '172', '165', '179'],\n      ['プロダクトA', '2024-04', '178', '170', '186'],\n      ['プロダクトB', '2024-03', '102', '95', '109'],\n      ['プロダクトB', '2024-04', '108', '100', '116']\n    ];\n    \n    const csvContent = '\\uFEFF' + csvData.map(row => row.join(',')).join('\\n');\n    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });\n    const link = document.createElement('a');\n    link.href = URL.createObjectURL(blob);\n    link.download = 'demand_forecast_' + new Date().toISOString().slice(0, 10) + '.csv';\n    link.click();\n  });\n\n  container.querySelector(\"#btn-refresh\").addEventListener(\"click\", async () => {\n    if (window.aivicApi) {\n      const rows = await window.aivicApi.list(0);\n      if (rows) {\n        renderHistoricalData(rows);\n      }\n    }\n    drawForecastChart();\n    drawSeasonalChart();\n    drawTrendChart();\n  });\n\n  container.querySelector(\"#btn-alert-setting\").addEventListener(\"click\", () => {\n    alert(\"アラート設定機能は開発中です\");\n  });\n}";
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
 :root {
   --primary: #8B4513;
   --primary-hover: #A0522D;
-  --bg-main: #FAF7F2;
-  --bg-card: #F5F1E8;
-  --bg-sidebar: #F0EBE0;
+  --bg-main: #F5F5DC;
+  --bg-card: #FAEBD7;
+  --bg-sidebar: #F0E68C;
   --border: #D2B48C;
   --text: #2F1B14;
   --text-muted: #5D4037;
-  --top-bar-bg: #EFEBE2;
-  --top-bar-border: #C8A882;
+  --top-bar-bg: #DEB887;
+  --top-bar-border: #CD853F;
 }
 *, *::before, *::after { box-sizing: border-box; }
 body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg-main); color:var(--text); display:flex; flex-direction:column; height:100vh; overflow:hidden; }
@@ -102,182 +102,125 @@ canvas { display:block; max-height:280px !important; }
   </aside>
   <main class="main">
     <section class="card" data-aivic-panel="scr-1780995344648" style="margin-top:0">
-<div class="breadcrumb" style="color: var(--text-muted); font-size: 0.9em; margin-bottom: 1rem;">
+<div class="breadcrumb" style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
   AAA › 生産管理システム › 需要予測分析画面
 </div>
 
-<div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
-  <h1 style="font-size: 1.5rem; font-weight: 600; color: var(--text); margin: 0;">需要予測分析</h1>
-  <button class="action-btn" data-testid="production-order-button" onclick="window.showScreen('scr-1780995230897')">
-    生産指示書作成
-  </button>
-</div>
-
-<!-- 予測条件設定パネル -->
-<div class="card" style="margin-bottom: 1.5rem; padding: 1rem;">
-  <h2 style="font-size: 1.1rem; font-weight: 500; color: var(--text); margin: 0 0 1rem 0;">予測条件設定</h2>
-  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; align-items: end;">
-    <div>
-      <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">予測期間</label>
-      <select id="forecast-period" data-testid="forecast-period-select" style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
-        <option value="">選択してください</option>
-        <option value="1month">1ヶ月</option>
-        <option value="3months">3ヶ月</option>
-        <option value="6months">6ヶ月</option>
-        <option value="1year">1年</option>
-      </select>
-    </div>
-    <div>
-      <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">製品カテゴリ</label>
-      <select id="product-category" data-testid="product-category-select" style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
-        <option value="">全カテゴリ</option>
-        <option value="完成品">完成品</option>
-        <option value="半製品">半製品</option>
-        <option value="部品">部品</option>
-      </select>
-    </div>
-    <div>
-      <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">予測モデル</label>
-      <select id="forecast-model" data-testid="forecast-model-select" style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
-        <option value="">選択してください</option>
-        <option value="linear">線形回帰</option>
-        <option value="seasonal">季節性調整</option>
-        <option value="arima">ARIMA</option>
-        <option value="exponential">指数平滑</option>
-      </select>
-    </div>
-    <div>
-      <button id="btn-analyze" class="action-btn" data-testid="analyze-button" style="width: 100%;">分析実行</button>
-    </div>
+<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+  <h1 style="margin: 0; font-size: 1.5rem; color: var(--text);">需要予測分析</h1>
+  <div style="display: flex; gap: 0.75rem;">
+    <button class="action-btn" data-testid="production-order-btn" id="btn-production-order">生産指示書作成</button>
+    <button class="action-btn secondary" data-testid="export-btn" id="btn-export">予測結果エクスポート</button>
+    <button class="action-btn secondary" data-testid="refresh-btn" id="btn-refresh">データ更新</button>
   </div>
 </div>
 
-<!-- KPI指標カード -->
-<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
-  <div class="card" style="padding: 1rem; text-align: center;" data-testid="kpi-accuracy">
-    <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">予測精度</div>
-    <div id="accuracy-value" style="font-size: 1.8rem; font-weight: 600; color: var(--primary);">87.3%</div>
-  </div>
-  <div class="card" style="padding: 1rem; text-align: center;" data-testid="kpi-trend">
-    <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">トレンド</div>
-    <div id="trend-value" style="font-size: 1.8rem; font-weight: 600; color: #22c55e;">↗ +12.5%</div>
-  </div>
-  <div class="card" style="padding: 1rem; text-align: center;" data-testid="kpi-seasonality">
-    <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">季節性指数</div>
-    <div id="seasonality-value" style="font-size: 1.8rem; font-weight: 600; color: var(--text);">1.15</div>
-  </div>
-  <div class="card" style="padding: 1rem; text-align: center;" data-testid="kpi-variance">
-    <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">予測誤差</div>
-    <div id="variance-value" style="font-size: 1.8rem; font-weight: 600; color: #f59e0b;">±8.2%</div>
-  </div>
-</div>
-
-<!-- メインコンテンツエリア -->
-<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
-  <!-- 左側：グラフエリア -->
-  <div>
-    <!-- 需要予測グラフ -->
-    <div class="card" style="padding: 1rem; margin-bottom: 1rem;">
-      <h3 style="font-size: 1rem; font-weight: 500; color: var(--text); margin: 0 0 1rem 0;">需要予測グラフ</h3>
-      <canvas id="forecast-chart" width="600" height="300" style="width: 100%; height: 300px; background: var(--bg-main); border-radius: 4px;"></canvas>
-    </div>
-
-    <!-- トレンド分析グラフ -->
-    <div class="card" style="padding: 1rem;">
-      <h3 style="font-size: 1rem; font-weight: 500; color: var(--text); margin: 0 0 1rem 0;">トレンド分析</h3>
-      <canvas id="trend-chart" width="600" height="200" style="width: 100%; height: 200px; background: var(--bg-main); border-radius: 4px;"></canvas>
-    </div>
-  </div>
-
-  <!-- 右側：データテーブルとコントロール -->
-  <div>
-    <!-- 外部要因入力 -->
-    <div class="card" style="padding: 1rem; margin-bottom: 1rem;">
-      <h3 style="font-size: 1rem; font-weight: 500; color: var(--text); margin: 0 0 1rem 0;">外部要因設定</h3>
-      <div style="display: grid; gap: 0.8rem;">
-        <div>
-          <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">市場成長率(%)</label>
-          <input type="number" id="market-growth" data-testid="market-growth-input" step="0.1" value="3.5" style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
-        </div>
-        <div>
-          <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">競合影響度</label>
-          <select id="competition-impact" data-testid="competition-select" style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
-            <option value="low">低</option>
-            <option value="medium" selected>中</option>
-            <option value="high">高</option>
-          </select>
-        </div>
-        <div>
-          <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">経済指標調整</label>
-          <input type="number" id="economic-factor" data-testid="economic-factor-input" step="0.01" value="1.02" style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
-        </div>
-      </div>
-    </div>
-
-    <!-- 季節性分析 -->
-    <div class="card" style="padding: 1rem; margin-bottom: 1rem;">
-      <h3 style="font-size: 1rem; font-weight: 500; color: var(--text); margin: 0 0 1rem 0;">季節性分析</h3>
-      <canvas id="seasonal-chart" width="300" height="200" style="width: 100%; height: 200px; background: var(--bg-main); border-radius: 4px;"></canvas>
-    </div>
-
-    <!-- アクションボタン -->
-    <div class="card" style="padding: 1rem;">
-      <h3 style="font-size: 1rem; font-weight: 500; color: var(--text); margin: 0 0 1rem 0;">アクション</h3>
-      <div style="display: grid; gap: 0.8rem;">
-        <button id="btn-export" class="action-btn" data-testid="export-button" style="width: 100%;">予測結果エクスポート</button>
-        <button id="btn-alert-setting" class="action-btn secondary" data-testid="alert-setting-button" style="width: 100%;">アラート設定</button>
-        <button id="btn-update-data" class="action-btn secondary" data-testid="update-data-button" style="width: 100%;">データ更新</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- 過去実績データテーブル -->
-<div class="card" style="padding: 1rem; margin-top: 1.5rem;">
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-    <h3 style="font-size: 1rem; font-weight: 500; color: var(--text); margin: 0;">過去実績データ</h3>
-    <div style="display: flex; gap: 0.5rem;">
-      <input type="text" id="search-input" data-testid="search-input" placeholder="製品名で検索..." style="padding: 0.4rem 0.8rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); width: 200px;">
-      <button id="btn-search" class="action-btn secondary" data-testid="search-button">検索</button>
-    </div>
-  </div>
-  <div class="table-wrap">
-    <table data-testid="forecast-data-table">
-      <thead>
-        <tr>
-          <th>製品名</th>
-          <th>製品分類</th>
-          <th>前月実績</th>
-          <th>前年同月</th>
-          <th>予測値</th>
-          <th>予測精度</th>
-          <th>トレンド</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody id="forecast-tbody">
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<!-- アラート設定モーダル -->
-<div id="alert-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
-  <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-card); border-radius: 8px; padding: 1.5rem; width: 400px;">
-    <h3 style="font-size: 1.1rem; font-weight: 500; color: var(--text); margin: 0 0 1rem 0;">アラート設定</h3>
-    <div style="display: grid; gap: 1rem;">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+  <div class="card" style="padding: 1rem;">
+    <h3 style="margin: 0 0 0.75rem 0; font-size: 0.95rem; color: var(--text);">予測条件設定</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
       <div>
-        <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">予測精度閾値(%)</label>
-        <input type="number" id="accuracy-threshold" data-testid="accuracy-threshold-input" value="80" style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
+        <label style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">予測期間</label>
+        <select data-testid="forecast-period" id="forecast-period" style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
+          <option value="">選択してください</option>
+          <option value="1month">1ヶ月</option>
+          <option value="3months">3ヶ月</option>
+          <option value="6months">6ヶ月</option>
+          <option value="1year">1年</option>
+        </select>
       </div>
       <div>
-        <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">需要変動閾値(%)</label>
-        <input type="number" id="demand-threshold" data-testid="demand-threshold-input" value="15" style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
+        <label style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">製品カテゴリ</label>
+        <select data-testid="product-category" id="product-category" style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
+          <option value="">全カテゴリ</option>
+          <option value="完成品">完成品</option>
+          <option value="半製品">半製品</option>
+          <option value="部品">部品</option>
+        </select>
       </div>
-      <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem;">
-        <button id="btn-cancel-alert" class="action-btn secondary" data-testid="cancel-alert-button">キャンセル</button>
-        <button id="btn-save-alert" class="action-btn" data-testid="save-alert-button">保存</button>
+      <div>
+        <label style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">予測モデル</label>
+        <select data-testid="forecast-model" id="forecast-model" style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
+          <option value="">選択してください</option>
+          <option value="linear">線形回帰</option>
+          <option value="seasonal">季節性調整</option>
+          <option value="arima">ARIMA</option>
+          <option value="ensemble">アンサンブル</option>
+        </select>
       </div>
+      <div>
+        <label style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">外部要因</label>
+        <input data-testid="external-factor" id="external-factor" type="text" placeholder="例：キャンペーン、季節要因" style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
+      </div>
+    </div>
+    <div style="margin-top: 0.75rem; display: flex; gap: 0.5rem;">
+      <button class="action-btn" data-testid="analyze-btn" id="btn-analyze">予測分析実行</button>
+      <button class="action-btn secondary" data-testid="alert-setting-btn" id="btn-alert-setting">アラート設定</button>
+    </div>
+  </div>
+
+  <div class="card" style="padding: 1rem;">
+    <h3 style="margin: 0 0 0.75rem 0; font-size: 0.95rem; color: var(--text);">予測精度指標</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+      <div style="text-align: center; padding: 0.75rem; background: rgba(0,0,0,0.15); border-radius: 4px;">
+        <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);" id="accuracy-rate">87.3%</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">予測精度</div>
+      </div>
+      <div style="text-align: center; padding: 0.75rem; background: rgba(0,0,0,0.15); border-radius: 4px;">
+        <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);" id="mae-value">12.4</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">平均絶対誤差</div>
+      </div>
+      <div style="text-align: center; padding: 0.75rem; background: rgba(0,0,0,0.15); border-radius: 4px;">
+        <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);" id="rmse-value">18.7</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">RMSE</div>
+      </div>
+      <div style="text-align: center; padding: 0.75rem; background: rgba(0,0,0,0.15); border-radius: 4px;">
+        <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);" id="mape-value">8.9%</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">MAPE</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+  <div class="card" style="padding: 1rem;">
+    <h3 style="margin: 0 0 0.75rem 0; font-size: 0.95rem; color: var(--text);">需要予測グラフ</h3>
+    <canvas id="forecast-chart" width="600" height="300" style="width: 100%; height: 300px; background: rgba(0,0,0,0.1); border-radius: 4px;"></canvas>
+  </div>
+
+  <div class="card" style="padding: 1rem;">
+    <h3 style="margin: 0 0 0.75rem 0; font-size: 0.95rem; color: var(--text);">季節性分析</h3>
+    <canvas id="seasonal-chart" width="300" height="300" style="width: 100%; height: 300px; background: rgba(0,0,0,0.1); border-radius: 4px;"></canvas>
+  </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+  <div class="card" style="padding: 1rem;">
+    <h3 style="margin: 0 0 0.75rem 0; font-size: 0.95rem; color: var(--text);">過去実績データ</h3>
+    <div class="table-wrap" style="max-height: 300px; overflow-y: auto;">
+      <table data-testid="historical-data-table">
+        <thead>
+          <tr>
+            <th>製品名</th>
+            <th>年月</th>
+            <th>実績数量</th>
+            <th>予測数量</th>
+            <th>誤差率</th>
+          </tr>
+        </thead>
+        <tbody id="historical-tbody">
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="padding: 1rem;">
+    <h3 style="margin: 0 0 0.75rem 0; font-size: 0.95rem; color: var(--text);">トレンド分析</h3>
+    <canvas id="trend-chart" width="400" height="250" style="width: 100%; height: 250px; background: rgba(0,0,0,0.1); border-radius: 4px;"></canvas>
+    <div style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-muted);">
+      <div>上昇トレンド: <span style="color: #4ade80;">+15.2%</span></div>
+      <div>季節変動: <span style="color: #fbbf24;">±8.7%</span></div>
+      <div>周期性: <span style="color: #60a5fa;">12ヶ月</span></div>
     </div>
   </div>
 </div>

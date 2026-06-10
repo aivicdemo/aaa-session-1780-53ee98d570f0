@@ -11,21 +11,21 @@ window.AIVIC_SYSTEM_NAME = "生産管理システム";
 window.AIVIC_TABLES = [{"tableName":"製品マスタ","purpose":"生産管理システムで製造する製品の基本情報を管理するマスタテーブル","columns":[{"name":"製品ID","type":"uuid","required":true,"description":"製品を一意に識別するID（主キー）"},{"name":"製品コード","type":"varchar(100)","required":true,"description":"製品の業務コード（ユニーク）"},{"name":"製品名","type":"varchar(100)","required":true,"description":"製品の名称"},{"name":"製品分類","type":"varchar(100)","required":true,"description":"製品の分類（完成品/半製品/部品等）"},{"name":"規格","type":"varchar(100)","required":false,"description":"製品の規格・仕様"},{"name":"単位","type":"varchar(100)","required":true,"description":"製品の管理単位（個/kg/m等）"},{"name":"標準原価","type":"integer","required":false,"description":"製品の標準原価（円）"},{"name":"標準リードタイム","type":"integer","required":false,"description":"製品の標準製造リードタイム（日）"},{"name":"有効フラグ","type":"boolean","required":true,"description":"製品の有効/無効状態"},{"name":"備考","type":"text","required":false,"description":"製品に関する補足情報"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者のユーザーID"},{"name":"更新者ID","type":"uuid","required":true,"description":"レコード最終更新者のユーザーID"}]},{"tableName":"製品仕様","purpose":"製品の技術仕様や品質基準を管理し、生産工程での仕様確認や品質管理に使用する","columns":[{"name":"仕様ID","type":"uuid","required":true,"description":"製品仕様の一意識別子（主キー）"},{"name":"製品ID","type":"uuid","required":true,"description":"製品マスタへの外部キー"},{"name":"仕様バージョン","type":"varchar(100)","required":true,"description":"仕様のバージョン番号"},{"name":"仕様名","type":"varchar(100)","required":true,"description":"仕様の名称"},{"name":"仕様詳細","type":"text","required":false,"description":"詳細な仕様内容"},{"name":"品質基準","type":"text","required":false,"description":"品質管理基準"},{"name":"材料仕様","type":"text","required":false,"description":"使用材料の仕様"},{"name":"寸法規格","type":"varchar(100)","required":false,"description":"製品の寸法規格"},{"name":"重量規格","type":"varchar(100)","required":false,"description":"製品の重量規格"},{"name":"有効開始日","type":"timestamp","required":true,"description":"仕様の有効開始日時"},{"name":"有効終了日","type":"timestamp","required":false,"description":"仕様の有効終了日時"},{"name":"承認状態","type":"varchar(100)","required":true,"description":"仕様の承認状態（下書き/承認待ち/承認済み/廃止等）"},{"name":"承認者ID","type":"uuid","required":false,"description":"仕様を承認したユーザーID"},{"name":"承認日時","type":"timestamp","required":false,"description":"仕様が承認された日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"仕様を作成したユーザーID"},{"name":"作成日時","type":"timestamp","required":true,"description":"仕様作成日時"},{"name":"更新者ID","type":"uuid","required":false,"description":"仕様を最後に更新したユーザーID"},{"name":"更新日時","type":"timestamp","required":false,"description":"仕様最終更新日時"}]},{"tableName":"工程マスタ","purpose":"製造工程の定義と管理を行うマスタテーブル","columns":[{"name":"工程ID","type":"uuid","required":true,"description":"工程の一意識別子（主キー）"},{"name":"工程コード","type":"varchar(100)","required":true,"description":"工程の業務コード（検索・表示用）"},{"name":"工程名","type":"varchar(100)","required":true,"description":"工程の名称"},{"name":"工程区分","type":"varchar(100)","required":true,"description":"工程の分類（加工/組立/検査/梱包等）"},{"name":"標準作業時間","type":"integer","required":false,"description":"標準的な作業時間（分）"},{"name":"段取時間","type":"integer","required":false,"description":"工程開始前の準備時間（分）"},{"name":"作業説明","type":"text","required":false,"description":"工程の作業内容詳細"},{"name":"品質基準","type":"text","required":false,"description":"品質管理の基準・チェック項目"},{"name":"使用可能フラグ","type":"boolean","required":true,"description":"工程が使用可能かどうか"},{"name":"表示順序","type":"integer","required":false,"description":"画面表示時の並び順"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者（ユーザーテーブル参照）"},{"name":"更新者ID","type":"uuid","required":true,"description":"レコード最終更新者（ユーザーテーブル参照）"}]},{"tableName":"製造ライン","purpose":"製造現場の生産ラインを管理し、工程の実行、資材の投入、製品の製造進捗を追跡する","columns":[{"name":"ライン_ID","type":"uuid","required":true,"description":"製造ラインの一意識別子"},{"name":"ライン名","type":"varchar(100)","required":true,"description":"製造ラインの名称"},{"name":"製品_ID","type":"uuid","required":true,"description":"製造中の製品への参照"},{"name":"工程_ID","type":"uuid","required":true,"description":"現在実行中の工程への参照"},{"name":"ライン状態","type":"varchar(100)","required":true,"description":"稼働中/停止中/メンテナンス中/故障中"},{"name":"計画生産数量","type":"integer","required":true,"description":"予定している生産数量"},{"name":"実績生産数量","type":"integer","required":true,"description":"実際に生産完了した数量"},{"name":"不良品数量","type":"integer","required":true,"description":"検査で不良と判定された数量"},{"name":"生産開始日時","type":"timestamp","required":false,"description":"実際の生産開始タイムスタンプ"},{"name":"生産完了予定日時","type":"timestamp","required":false,"description":"生産完了の予定日時"},{"name":"生産完了日時","type":"timestamp","required":false,"description":"実際の生産完了タイムスタンプ"},{"name":"担当者_ID","type":"uuid","required":false,"description":"ライン責任者のユーザーID"},{"name":"備考","type":"text","required":false,"description":"生産に関する特記事項や注意点"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者_ID","type":"uuid","required":true,"description":"レコード作成者のユーザーID"}]},{"tableName":"生産指示書","purpose":"製造現場への生産指示を管理し、製品の製造計画と実績を追跡する","columns":[{"name":"生産指示書ID","type":"uuid","required":true,"description":"生産指示書の一意識別子"},{"name":"生産指示書番号","type":"varchar(100)","required":true,"description":"業務で使用する生産指示書の管理番号"},{"name":"製品ID","type":"uuid","required":true,"description":"製造対象製品への参照"},{"name":"製造ラインID","type":"uuid","required":true,"description":"製造を行うラインへの参照"},{"name":"生産予定数量","type":"integer","required":true,"description":"製造予定の数量"},{"name":"生産実績数量","type":"integer","required":false,"description":"実際に製造された数量"},{"name":"良品数量","type":"integer","required":false,"description":"品質検査を通過した良品の数量"},{"name":"不良品数量","type":"integer","required":false,"description":"品質検査で不良と判定された数量"},{"name":"生産開始予定日時","type":"timestamp","required":true,"description":"生産開始の予定日時"},{"name":"生産完了予定日時","type":"timestamp","required":true,"description":"生産完了の予定日時"},{"name":"生産開始実績日時","type":"timestamp","required":false,"description":"実際の生産開始日時"},{"name":"生産完了実績日時","type":"timestamp","required":false,"description":"実際の生産完了日時"},{"name":"優先度","type":"integer","required":true,"description":"生産の優先順位（数値が小さいほど高優先）"},{"name":"ステータス","type":"varchar(100)","required":true,"description":"生産指示の状態（未着手/進行中/完了/中止等）"},{"name":"備考","type":"text","required":false,"description":"生産に関する特記事項や注意点"},{"name":"作成者ID","type":"uuid","required":true,"description":"生産指示書を作成したユーザー"},{"name":"承認者ID","type":"uuid","required":false,"description":"生産指示書を承認したユーザー"},{"name":"作成日時","type":"timestamp","required":true,"description":"生産指示書の作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"生産指示書の最終更新日時"}]},{"tableName":"生産指示書明細","purpose":"生産指示書の各製品別の詳細な生産指示内容を管理する","columns":[{"name":"生産指示書明細ID","type":"uuid","required":true,"description":"生産指示書明細の一意識別子"},{"name":"生産指示書ID","type":"uuid","required":true,"description":"親となる生産指示書への参照"},{"name":"明細番号","type":"integer","required":true,"description":"生産指示書内での明細の順序番号"},{"name":"製品ID","type":"uuid","required":true,"description":"生産対象製品への参照"},{"name":"製品仕様ID","type":"uuid","required":false,"description":"適用する製品仕様への参照"},{"name":"工程ID","type":"uuid","required":true,"description":"実行する工程への参照"},{"name":"製造ラインID","type":"uuid","required":true,"description":"使用する製造ラインへの参照"},{"name":"生産予定数量","type":"integer","required":true,"description":"生産予定の数量"},{"name":"単位","type":"varchar(100)","required":true,"description":"数量の単位"},{"name":"開始予定日時","type":"timestamp","required":true,"description":"生産開始予定日時"},{"name":"完了予定日時","type":"timestamp","required":true,"description":"生産完了予定日時"},{"name":"優先度","type":"integer","required":true,"description":"生産の優先度（数値が小さいほど高優先）"},{"name":"ステータス","type":"varchar(100)","required":true,"description":"明細の状態（未着手/進行中/完了/中止等）"},{"name":"実績数量","type":"integer","required":false,"description":"実際に生産された数量"},{"name":"実際開始日時","type":"timestamp","required":false,"description":"実際の生産開始日時"},{"name":"実際完了日時","type":"timestamp","required":false,"description":"実際の生産完了日時"},{"name":"備考","type":"text","required":false,"description":"明細に関する特記事項や注意点"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者への参照"},{"name":"更新者ID","type":"uuid","required":true,"description":"レコード最終更新者への参照"}]},{"tableName":"作業実績","purpose":"製造ラインでの実際の作業結果を記録し、生産指示に対する進捗管理と品質管理を行う","columns":[{"name":"作業実績ID","type":"uuid","required":true,"description":"作業実績の一意識別子"},{"name":"生産指示書ID","type":"uuid","required":true,"description":"関連する生産指示書への参照"},{"name":"生産指示書明細ID","type":"uuid","required":true,"description":"関連する生産指示書明細への参照"},{"name":"製造ラインID","type":"uuid","required":true,"description":"作業を実施した製造ラインへの参照"},{"name":"工程ID","type":"uuid","required":true,"description":"実施した工程への参照"},{"name":"作業開始日時","type":"timestamp","required":true,"description":"作業の開始日時"},{"name":"作業終了日時","type":"timestamp","required":false,"description":"作業の終了日時"},{"name":"実績数量","type":"integer","required":true,"description":"実際に完成した製品数量"},{"name":"良品数量","type":"integer","required":true,"description":"品質基準を満たした製品数量"},{"name":"不良品数量","type":"integer","required":true,"description":"品質基準を満たさなかった製品数量"},{"name":"作業者ID","type":"uuid","required":true,"description":"作業を実施した作業者（ユーザー）への参照"},{"name":"作業状況","type":"varchar(100)","required":true,"description":"作業の状況（開始、進行中、完了、中断等）"},{"name":"備考","type":"text","required":false,"description":"作業に関する特記事項や問題点"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者への参照"}]},{"tableName":"品質検査結果","purpose":"製品の品質検査結果を記録し、品質基準への適合性を管理する","columns":[{"name":"検査結果ID","type":"uuid","required":true,"description":"品質検査結果の一意識別子"},{"name":"生産指示書ID","type":"uuid","required":true,"description":"検査対象の生産指示書への参照"},{"name":"製品ID","type":"uuid","required":true,"description":"検査対象製品への参照"},{"name":"工程ID","type":"uuid","required":true,"description":"検査を実施した工程への参照"},{"name":"検査項目名","type":"varchar(100)","required":true,"description":"検査した項目の名称"},{"name":"検査基準値","type":"varchar(100)","required":false,"description":"品質基準として設定された値"},{"name":"実測値","type":"varchar(100)","required":false,"description":"実際に測定された値"},{"name":"判定結果","type":"varchar(100)","required":true,"description":"合格/不合格/要再検査等の判定"},{"name":"検査数量","type":"integer","required":true,"description":"検査を実施した数量"},{"name":"不良数量","type":"integer","required":false,"description":"不良と判定された数量"},{"name":"検査日時","type":"timestamp","required":true,"description":"検査を実施した日時"},{"name":"検査者ID","type":"uuid","required":true,"description":"検査を実施したユーザーへの参照"},{"name":"備考","type":"text","required":false,"description":"検査に関する補足情報や特記事項"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者への参照"}]},{"tableName":"工程引き継ぎ情報","purpose":"製造工程間での作業状況、品質情報、注意事項等の引き継ぎ情報を管理する","columns":[{"name":"引き継ぎID","type":"uuid","required":true,"description":"引き継ぎ情報の一意識別子"},{"name":"生産指示書ID","type":"uuid","required":true,"description":"対象の生産指示書への参照"},{"name":"引き継ぎ元工程ID","type":"uuid","required":true,"description":"引き継ぎ元工程への参照"},{"name":"引き継ぎ先工程ID","type":"uuid","required":true,"description":"引き継ぎ先工程への参照"},{"name":"製造ラインID","type":"uuid","required":true,"description":"製造ラインへの参照"},{"name":"ロット番号","type":"varchar(100)","required":true,"description":"引き継ぎ対象のロット番号"},{"name":"引き継ぎ数量","type":"integer","required":true,"description":"引き継ぎする製品数量"},{"name":"作業状況","type":"varchar(100)","required":true,"description":"前工程での作業完了状況"},{"name":"品質状況","type":"varchar(100)","required":true,"description":"品質検査結果や品質状況"},{"name":"注意事項","type":"text","required":false,"description":"次工程への注意事項や特記事項"},{"name":"引き継ぎ日時","type":"timestamp","required":true,"description":"工程間引き継ぎを行った日時"},{"name":"引き継ぎ者ID","type":"uuid","required":true,"description":"引き継ぎを行った作業者への参照"},{"name":"受け取り者ID","type":"uuid","required":false,"description":"引き継ぎを受け取った作業者への参照"},{"name":"受け取り日時","type":"timestamp","required":false,"description":"次工程で受け取りを確認した日時"},{"name":"引き継ぎ状態","type":"varchar(100)","required":true,"description":"引き継ぎ状態（引き継ぎ済み、受け取り済み等）"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者への参照"}]},{"tableName":"標準手順書","purpose":"製品の製造工程における標準的な作業手順を定義・管理するマスタテーブル","columns":[{"name":"標準手順書ID","type":"uuid","required":true,"description":"標準手順書の一意識別子（主キー）"},{"name":"手順書コード","type":"varchar(100)","required":true,"description":"標準手順書の業務コード（検索・参照用）"},{"name":"手順書名","type":"varchar(100)","required":true,"description":"標準手順書の名称"},{"name":"製品ID","type":"uuid","required":true,"description":"対象製品への外部キー"},{"name":"工程ID","type":"uuid","required":true,"description":"対象工程への外部キー"},{"name":"バージョン","type":"varchar(100)","required":true,"description":"手順書のバージョン番号"},{"name":"手順内容","type":"text","required":true,"description":"作業手順の詳細内容"},{"name":"標準作業時間","type":"integer","required":false,"description":"標準的な作業時間（分）"},{"name":"必要スキルレベル","type":"integer","required":false,"description":"作業に必要なスキルレベル"},{"name":"安全注意事項","type":"text","required":false,"description":"作業時の安全に関する注意事項"},{"name":"品質管理ポイント","type":"text","required":false,"description":"品質確保のための管理ポイント"},{"name":"有効フラグ","type":"boolean","required":true,"description":"手順書の有効/無効状態"},{"name":"承認者ID","type":"uuid","required":false,"description":"手順書を承認したユーザーID"},{"name":"承認日時","type":"timestamp","required":false,"description":"手順書が承認された日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"手順書を作成したユーザーID"},{"name":"作成日時","type":"timestamp","required":true,"description":"手順書の作成日時"},{"name":"更新者ID","type":"uuid","required":false,"description":"手順書を最後に更新したユーザーID"},{"name":"更新日時","type":"timestamp","required":false,"description":"手順書の最終更新日時"}]},{"tableName":"品質基準","purpose":"製品や工程における品質管理の基準値や検査項目を定義し、品質検査結果との照合に使用する","columns":[{"name":"品質基準ID","type":"uuid","required":true,"description":"品質基準の一意識別子（主キー）"},{"name":"基準名","type":"varchar(100)","required":true,"description":"品質基準の名称"},{"name":"製品ID","type":"uuid","required":false,"description":"対象製品の識別子（製品マスタへの外部キー）"},{"name":"工程ID","type":"uuid","required":false,"description":"対象工程の識別子（工程マスタへの外部キー）"},{"name":"検査項目名","type":"varchar(100)","required":true,"description":"検査する項目の名称"},{"name":"基準値","type":"varchar(100)","required":false,"description":"品質基準の目標値"},{"name":"上限値","type":"varchar(100)","required":false,"description":"許容される上限値"},{"name":"下限値","type":"varchar(100)","required":false,"description":"許容される下限値"},{"name":"単位","type":"varchar(100)","required":false,"description":"測定値の単位"},{"name":"検査方法","type":"text","required":false,"description":"検査の実施方法や手順"},{"name":"必須検査フラグ","type":"boolean","required":true,"description":"必須検査項目かどうかの判定フラグ"},{"name":"有効開始日","type":"timestamp","required":true,"description":"この基準が有効になる開始日時"},{"name":"有効終了日","type":"timestamp","required":false,"description":"この基準が無効になる終了日時"},{"name":"備考","type":"text","required":false,"description":"品質基準に関する補足情報"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"uuid","required":true,"description":"レコード作成者（ユーザーへの外部キー）"},{"name":"更新者","type":"uuid","required":true,"description":"レコード最終更新者（ユーザーへの外部キー）"}]},{"tableName":"作業履歴","purpose":"作業者が実施した各工程での作業内容、時間、結果を記録し、生産実績の詳細な履歴を管理する","columns":[{"name":"作業履歴ID","type":"uuid","required":true,"description":"作業履歴の一意識別子"},{"name":"生産指示書ID","type":"uuid","required":true,"description":"関連する生産指示書への参照"},{"name":"生産指示書明細ID","type":"uuid","required":true,"description":"関連する生産指示書明細への参照"},{"name":"工程ID","type":"uuid","required":true,"description":"実施した工程への参照"},{"name":"製造ラインID","type":"uuid","required":true,"description":"作業を実施した製造ラインへの参照"},{"name":"作業者ID","type":"uuid","required":true,"description":"作業を実施したユーザーへの参照"},{"name":"作業開始日時","type":"timestamp","required":true,"description":"作業を開始した日時"},{"name":"作業終了日時","type":"timestamp","required":false,"description":"作業を終了した日時"},{"name":"作業ステータス","type":"varchar(100)","required":true,"description":"作業の状態（開始、完了、中断、エラー等）"},{"name":"処理数量","type":"integer","required":false,"description":"この作業で処理した数量"},{"name":"良品数量","type":"integer","required":false,"description":"良品として判定された数量"},{"name":"不良品数量","type":"integer","required":false,"description":"不良品として判定された数量"},{"name":"作業内容","type":"text","required":false,"description":"実施した作業の詳細内容"},{"name":"備考","type":"text","required":false,"description":"作業に関する特記事項や問題点"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者"}]},{"tableName":"進捗管理","purpose":"生産指示書の各工程における作業進捗状況を管理し、計画と実績の差異を追跡する","columns":[{"name":"進捗管理ID","type":"uuid","required":true,"description":"進捗管理レコードの一意識別子"},{"name":"生産指示書ID","type":"uuid","required":true,"description":"対象となる生産指示書への参照"},{"name":"生産指示書明細ID","type":"uuid","required":true,"description":"対象となる生産指示書明細への参照"},{"name":"工程ID","type":"uuid","required":true,"description":"進捗を管理する工程への参照"},{"name":"製造ラインID","type":"uuid","required":true,"description":"作業を実施する製造ラインへの参照"},{"name":"計画開始日時","type":"timestamp","required":true,"description":"工程の計画開始日時"},{"name":"計画終了日時","type":"timestamp","required":true,"description":"工程の計画終了日時"},{"name":"実績開始日時","type":"timestamp","required":false,"description":"工程の実際の開始日時"},{"name":"実績終了日時","type":"timestamp","required":false,"description":"工程の実際の終了日時"},{"name":"計画数量","type":"integer","required":true,"description":"計画生産数量"},{"name":"完了数量","type":"integer","required":true,"description":"完了した数量"},{"name":"良品数量","type":"integer","required":true,"description":"品質検査を通過した良品数量"},{"name":"不良品数量","type":"integer","required":true,"description":"品質検査で不良と判定された数量"},{"name":"進捗率","type":"integer","required":true,"description":"工程の進捗率（0-100）"},{"name":"工程ステータス","type":"varchar(100)","required":true,"description":"工程の現在状況（未着手/進行中/完了/中断/遅延）"},{"name":"遅延フラグ","type":"boolean","required":true,"description":"計画に対して遅延が発生しているかのフラグ"},{"name":"遅延理由","type":"text","required":false,"description":"遅延が発生している場合の理由"},{"name":"備考","type":"text","required":false,"description":"進捗に関する特記事項や注意点"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者のユーザーID"},{"name":"更新者ID","type":"uuid","required":true,"description":"レコード最終更新者のユーザーID"}]},{"tableName":"アラート通知","purpose":"生産管理システムにおける各種アラート・警告・異常の通知情報を管理し、関係者への迅速な情報伝達を実現する","columns":[{"name":"アラート通知ID","type":"uuid","required":true,"description":"アラート通知の一意識別子"},{"name":"アラート種別","type":"varchar(100)","required":true,"description":"品質異常、設備故障、進捗遅延、在庫不足等のアラート分類"},{"name":"重要度","type":"varchar(100)","required":true,"description":"緊急、高、中、低等の優先度レベル"},{"name":"タイトル","type":"varchar(100)","required":true,"description":"アラートの概要を示すタイトル"},{"name":"メッセージ内容","type":"text","required":true,"description":"詳細なアラート内容・状況説明"},{"name":"発生元テーブル","type":"varchar(100)","required":false,"description":"アラートの発生源となったテーブル名"},{"name":"発生元ID","type":"varchar(100)","required":false,"description":"発生源レコードの識別子"},{"name":"製造ラインID","type":"uuid","required":false,"description":"関連する製造ラインの識別子"},{"name":"生産指示書ID","type":"uuid","required":false,"description":"関連する生産指示書の識別子"},{"name":"通知対象ユーザーID","type":"uuid","required":true,"description":"通知を受け取るユーザーの識別子"},{"name":"通知ステータス","type":"varchar(100)","required":true,"description":"未読、既読、対応中、完了等の処理状況"},{"name":"既読フラグ","type":"boolean","required":true,"description":"通知の既読・未読状態"},{"name":"既読日時","type":"timestamp","required":false,"description":"通知が既読になった日時"},{"name":"対応完了フラグ","type":"boolean","required":true,"description":"アラートへの対応完了状態"},{"name":"対応完了日時","type":"timestamp","required":false,"description":"アラートへの対応が完了した日時"},{"name":"対応者ID","type":"uuid","required":false,"description":"アラートに対応したユーザーの識別子"},{"name":"対応コメント","type":"text","required":false,"description":"対応内容・結果に関するコメント"},{"name":"有効期限","type":"timestamp","required":false,"description":"アラート通知の有効期限"},{"name":"作成日時","type":"timestamp","required":true,"description":"アラート通知の作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"アラート通知を作成したユーザーまたはシステム"}]},{"tableName":"異常値検出ログ","purpose":"生産工程で発生した異常値の検出記録を管理し、品質管理と改善活動に活用する","columns":[{"name":"異常値検出ログID","type":"uuid","required":true,"description":"異常値検出ログの一意識別子"},{"name":"製造ラインID","type":"uuid","required":true,"description":"異常値が検出された製造ライン"},{"name":"工程ID","type":"uuid","required":true,"description":"異常値が検出された工程"},{"name":"製品ID","type":"uuid","required":true,"description":"異常値が検出された製品"},{"name":"生産指示書ID","type":"uuid","required":true,"description":"関連する生産指示書"},{"name":"検出項目名","type":"varchar(100)","required":true,"description":"異常値が検出された測定項目名"},{"name":"検出値","type":"varchar(100)","required":true,"description":"実際に検出された異常値"},{"name":"基準値下限","type":"varchar(100)","required":false,"description":"品質基準の下限値"},{"name":"基準値上限","type":"varchar(100)","required":false,"description":"品質基準の上限値"},{"name":"異常レベル","type":"varchar(100)","required":true,"description":"異常の重要度レベル（軽微/注意/重大等）"},{"name":"検出方法","type":"varchar(100)","required":true,"description":"異常値の検出方法（自動検査/手動検査等）"},{"name":"対応状況","type":"varchar(100)","required":true,"description":"異常値への対応状況（未対応/対応中/完了等）"},{"name":"対応内容","type":"text","required":false,"description":"実施した対応措置の詳細"},{"name":"原因分析結果","type":"text","required":false,"description":"異常値発生原因の分析結果"},{"name":"改善措置","type":"text","required":false,"description":"再発防止のための改善措置"},{"name":"担当者ID","type":"uuid","required":true,"description":"異常値対応の担当者"},{"name":"検出日時","type":"timestamp","required":true,"description":"異常値が検出された日時"},{"name":"対応完了日時","type":"timestamp","required":false,"description":"異常値への対応が完了した日時"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者"}]}];
 window.AIVIC_PRESET_SEED = {};
 window.AIVIC_PAGE_SCREEN_ID = "scr-1780995279362";
-window.AIVIC_PAGE_INIT_JS = "function(container, apiUrl, tables) {\n  let selectedOrderId = null;\n  \n  // 生産指示書一覧の再描画\n  function renderOrders(orders) {\n    const tbody = container.querySelector(\"#order-tbody\");\n    tbody.innerHTML = orders.map(order => `\n      <tr data-id=\"${order.生産指示書ID}\" style=\"cursor: pointer; border-bottom: 1px solid var(--border);\" \n          class=\"order-row\">\n        <td style=\"padding: 0.5rem; color: var(--text);\">${order.生産指示書番号 || \"\"}</td>\n        <td style=\"padding: 0.5rem; color: var(--text);\">${order.製品名 || \"\"}</td>\n      </tr>\n    `).join(\"\");\n  }\n\n  // 初期データ表示\n  const productionOrders = tables.find(t => t.tableName === \"生産指示書\");\n  if (productionOrders) {\n    renderOrders(productionOrders.records || []);\n  }\n\n  // 生産指示書検索\n  container.querySelector(\"#btn-search-order\").addEventListener(\"click\", async () => {\n    const keyword = container.querySelector(\"#production-order-search\").value.trim();\n    try {\n      const orders = await window.aivicApi.list(tables.findIndex(t => t.tableName === \"生産指示書\"));\n      if (orders) {\n        const filtered = keyword ? \n          orders.filter(order => \n            (order.生産指示書番号 || \"\").includes(keyword) ||\n            (order.製品名 || \"\").includes(keyword)\n          ) : orders;\n        renderOrders(filtered);\n      }\n    } catch (error) {\n      console.error(\"検索エラー:\", error);\n    }\n  });\n\n  // 生産指示書選択\n  container.addEventListener(\"click\", (e) => {\n    const orderRow = e.target.closest(\".order-row\");\n    if (orderRow) {\n      selectedOrderId = orderRow.dataset.id;\n      \n      // 選択行のハイライト\n      container.querySelectorAll(\".order-row\").forEach(row => {\n        row.style.background = \"\";\n      });\n      orderRow.style.background = \"rgba(var(--primary-rgb, 59, 130, 246), 0.1)\";\n      \n      // 選択した生産指示書の情報を表示\n      const orderNumber = orderRow.querySelector(\"td:first-child\").textContent;\n      const productName = orderRow.querySelector(\"td:nth-child(2)\").textContent;\n      \n      container.querySelector(\"#display-order-number\").textContent = orderNumber;\n      container.querySelector(\"#display-product-name\").textContent = productName;\n      container.querySelector(\"#display-line-name\").textContent = \"ライン A\"; // 仮の値\n      \n      // フォーム表示\n      container.querySelector(\"#selected-order-info\").style.display = \"block\";\n      container.querySelector(\"#progress-form\").style.display = \"block\";\n      container.querySelector(\"#initial-message\").style.display = \"none\";\n      \n      // 現在時刻を開始時刻にセット\n      const now = new Date();\n      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());\n      container.querySelector(\"#start-time\").value = now.toISOString().slice(0, 16);\n    }\n  });\n\n  // フォームクリア\n  container.querySelector(\"#btn-clear\").addEventListener(\"click\", () => {\n    container.querySelector(\"#process-select\").value = \"\";\n    container.querySelector(\"#worker-select\").value = \"\";\n    container.querySelector(\"#progress-rate\").value = \"\";\n    container.querySelector(\"#start-time\").value = \"\";\n    container.querySelector(\"#end-time\").value = \"\";\n    container.querySelector(\"#actual-quantity\").value = \"\";\n    container.querySelector(\"#defect-quantity\").value = \"\";\n    container.querySelector(\"#remarks\").value = \"\";\n    container.querySelectorAll('input[name=\"quality-result\"]').forEach(radio => radio.checked = false);\n  });\n\n  // 進捗更新保存\n  container.querySelector(\"#btn-save-progress\").addEventListener(\"click\", async () => {\n    if (!selectedOrderId) {\n      alert(\"生産指示書を選択してください\");\n      return;\n    }\n\n    const processId = container.querySelector(\"#process-select\").value;\n    const workerId = container.querySelector(\"#worker-select\").value;\n    const progressRate = container.querySelector(\"#progress-rate\").value;\n    const startTime = container.querySelector(\"#start-time\").value;\n    const endTime = container.querySelector(\"#end-time\").value;\n    const actualQuantity = container.querySelector(\"#actual-quantity\").value;\n    const defectQuantity = container.querySelector(\"#defect-quantity\").value;\n    const qualityResult = container.querySelector('input[name=\"quality-result\"]:checked')?.value;\n    const remarks = container.querySelector(\"#remarks\").value;\n\n    if (!processId || !workerId || !progressRate) {\n      alert(\"工程、作業者、進捗率は必須項目です\");\n      return;\n    }\n\n    try {\n      // 進捗管理テーブルに保存\n      const progressTableIndex = tables.findIndex(t => t.tableName === \"進捗管理\");\n      if (progressTableIndex >= 0) {\n        const progressData = {\n          生産指示書ID: selectedOrderId,\n          工程ID: processId,\n          製造ラインID: \"1\", // 仮の値\n          計画開始日時: startTime,\n          計画終了日時: endTime,\n          実績開始日時: startTime,\n          実績終了日時: endTime,\n          計画数量: parseInt(actualQuantity) || 0,\n          完了数量: parseInt(actualQuantity) || 0,\n          良品数量: (parseInt(actualQuantity) || 0) - (parseInt(defectQuantity) || 0),\n          不良品数量: parseInt(defectQuantity) || 0,\n          進捗率: parseInt(progressRate),\n          工程ステータス: progressRate == 100 ? \"完了\" : \"進行中\",\n          遅延フラグ: false,\n          備考: remarks,\n          作成者ID: \"current-user\",\n          更新者ID: \"current-user\"\n        };\n\n        const saved = await window.aivicApi.save(progressTableIndex, progressData);\n        if (saved) {\n          alert(\"進捗を更新しました\");\n          \n          // 作業実績も同時に記録\n          const workResultTableIndex = tables.findIndex(t => t.tableName === \"作業実績\");\n          if (workResultTableIndex >= 0) {\n            const workResultData = {\n              生産指示書ID: selectedOrderId,\n              製造ラインID: \"1\",\n              工程ID: processId,\n              作業開始日時: startTime,\n              作業終了日時: endTime,\n              実績数量: parseInt(actualQuantity) || 0,\n              良品数量: (parseInt(actualQuantity) || 0) - (parseInt(defectQuantity) || 0),\n              不良品数量: parseInt(defectQuantity) || 0,\n              作業者ID: workerId,\n              作業状況: endTime ? \"完了\" : \"進行中\",\n              備考: remarks,\n              作成者ID: \"current-user\"\n            };\n            await window.aivicApi.save(workResultTableIndex, workResultData);\n          }\n\n          // 品質検査結果も記録\n          if (qualityResult) {\n            const qualityTableIndex = tables.findIndex(t => t.tableName === \"品質検査結果\");\n            if (qualityTableIndex >= 0) {\n              const qualityData = {\n                生産指示書ID: selectedOrderId,\n                製品ID: \"1\", // 仮の値\n                工程ID: processId,\n                検査項目名: \"工程検査\",\n                判定結果: qualityResult,\n                検査数量: parseInt(actualQuantity) || 0,\n                不良数量: parseInt(defectQuantity) || 0,\n                検査日時: new Date().toISOString(),\n                検査者ID: workerId,\n                備考: remarks,\n                作成者ID: \"current-user\"\n              };\n              await window.aivicApi.save(qualityTableIndex, qualityData);\n            }\n          }\n          \n          // フォームクリア\n          container.querySelector(\"#btn-clear\").click();\n        }\n      }\n    } catch (error) {\n      console.error(\"保存エラー:\", error);\n      alert(\"保存に失敗しました\");\n    }\n  });\n}";
+window.AIVIC_PAGE_INIT_JS = "function(container, apiUrl, tables) {\n  let selectedInstructionId = null;\n  let selectedInstruction = null;\n\n  // 生産指示書一覧を描画\n  function renderInstructions(instructions) {\n    const listEl = container.querySelector(\"#instruction-list\");\n    if (!instructions || instructions.length === 0) {\n      listEl.innerHTML = '<div style=\"color: var(--text-muted); text-align: center; padding: 1rem;\">該当する生産指示書がありません</div>';\n      return;\n    }\n    \n    listEl.innerHTML = instructions.map(inst => `\n      <div class=\"instruction-item\" data-id=\"${inst.id}\" \n           style=\"padding: 0.75rem; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; margin-bottom: 0.5rem; cursor: pointer; background: rgba(0,0,0,0.1);\">\n        <div style=\"font-weight: 500; color: var(--text);\">${inst.生産指示書番号 || ''}</div>\n        <div style=\"font-size: 0.85em; color: var(--text-muted);\">${inst.製品名 || ''} | 予定: ${inst.生産予定数量 || 0}個</div>\n        <div style=\"font-size: 0.8em; color: var(--text-muted);\">ライン: ${inst.ライン名 || ''}</div>\n      </div>\n    `).join('');\n  }\n\n  // 進捗履歴を描画\n  function renderProgressHistory(records) {\n    const tbody = container.querySelector(\"#progress-history-tbody\");\n    if (!records || records.length === 0) {\n      tbody.innerHTML = '<tr><td colspan=\"8\" style=\"text-align: center; color: var(--text-muted);\">履歴がありません</td></tr>';\n      return;\n    }\n    \n    tbody.innerHTML = records.map(record => `\n      <tr data-id=\"${record.id}\">\n        <td>${record.更新日時 ? new Date(record.更新日時).toLocaleTimeString() : ''}</td>\n        <td>${record.生産指示書番号 || ''}</td>\n        <td>${record.工程名 || ''}</td>\n        <td>${record.作業者名 || ''}</td>\n        <td>${record.進捗率 || 0}%</td>\n        <td>${record.完了数量 || 0}</td>\n        <td>\n          <span style=\"padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.8em; \n                       background: ${record.品質結果 === '合格' ? '#22c55e' : record.品質結果 === '不合格' ? '#ef4444' : '#f59e0b'}; \n                       color: #fff;\">\n            ${record.品質結果 || '-'}\n          </span>\n        </td>\n        <td>\n          <button class=\"action-btn secondary edit-btn\" data-id=\"${record.id}\" style=\"font-size: 0.8em; padding: 0.3rem 0.6rem;\">編集</button>\n          <button class=\"action-btn secondary delete-btn\" data-id=\"${record.id}\" style=\"font-size: 0.8em; padding: 0.3rem 0.6rem;\">削除</button>\n        </td>\n      </tr>\n    `).join('');\n  }\n\n  // 初期データ読み込み\n  window.aivicApi.list(4).then(instructions => {\n    renderInstructions(instructions || []);\n  });\n\n  window.aivicApi.list(12).then(progressRecords => {\n    const today = new Date().toDateString();\n    const todayRecords = (progressRecords || []).filter(record => \n      record.更新日時 && new Date(record.更新日時).toDateString() === today\n    );\n    renderProgressHistory(todayRecords);\n  });\n\n  // 生産指示書検索\n  container.querySelector(\"#btn-search-instruction\").addEventListener(\"click\", async () => {\n    const searchNo = container.querySelector(\"#search-instruction-no\").value.trim();\n    const instructions = await window.aivicApi.list(4);\n    \n    if (searchNo) {\n      const filtered = instructions.filter(inst => \n        inst.生産指示書番号 && inst.生産指示書番号.includes(searchNo)\n      );\n      renderInstructions(filtered);\n    } else {\n      renderInstructions(instructions);\n    }\n  });\n\n  // 生産指示書選択\n  container.addEventListener(\"click\", (e) => {\n    const instructionItem = e.target.closest(\".instruction-item\");\n    if (instructionItem) {\n      // 既存の選択を解除\n      container.querySelectorAll(\".instruction-item\").forEach(item => {\n        item.style.background = \"rgba(0,0,0,0.1)\";\n        item.style.borderColor = \"rgba(255,255,255,0.1)\";\n      });\n      \n      // 新しい選択を適用\n      instructionItem.style.background = \"rgba(var(--primary-rgb, 59, 130, 246), 0.15)\";\n      instructionItem.style.borderColor = \"var(--primary)\";\n      \n      selectedInstructionId = instructionItem.dataset.id;\n      \n      // 選択された生産指示書の情報を表示\n      window.aivicApi.list(4).then(instructions => {\n        selectedInstruction = instructions.find(inst => inst.id === selectedInstructionId);\n        if (selectedInstruction) {\n          container.querySelector(\"#display-instruction-no\").textContent = selectedInstruction.生産指示書番号 || '';\n          container.querySelector(\"#display-product-name\").textContent = selectedInstruction.製品名 || '';\n          container.querySelector(\"#display-line-name\").textContent = selectedInstruction.ライン名 || '';\n          container.querySelector(\"#display-planned-qty\").textContent = `${selectedInstruction.生産予定数量 || 0}個`;\n          container.querySelector(\"#selected-instruction-info\").style.display = \"block\";\n        }\n      });\n    }\n  });\n\n  // 進捗更新フォーム送信\n  container.querySelector(\"#progress-form\").addEventListener(\"submit\", async (e) => {\n    e.preventDefault();\n    \n    if (!selectedInstructionId) {\n      alert(\"生産指示書を選択してください\");\n      return;\n    }\n\n    const formData = new FormData(e.target);\n    const qualityResult = container.querySelector('input[name=\"qualityResult\"]:checked')?.value || '';\n    \n    const progressData = {\n      生産指示書ID: selectedInstructionId,\n      生産指示書番号: selectedInstruction?.生産指示書番号 || '',\n      工程ID: formData.get('process'),\n      工程名: container.querySelector(\"#process-select option:checked\").textContent,\n      作業者ID: formData.get('worker'),\n      作業者名: container.querySelector(\"#worker-select option:checked\").textContent,\n      計画開始日時: formData.get('startTime'),\n      実績開始日時: formData.get('startTime'),\n      実績終了日時: formData.get('endTime') || null,\n      進捗率: parseInt(formData.get('progressRate')) || 0,\n      完了数量: parseInt(formData.get('actualQty')) || 0,\n      不良品数量: parseInt(formData.get('defectQty')) || 0,\n      工程ステータス: parseInt(formData.get('progressRate')) >= 100 ? '完了' : '進行中',\n      品質結果: qualityResult === 'pass' ? '合格' : qualityResult === 'fail' ? '不合格' : qualityResult === 'recheck' ? '要再検査' : '',\n      備考: formData.get('remarks') || '',\n      作成日時: new Date().toISOString(),\n      更新日時: new Date().toISOString(),\n      作成者ID: 'current-user',\n      更新者ID: 'current-user'\n    };\n\n    const saved = await window.aivicApi.save(12, progressData);\n    if (saved) {\n      alert(\"進捗を更新しました\");\n      e.target.reset();\n      container.querySelector(\"#selected-instruction-info\").style.display = \"none\";\n      selectedInstructionId = null;\n      selectedInstruction = null;\n      \n      // 履歴を再読み込み\n      const progressRecords = await window.aivicApi.list(12);\n      const today = new Date().toDateString();\n      const todayRecords = progressRecords.filter(record => \n        record.更新日時 && new Date(record.更新日時).toDateString() === today\n      );\n      renderProgressHistory(todayRecords);\n    }\n  });\n\n  // 実績記録画面への遷移\n  container.querySelector(\"#btn-record-result\").addEventListener(\"click\", () => {\n    window.showScreen(\"scr-1780995289968\");\n  });\n\n  // 履歴の編集・削除\n  container.addEventListener(\"click\", async (e) => {\n    const deleteBtn = e.target.closest(\".delete-btn\");\n    const editBtn = e.target.closest(\".edit-btn\");\n    \n    if (deleteBtn) {\n      if (!confirm(\"この進捗記録を削除しますか？\")) return;\n      \n      await window.aivicApi.delete(12, deleteBtn.dataset.id);\n      const progressRecords = await window.aivicApi.list(12);\n      const today = new Date().toDateString();\n      const todayRecords = progressRecords.filter(record => \n        record.更新日時 && new Date(record.更新日時).toDateString() === today\n      );\n      renderProgressHistory(todayRecords);\n    }\n    \n    if (editBtn) {\n      // 編集機能は簡略化（実際の業務では詳細な編集画面が必要）\n      alert(\"編集機能は別画面で実装されます\");\n    }\n  });\n\n  // 現在時刻を開始時刻にセット\n  const now = new Date();\n  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());\n  container.querySelector(\"#start-time\").value = now.toISOString().slice(0, 16);\n}";
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
 :root {
   --primary: #8B4513;
   --primary-hover: #A0522D;
-  --bg-main: #FAF7F2;
-  --bg-card: #F5F1E8;
-  --bg-sidebar: #F0EBE0;
+  --bg-main: #F5F5DC;
+  --bg-card: #FAEBD7;
+  --bg-sidebar: #F0E68C;
   --border: #D2B48C;
   --text: #2F1B14;
   --text-muted: #5D4037;
-  --top-bar-bg: #EFEBE2;
-  --top-bar-border: #C8A882;
+  --top-bar-bg: #DEB887;
+  --top-bar-border: #CD853F;
 }
 *, *::before, *::after { box-sizing: border-box; }
 body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg-main); color:var(--text); display:flex; flex-direction:column; height:100vh; overflow:hidden; }
@@ -102,164 +102,168 @@ canvas { display:block; max-height:280px !important; }
   </aside>
   <main class="main">
     <section class="card" data-aivic-panel="scr-1780995279362" style="margin-top:0">
-<div class="breadcrumb" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+<div class="breadcrumb" style="color: var(--text-muted); font-size: 0.9em; margin-bottom: 1rem;">
   AAA › 生産管理システム › 工程進捗更新処理
 </div>
 
 <div style="display: flex; gap: 1.5rem; height: calc(100vh - 120px);">
   <!-- 左側: 生産指示書検索・選択 -->
   <div class="card" style="flex: 0 0 320px; padding: 1rem;">
-    <h3 style="margin: 0 0 1rem 0; font-size: 1.1rem; color: var(--text);">生産指示書選択</h3>
+    <h3 style="margin: 0 0 1rem 0; font-size: 1.1em; color: var(--text);">生産指示書選択</h3>
     
     <div style="margin-bottom: 1rem;">
-      <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">生産指示書番号</label>
-      <input type="text" id="production-order-search" data-testid="production-order-search" 
-             style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);" 
-             placeholder="番号を入力">
+      <label style="display: block; font-size: 0.85em; color: var(--text-muted); margin-bottom: 0.3rem;">生産指示書番号</label>
+      <input type="text" id="search-instruction-no" data-testid="instruction-no-search" 
+             placeholder="番号を入力" 
+             style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
     </div>
     
-    <button id="btn-search-order" data-testid="search-order-button" class="action-btn" 
+    <button id="btn-search-instruction" data-testid="search-instruction-button" class="action-btn" 
             style="width: 100%; margin-bottom: 1rem;">検索</button>
     
-    <div id="order-list" data-testid="order-list" style="max-height: 400px; overflow-y: auto;">
-      <table style="width: 100%; font-size: 0.85rem;">
-        <thead>
-          <tr>
-            <th style="padding: 0.4rem; text-align: left; color: var(--text); border-bottom: 1px solid var(--border);">指示書番号</th>
-            <th style="padding: 0.4rem; text-align: left; color: var(--text); border-bottom: 1px solid var(--border);">製品名</th>
-          </tr>
-        </thead>
-        <tbody id="order-tbody">
-        </tbody>
-      </table>
+    <div id="instruction-list" data-testid="instruction-list" style="max-height: 300px; overflow-y: auto;">
+      <!-- 生産指示書一覧がここに表示される -->
     </div>
   </div>
 
   <!-- 右側: 進捗更新フォーム -->
   <div class="card" style="flex: 1; padding: 1.5rem;">
-    <h2 style="margin: 0 0 1.5rem 0; font-size: 1.3rem; color: var(--text);">工程進捗更新</h2>
+    <h2 style="margin: 0 0 1.5rem 0; font-size: 1.3em; color: var(--text);">工程進捗更新</h2>
     
-    <!-- 選択中の生産指示書情報 -->
-    <div id="selected-order-info" style="background: rgba(0,0,0,0.15); padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; display: none;">
-      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; font-size: 0.9rem;">
+    <div id="selected-instruction-info" style="background: rgba(0,0,0,0.15); padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; display: none;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9em;">
         <div>
           <span style="color: var(--text-muted);">生産指示書番号:</span>
-          <div id="display-order-number" style="font-weight: 500; color: var(--text);"></div>
+          <span id="display-instruction-no" style="color: var(--text); font-weight: 500;"></span>
         </div>
         <div>
           <span style="color: var(--text-muted);">製品名:</span>
-          <div id="display-product-name" style="font-weight: 500; color: var(--text);"></div>
+          <span id="display-product-name" style="color: var(--text); font-weight: 500;"></span>
         </div>
         <div>
           <span style="color: var(--text-muted);">製造ライン:</span>
-          <div id="display-line-name" style="font-weight: 500; color: var(--text);"></div>
+          <span id="display-line-name" style="color: var(--text); font-weight: 500;"></span>
+        </div>
+        <div>
+          <span style="color: var(--text-muted);">予定数量:</span>
+          <span id="display-planned-qty" style="color: var(--text); font-weight: 500;"></span>
         </div>
       </div>
     </div>
 
-    <!-- 進捗更新フォーム -->
-    <div id="progress-form" style="display: none;">
-      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-        <div>
-          <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">工程</label>
-          <select id="process-select" data-testid="process-select" 
-                  style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
-            <option value="">選択してください</option>
-            <option value="1">材料準備</option>
-            <option value="2">加工工程</option>
-            <option value="3">組立工程</option>
-            <option value="4">品質検査</option>
-            <option value="5">梱包工程</option>
-          </select>
-        </div>
-        
-        <div>
-          <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">作業者</label>
-          <select id="worker-select" data-testid="worker-select" 
-                  style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
-            <option value="">選択してください</option>
-            <option value="1">田中 太郎</option>
-            <option value="2">佐藤 花子</option>
-            <option value="3">鈴木 次郎</option>
-            <option value="4">高橋 美咲</option>
-          </select>
-        </div>
-        
-        <div>
-          <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">進捗率 (%)</label>
-          <input type="number" id="progress-rate" data-testid="progress-rate" min="0" max="100"
-                 style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);" 
-                 placeholder="0-100">
-        </div>
+    <form id="progress-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.5rem;">
+      <div>
+        <label style="display: block; font-size: 0.85em; color: var(--text-muted); margin-bottom: 0.3rem;">工程</label>
+        <select id="process-select" data-testid="process-select" name="process" required
+                style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
+          <option value="">選択してください</option>
+          <option value="cutting">切断工程</option>
+          <option value="machining">加工工程</option>
+          <option value="assembly">組立工程</option>
+          <option value="inspection">検査工程</option>
+          <option value="packaging">梱包工程</option>
+        </select>
       </div>
 
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-        <div>
-          <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">作業開始時刻</label>
-          <input type="datetime-local" id="start-time" data-testid="start-time"
-                 style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
-        </div>
-        
-        <div>
-          <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">作業終了時刻</label>
-          <input type="datetime-local" id="end-time" data-testid="end-time"
-                 style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
-        </div>
+      <div>
+        <label style="display: block; font-size: 0.85em; color: var(--text-muted); margin-bottom: 0.3rem;">作業者</label>
+        <select id="worker-select" data-testid="worker-select" name="worker" required
+                style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
+          <option value="">選択してください</option>
+          <option value="worker001">田中 太郎</option>
+          <option value="worker002">佐藤 花子</option>
+          <option value="worker003">鈴木 次郎</option>
+          <option value="worker004">高橋 美咲</option>
+        </select>
       </div>
 
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-        <div>
-          <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">作業実績数量</label>
-          <input type="number" id="actual-quantity" data-testid="actual-quantity" min="0"
-                 style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);" 
-                 placeholder="実績数量">
-        </div>
-        
-        <div>
-          <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">不良品数量</label>
-          <input type="number" id="defect-quantity" data-testid="defect-quantity" min="0"
-                 style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);" 
-                 placeholder="不良品数量">
-        </div>
+      <div>
+        <label style="display: block; font-size: 0.85em; color: var(--text-muted); margin-bottom: 0.3rem;">作業開始時刻</label>
+        <input type="datetime-local" id="start-time" data-testid="start-time-input" name="startTime" required
+               style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
       </div>
 
-      <div style="margin-bottom: 1.5rem;">
-        <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">品質検査結果</label>
-        <div style="display: flex; gap: 1.5rem;">
-          <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-            <input type="radio" name="quality-result" value="合格" data-testid="quality-pass" style="accent-color: var(--primary);">
-            <span style="color: var(--text);">合格</span>
+      <div>
+        <label style="display: block; font-size: 0.85em; color: var(--text-muted); margin-bottom: 0.3rem;">作業終了時刻</label>
+        <input type="datetime-local" id="end-time" data-testid="end-time-input" name="endTime"
+               style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 0.85em; color: var(--text-muted); margin-bottom: 0.3rem;">進捗率（%）</label>
+        <input type="number" id="progress-rate" data-testid="progress-rate-input" name="progressRate" min="0" max="100" required
+               style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 0.85em; color: var(--text-muted); margin-bottom: 0.3rem;">作業実績数量</label>
+        <input type="number" id="actual-qty" data-testid="actual-qty-input" name="actualQty" min="0" required
+               style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 0.85em; color: var(--text-muted); margin-bottom: 0.3rem;">不良品数量</label>
+        <input type="number" id="defect-qty" data-testid="defect-qty-input" name="defectQty" min="0" value="0"
+               style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 0.85em; color: var(--text-muted); margin-bottom: 0.3rem;">品質検査結果</label>
+        <div style="display: flex; gap: 1rem; align-items: center; margin-top: 0.5rem;">
+          <label style="display: flex; align-items: center; gap: 0.3rem; font-size: 0.9em; color: var(--text);">
+            <input type="radio" name="qualityResult" value="pass" data-testid="quality-pass" style="accent-color: var(--primary);">
+            合格
           </label>
-          <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-            <input type="radio" name="quality-result" value="不合格" data-testid="quality-fail" style="accent-color: var(--primary);">
-            <span style="color: var(--text);">不合格</span>
+          <label style="display: flex; align-items: center; gap: 0.3rem; font-size: 0.9em; color: var(--text);">
+            <input type="radio" name="qualityResult" value="fail" data-testid="quality-fail" style="accent-color: var(--primary);">
+            不合格
           </label>
-          <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-            <input type="radio" name="quality-result" value="要再検査" data-testid="quality-recheck" style="accent-color: var(--primary);">
-            <span style="color: var(--text);">要再検査</span>
+          <label style="display: flex; align-items: center; gap: 0.3rem; font-size: 0.9em; color: var(--text);">
+            <input type="radio" name="qualityResult" value="recheck" data-testid="quality-recheck" style="accent-color: var(--primary);">
+            要再検査
           </label>
         </div>
       </div>
 
-      <div style="margin-bottom: 1.5rem;">
-        <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">異常・備考</label>
-        <textarea id="remarks" data-testid="remarks" rows="4"
-                  style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); resize: vertical;" 
-                  placeholder="異常事項や特記事項があれば入力してください"></textarea>
+      <div style="grid-column: 1 / -1;">
+        <label style="display: block; font-size: 0.85em; color: var(--text-muted); margin-bottom: 0.3rem;">異常・備考</label>
+        <textarea id="remarks" data-testid="remarks-input" name="remarks" rows="3" placeholder="異常事項や特記事項があれば記入してください"
+                  style="width: 100%; padding: 0.5rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); resize: vertical;"></textarea>
       </div>
 
-      <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-        <button id="btn-clear" data-testid="clear-button" class="action-btn secondary">クリア</button>
-        <button id="btn-save-progress" data-testid="save-progress-button" class="action-btn">進捗更新</button>
-        <button id="btn-record" data-testid="record-button" class="action-btn" 
-                onclick="window.showScreen('scr-1780995289968')">実績記録</button>
+      <div style="grid-column: 1 / -1; display: flex; gap: 1rem; margin-top: 1rem;">
+        <button type="submit" id="btn-update-progress" data-testid="update-progress-button" class="action-btn" style="flex: 1;">
+          進捗更新
+        </button>
+        <button type="button" id="btn-record-result" data-testid="record-result-button" class="action-btn secondary" style="flex: 1;">
+          実績記録
+        </button>
       </div>
-    </div>
+    </form>
+  </div>
+</div>
 
-    <!-- 初期メッセージ -->
-    <div id="initial-message" style="text-align: center; color: var(--text-muted); padding: 3rem;">
-      左側から生産指示書を選択してください
-    </div>
+<!-- 進捗更新履歴 -->
+<div class="card" style="margin-top: 1.5rem; padding: 1rem;">
+  <h3 style="margin: 0 0 1rem 0; font-size: 1.1em; color: var(--text);">本日の進捗更新履歴</h3>
+  <div class="table-wrap">
+    <table data-testid="progress-history-list">
+      <thead>
+        <tr>
+          <th>時刻</th>
+          <th>生産指示書番号</th>
+          <th>工程</th>
+          <th>作業者</th>
+          <th>進捗率</th>
+          <th>実績数量</th>
+          <th>品質結果</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody id="progress-history-tbody">
+        <!-- 進捗履歴がここに表示される -->
+      </tbody>
+    </table>
   </div>
 </div>
     </section>

@@ -93,7 +93,211 @@ canvas { display:block; max-height:280px !important; }
   </aside>
   <main class="main">
     <section class="card" data-aivic-panel="scr-1780996218457" style="margin-top:0">
-<p class="muted">顧客通知機能</p>
+<div class="notification-management">
+  <!-- ヘッダー -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1 style="font-size: 24px; font-weight: 600; color: var(--text); margin: 0;">顧客通知機能</h1>
+    <div style="display: flex; gap: 12px;">
+      <button class="action-btn secondary" data-testid="template-manage-btn" onclick="window.showScreen('scr-1780996206790')">
+        テンプレート管理
+      </button>
+      <button class="action-btn secondary" data-testid="history-view-btn">
+        送信履歴
+      </button>
+    </div>
+  </div>
+
+  <!-- メインレイアウト: 左側フォーム + 右側プレビュー -->
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; height: calc(100vh - 200px);">
+    
+    <!-- 左側: 通知作成フォーム -->
+    <div class="card" style="padding: 20px; overflow-y: auto;">
+      <h2 style="font-size: 18px; font-weight: 600; color: var(--text); margin: 0 0 16px 0;">通知作成</h2>
+      
+      <form id="notification-form">
+        <!-- 通知対象顧客選択 -->
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">通知対象顧客</label>
+          <select data-testid="target-customer-select" id="target-customer" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+            <option value="">顧客を選択してください</option>
+            <option value="all">全顧客</option>
+            <option value="active">アクティブ顧客のみ</option>
+            <option value="specific">個別選択</option>
+          </select>
+        </div>
+
+        <!-- 個別顧客選択エリア -->
+        <div id="specific-customers" style="margin-bottom: 16px; display: none;">
+          <label style="display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">対象顧客（複数選択可）</label>
+          <div id="customer-list" style="max-height: 120px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; background: rgba(0,0,0,0.25); padding: 8px;">
+            <!-- 顧客チェックボックスリストが動的に生成される -->
+          </div>
+        </div>
+
+        <!-- 通知テンプレート選択 -->
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">通知テンプレート</label>
+          <select data-testid="template-select" id="notification-template" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+            <option value="">テンプレートを選択してください</option>
+            <option value="price-change">価格変更通知</option>
+            <option value="product-update">製品情報更新</option>
+            <option value="order-status">受注状況通知</option>
+            <option value="delivery-notice">納期変更通知</option>
+            <option value="custom">カスタム通知</option>
+          </select>
+        </div>
+
+        <!-- 通知タイトル -->
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">通知タイトル</label>
+          <input data-testid="notification-title" id="notification-title" type="text" placeholder="通知のタイトルを入力してください" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+        </div>
+
+        <!-- 通知内容 -->
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">通知内容</label>
+          <textarea data-testid="notification-content" id="notification-content" rows="6" placeholder="通知の内容を入力してください" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px; resize: vertical;"></textarea>
+        </div>
+
+        <!-- 2列レイアウト: 緊急度と通知方法 -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+          <div>
+            <label style="display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">緊急度</label>
+            <select data-testid="urgency-select" id="urgency" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+              <option value="low">低</option>
+              <option value="normal" selected>通常</option>
+              <option value="high">高</option>
+              <option value="urgent">緊急</option>
+            </select>
+          </div>
+          <div>
+            <label style="display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">通知方法</label>
+            <select data-testid="notification-method-select" id="notification-method" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+              <option value="email">メール</option>
+              <option value="sms">SMS</option>
+              <option value="system">システム内通知</option>
+              <option value="all">全て</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 送信日時設定 -->
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">送信日時</label>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <input type="radio" id="send-now" name="send-timing" value="now" checked style="accent-color: var(--primary);">
+            <label for="send-now" style="font-size: 14px; color: var(--text); margin-right: 16px;">即座に送信</label>
+            <input type="radio" id="send-scheduled" name="send-timing" value="scheduled" style="accent-color: var(--primary);">
+            <label for="send-scheduled" style="font-size: 14px; color: var(--text);">日時指定</label>
+          </div>
+          <input data-testid="scheduled-datetime" id="scheduled-datetime" type="datetime-local" disabled style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px; margin-top: 8px;">
+        </div>
+
+        <!-- 添付ファイル -->
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">添付ファイル</label>
+          <input data-testid="attachment-file" id="attachment-file" type="file" multiple style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+          <div id="file-list" style="margin-top: 8px; font-size: 13px; color: var(--text-muted);"></div>
+        </div>
+
+        <!-- アクションボタン -->
+        <div style="display: flex; gap: 12px;">
+          <button type="button" class="action-btn" data-testid="preview-btn" id="preview-btn">
+            プレビュー更新
+          </button>
+          <button type="button" class="action-btn" data-testid="send-notification-btn" id="send-notification-btn">
+            通知送信
+          </button>
+          <button type="button" class="action-btn secondary" data-testid="save-draft-btn" id="save-draft-btn">
+            下書き保存
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- 右側: プレビューエリア -->
+    <div class="card" style="padding: 20px; overflow-y: auto;">
+      <h2 style="font-size: 18px; font-weight: 600; color: var(--text); margin: 0 0 16px 0;">プレビュー</h2>
+      
+      <div id="notification-preview" style="border: 1px solid rgba(255,255,255,0.18); border-radius: 8px; padding: 16px; background: rgba(0,0,0,0.15);">
+        <!-- 通知ヘッダー -->
+        <div style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span id="preview-urgency" style="padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; background: var(--primary); color: #fff;">通常</span>
+            <span id="preview-method" style="font-size: 13px; color: var(--text-muted);">メール</span>
+          </div>
+          <h3 id="preview-title" style="font-size: 16px; font-weight: 600; color: var(--text); margin: 0;">通知タイトルがここに表示されます</h3>
+        </div>
+
+        <!-- 通知本文 -->
+        <div id="preview-content" style="font-size: 14px; line-height: 1.6; color: var(--text); white-space: pre-wrap; margin-bottom: 16px;">
+          通知内容がここに表示されます。
+        </div>
+
+        <!-- 添付ファイル表示 -->
+        <div id="preview-attachments" style="display: none;">
+          <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">添付ファイル:</div>
+          <div id="preview-file-list" style="font-size: 13px; color: var(--text);"></div>
+        </div>
+
+        <!-- 送信情報 -->
+        <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; margin-top: 16px;">
+          <div style="font-size: 13px; color: var(--text-muted);">
+            <div>送信対象: <span id="preview-targets">未選択</span></div>
+            <div>送信日時: <span id="preview-datetime">即座に送信</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 送信統計 -->
+      <div style="margin-top: 20px;">
+        <h3 style="font-size: 16px; font-weight: 600; color: var(--text); margin: 0 0 12px 0;">送信統計</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div style="padding: 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; text-align: center;">
+            <div style="font-size: 20px; font-weight: 600; color: var(--primary);" id="total-recipients">0</div>
+            <div style="font-size: 13px; color: var(--text-muted);">送信対象数</div>
+          </div>
+          <div style="padding: 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; text-align: center;">
+            <div style="font-size: 20px; font-weight: 600; color: var(--text);" id="estimated-cost">¥0</div>
+            <div style="font-size: 13px; color: var(--text-muted);">推定送信コスト</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 送信履歴テーブル -->
+  <div class="card" style="margin-top: 20px; padding: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <h2 style="font-size: 18px; font-weight: 600; color: var(--text); margin: 0;">最近の送信履歴</h2>
+      <div style="display: flex; gap: 12px;">
+        <input data-testid="history-search" id="history-search" type="text" placeholder="履歴を検索..." style="padding: 6px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px; width: 200px;">
+        <button class="action-btn secondary" data-testid="search-history-btn" id="search-history-btn">検索</button>
+        <button class="action-btn secondary" data-testid="export-history-btn" id="export-history-btn">CSV出力</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table data-testid="notification-history-list">
+        <thead>
+          <tr>
+            <th>送信日時</th>
+            <th>タイトル</th>
+            <th>対象顧客数</th>
+            <th>通知方法</th>
+            <th>緊急度</th>
+            <th>ステータス</th>
+            <th>開封率</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="history-tbody">
+          <!-- 履歴データが動的に生成される -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
     </section>
   </main>
 </div>

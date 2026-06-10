@@ -1,7 +1,7 @@
 {
   "systemId": "itg-2",
   "systemName": "在庫管理システム",
-  "cssTheme": ":root {\n  --primary: #8B4513;\n  --primary-hover: #A0522D;\n  --bg-main: #FAF7F2;\n  --bg-card: #F5F1E8;\n  --bg-sidebar: #F0EBE0;\n  --border: #D2B48C;\n  --text: #2F1B14;\n  --text-muted: #5D4037;\n  --top-bar-bg: #F5F1E8;\n  --top-bar-border: #DEB887;\n}",
+  "cssTheme": ":root {\n  --primary: #8B4513;\n  --primary-hover: #A0522D;\n  --bg-main: #FAF7F2;\n  --bg-card: #F5F0E8;\n  --bg-sidebar: #F0E6D6;\n  --border: #D2B48C;\n  --text: #2F1B14;\n  --text-muted: #5D4037;\n  --top-bar-bg: #EFEBE3;\n  --top-bar-border: #CD853F;\n}",
   "screens": [
     {
       "id": "scr-1780995483399",

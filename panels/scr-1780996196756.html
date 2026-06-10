@@ -11,7 +11,7 @@ window.AIVIC_SYSTEM_NAME = "営業支援システム";
 window.AIVIC_TABLES = [{"tableName":"ユーザー","purpose":"生産管理システムを利用するユーザーの基本情報と認証情報を管理する","columns":[{"name":"ユーザーID","type":"uuid","required":true,"description":"ユーザーを一意に識別するID"},{"name":"ユーザー名","type":"varchar(100)","required":true,"description":"システムログイン用のユーザー名"},{"name":"パスワードハッシュ","type":"varchar(100)","required":true,"description":"暗号化されたパスワード"},{"name":"氏名","type":"varchar(100)","required":true,"description":"ユーザーの実名"},{"name":"メールアドレス","type":"varchar(100)","required":false,"description":"連絡用メールアドレス"},{"name":"部署","type":"varchar(100)","required":false,"description":"所属部署名"},{"name":"役職","type":"varchar(100)","required":false,"description":"役職名"},{"name":"権限レベル","type":"integer","required":true,"description":"システム操作権限レベル（1:参照のみ、2:入力、3:管理者等）"},{"name":"有効フラグ","type":"boolean","required":true,"description":"アカウントの有効/無効状態"},{"name":"最終ログイン日時","type":"timestamp","required":false,"description":"最後にログインした日時"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"uuid","required":true,"description":"レコードを作成したユーザーのID"}]},{"tableName":"価格履歴","purpose":"商品の価格変動を時系列で管理し、発注時の価格決定や原価分析に使用する","columns":[{"name":"価格履歴ID","type":"uuid","required":true,"description":"価格履歴の一意識別子（主キー）"},{"name":"商品ID","type":"uuid","required":true,"description":"商品マスタへの外部キー"},{"name":"仕入先ID","type":"uuid","required":true,"description":"仕入先マスタへの外部キー"},{"name":"適用開始日","type":"timestamp","required":true,"description":"この価格が適用される開始日時"},{"name":"適用終了日","type":"timestamp","required":false,"description":"この価格が適用される終了日時（NULL=現在有効）"},{"name":"単価","type":"integer","required":true,"description":"商品の単価（円）"},{"name":"最小発注数量","type":"integer","required":false,"description":"この価格が適用される最小発注数量"},{"name":"価格変更理由","type":"varchar(100)","required":false,"description":"価格変更の理由（原材料費上昇、為替変動等）"},{"name":"有効フラグ","type":"boolean","required":true,"description":"この価格履歴が有効かどうか"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"作成者","type":"varchar(100)","required":true,"description":"レコード作成者"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"更新者","type":"varchar(100)","required":true,"description":"レコード最終更新者"}]},{"tableName":"顧客","purpose":"営業活動の対象となる顧客情報を管理し、営業担当者による顧客検索・絞り込み・商談管理を支援する","columns":[{"name":"顧客ID","type":"uuid","required":true,"description":"顧客の一意識別子（主キー）"},{"name":"顧客名","type":"varchar(100)","required":true,"description":"会社名または個人名"},{"name":"顧客区分","type":"varchar(100)","required":true,"description":"法人・個人事業主・個人等の区分"},{"name":"業界","type":"varchar(100)","required":false,"description":"顧客の所属業界（営業戦略立案・絞り込み用）"},{"name":"従業員数","type":"integer","required":false,"description":"企業規模判定・ターゲティング用"},{"name":"郵便番号","type":"varchar(100)","required":false,"description":"住所の郵便番号"},{"name":"住所","type":"varchar(100)","required":false,"description":"顧客の所在地"},{"name":"電話番号","type":"varchar(100)","required":false,"description":"連絡先電話番号"},{"name":"メールアドレス","type":"varchar(100)","required":false,"description":"連絡先メールアドレス"},{"name":"担当営業ID","type":"uuid","required":true,"description":"ユーザーテーブルへの外部キー（営業担当者）"},{"name":"顧客ステータス","type":"varchar(100)","required":true,"description":"見込み客・既存顧客・休眠顧客等のステータス"},{"name":"初回接触日","type":"timestamp","required":false,"description":"最初に営業接触した日付"},{"name":"最終接触日","type":"timestamp","required":false,"description":"最後に営業活動を行った日付"},{"name":"備考","type":"text","required":false,"description":"営業活動に関する特記事項"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者（ユーザーテーブルへの外部キー）"}]},{"tableName":"製品","purpose":"営業活動で扱う製品・サービスの基本情報を管理し、見積もりや提案書作成、売上分析に使用する","columns":[{"name":"製品ID","type":"uuid","required":true,"description":"製品の一意識別子（主キー）"},{"name":"製品コード","type":"varchar(100)","required":true,"description":"社内管理用の製品コード（検索・絞り込みで使用）"},{"name":"製品名","type":"varchar(100)","required":true,"description":"製品・サービスの名称"},{"name":"製品説明","type":"text","required":false,"description":"製品の詳細説明（提案書作成時に使用）"},{"name":"カテゴリ","type":"varchar(100)","required":true,"description":"製品分類（売上分析での集計軸として使用）"},{"name":"標準価格","type":"integer","required":true,"description":"標準販売価格（見積もり作成時の基準価格）"},{"name":"原価","type":"integer","required":false,"description":"製品原価（利益率計算で使用）"},{"name":"販売開始日","type":"timestamp","required":false,"description":"販売開始日（販売可能期間の判定で使用）"},{"name":"販売終了日","type":"timestamp","required":false,"description":"販売終了日（販売可能期間の判定で使用）"},{"name":"販売状態","type":"varchar(100)","required":true,"description":"販売状態（販売中/販売停止/廃止等、見積もり対象製品の絞り込みで使用）"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者のユーザーID"}]},{"tableName":"受注","purpose":"営業活動で獲得した顧客からの注文を管理し、受注から出荷・請求までの業務プロセスを支援する","columns":[{"name":"受注ID","type":"uuid","required":true,"description":"受注を一意に識別するID"},{"name":"受注番号","type":"varchar(100)","required":true,"description":"業務で使用する受注管理番号"},{"name":"顧客ID","type":"uuid","required":true,"description":"受注した顧客のID"},{"name":"受注日","type":"timestamp","required":true,"description":"顧客から受注した日付"},{"name":"納期","type":"timestamp","required":true,"description":"顧客への納品予定日"},{"name":"受注金額","type":"integer","required":true,"description":"受注総額（税込）"},{"name":"受注ステータス","type":"varchar(100)","required":true,"description":"受注処理の進捗状況（受注確定/製造中/出荷済み/完了等）"},{"name":"担当営業ID","type":"uuid","required":true,"description":"この受注を担当する営業担当者のユーザーID"},{"name":"備考","type":"text","required":false,"description":"受注に関する特記事項や顧客要望"},{"name":"作成日時","type":"timestamp","required":true,"description":"受注レコードの作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"受注レコードの最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"受注レコードを作成したユーザーのID"}]},{"tableName":"受注明細","purpose":"受注の商品別明細情報を管理し、受注数量・単価・金額の詳細を記録する","columns":[{"name":"受注明細ID","type":"uuid","required":true,"description":"受注明細の一意識別子（主キー）"},{"name":"受注ID","type":"uuid","required":true,"description":"受注テーブルへの外部キー"},{"name":"製品ID","type":"uuid","required":true,"description":"製品テーブルへの外部キー"},{"name":"明細番号","type":"integer","required":true,"description":"受注内での明細の連番"},{"name":"数量","type":"integer","required":true,"description":"受注数量"},{"name":"単価","type":"integer","required":true,"description":"受注時の単価（円）"},{"name":"金額","type":"integer","required":true,"description":"明細金額（数量×単価）"},{"name":"備考","type":"text","required":false,"description":"明細に関する特記事項"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"uuid","required":true,"description":"レコード作成者のユーザーID"}]},{"tableName":"生産計画","purpose":"製品の生産スケジュールと数量を管理し、受注に対する生産能力と納期を計画する","columns":[{"name":"生産計画ID","type":"uuid","required":true,"description":"生産計画の一意識別子"},{"name":"製品ID","type":"uuid","required":true,"description":"生産対象製品への参照"},{"name":"計画年月","type":"varchar(100)","required":true,"description":"生産計画の対象年月（YYYY-MM形式）"},{"name":"計画数量","type":"integer","required":true,"description":"計画生産数量"},{"name":"生産開始予定日","type":"timestamp","required":true,"description":"生産開始予定日時"},{"name":"生産完了予定日","type":"timestamp","required":true,"description":"生産完了予定日時"},{"name":"ステータス","type":"varchar(100)","required":true,"description":"計画ステータス（計画中/承認済/生産中/完了/中止）"},{"name":"優先度","type":"integer","required":true,"description":"生産優先度（1が最高優先）"},{"name":"備考","type":"text","required":false,"description":"生産計画に関する備考・注意事項"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"計画作成者のユーザーID"}]},{"tableName":"生産ライン","purpose":"製品の生産を行う生産ラインの管理。生産計画の実行単位として使用され、各ラインの稼働状況や生産能力を管理する","columns":[{"name":"生産ラインID","type":"uuid","required":true,"description":"生産ラインの一意識別子（主キー）"},{"name":"ライン名","type":"varchar(100)","required":true,"description":"生産ラインの名称"},{"name":"ライン番号","type":"varchar(100)","required":true,"description":"生産ラインの管理番号"},{"name":"製品ID","type":"uuid","required":false,"description":"このラインで生産可能な製品（製品テーブルへの外部キー）"},{"name":"生産能力","type":"integer","required":true,"description":"1日あたりの最大生産可能数量"},{"name":"稼働状況","type":"varchar(100)","required":true,"description":"稼働中/停止中/メンテナンス中等のステータス"},{"name":"場所","type":"varchar(100)","required":false,"description":"生産ラインの設置場所"},{"name":"備考","type":"text","required":false,"description":"生産ラインに関する補足情報"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"uuid","required":true,"description":"レコード作成者（ユーザーテーブルへの外部キー）"}]},{"tableName":"原価","purpose":"製品の原価情報を管理し、受注時の利益計算や価格設定の基礎データを提供する","columns":[{"name":"原価ID","type":"uuid","required":true,"description":"原価レコードの一意識別子"},{"name":"製品ID","type":"uuid","required":true,"description":"製品テーブルへの外部キー"},{"name":"材料費","type":"integer","required":true,"description":"製品1単位あたりの材料費（円）"},{"name":"労務費","type":"integer","required":true,"description":"製品1単位あたりの労務費（円）"},{"name":"製造間接費","type":"integer","required":true,"description":"製品1単位あたりの製造間接費（円）"},{"name":"総原価","type":"integer","required":true,"description":"製品1単位あたりの総原価（円）"},{"name":"適用開始日","type":"timestamp","required":true,"description":"この原価が適用される開始日"},{"name":"適用終了日","type":"timestamp","required":false,"description":"この原価が適用される終了日"},{"name":"有効フラグ","type":"boolean","required":true,"description":"現在有効な原価かどうか"},{"name":"備考","type":"text","required":false,"description":"原価に関する補足情報"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者のユーザーID"},{"name":"更新者ID","type":"uuid","required":true,"description":"レコード最終更新者のユーザーID"}]},{"tableName":"競合価格情報","purpose":"競合他社の製品価格情報を管理し、営業戦略立案や価格設定の参考データとして活用する","columns":[{"name":"競合価格情報ID","type":"uuid","required":true,"description":"競合価格情報の一意識別子"},{"name":"製品ID","type":"uuid","required":true,"description":"自社製品との対応関係を示す製品ID"},{"name":"競合会社名","type":"varchar(100)","required":true,"description":"競合他社の会社名"},{"name":"競合製品名","type":"varchar(100)","required":true,"description":"競合他社の製品名"},{"name":"競合製品型番","type":"varchar(100)","required":false,"description":"競合他社の製品型番・品番"},{"name":"価格","type":"integer","required":true,"description":"競合製品の価格"},{"name":"価格取得日","type":"timestamp","required":true,"description":"価格情報を取得した日付"},{"name":"情報源","type":"varchar(100)","required":true,"description":"価格情報の取得元（カタログ、Web、営業情報等）"},{"name":"顧客ID","type":"uuid","required":false,"description":"特定顧客向けの価格情報の場合の顧客ID"},{"name":"備考","type":"text","required":false,"description":"価格条件や特記事項"},{"name":"有効フラグ","type":"boolean","required":true,"description":"情報の有効性フラグ"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者のユーザーID"}]},{"tableName":"利益率履歴","purpose":"製品や顧客別の利益率の変動を時系列で管理し、営業戦略や価格設定の分析に活用する","columns":[{"name":"利益率履歴ID","type":"uuid","required":true,"description":"利益率履歴の一意識別子"},{"name":"製品ID","type":"uuid","required":false,"description":"対象製品の識別子（製品別利益率の場合）"},{"name":"顧客ID","type":"uuid","required":false,"description":"対象顧客の識別子（顧客別利益率の場合）"},{"name":"受注ID","type":"uuid","required":false,"description":"関連する受注の識別子（受注別利益率の場合）"},{"name":"利益率","type":"integer","required":true,"description":"利益率（パーセント、小数点2桁まで考慮し100倍した整数値）"},{"name":"売上金額","type":"integer","required":true,"description":"対象期間または取引の売上金額"},{"name":"原価金額","type":"integer","required":true,"description":"対象期間または取引の原価金額"},{"name":"利益金額","type":"integer","required":true,"description":"売上金額から原価金額を差し引いた利益金額"},{"name":"集計期間開始日","type":"timestamp","required":true,"description":"利益率計算の対象期間開始日"},{"name":"集計期間終了日","type":"timestamp","required":true,"description":"利益率計算の対象期間終了日"},{"name":"集計単位","type":"varchar(100)","required":true,"description":"集計の単位（月次、四半期、年次、受注単位等）"},{"name":"備考","type":"text","required":false,"description":"利益率に関する補足情報や特記事項"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"uuid","required":true,"description":"レコード作成者のユーザーID"}]}];
 window.AIVIC_PRESET_SEED = {};
 window.AIVIC_PAGE_SCREEN_ID = "scr-1780996196756";
-window.AIVIC_PAGE_INIT_JS = "function(container, apiUrl, tables) {}";
+window.AIVIC_PAGE_INIT_JS = "function(container, apiUrl, tables) {\n  const tbody = container.querySelector(\"#request-tbody\");\n  \n  // 1. テーブル再描画関数を定義\n  function renderRows(rows) {\n    tbody.innerHTML = rows.map(r => `\n      <tr data-id=\"${r.id || ''}\" style=\"cursor: pointer; border-bottom: 1px solid var(--border);\" \n          onmouseover=\"this.style.background='rgba(255,255,255,0.03)'\" \n          onmouseout=\"this.style.background='transparent'\">\n        <td style=\"padding: 10px 12px; color: var(--text);\">${r.要求ID || r.id || ''}</td>\n        <td style=\"padding: 10px 12px; color: var(--text);\">${r.顧客名 || r.customerName || ''}</td>\n        <td style=\"padding: 10px 12px; color: var(--text);\">${r.製品名 || r.productName || ''}</td>\n        <td style=\"padding: 10px 12px; color: var(--text);\">${r.数量 || r.quantity || ''}</td>\n        <td style=\"padding: 10px 12px; color: var(--text);\">${r.希望納期 || r.deliveryDate || ''}</td>\n        <td style=\"padding: 10px 12px;\">\n          <span style=\"padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 500; \n                       background: ${getStatusColor(r.ステータス || r.status)}; color: #fff;\">\n            ${r.ステータス || r.status || ''}\n          </span>\n        </td>\n        <td style=\"padding: 10px 12px; color: var(--text);\">${r.担当営業 || r.salesPerson || ''}</td>\n        <td style=\"padding: 10px 12px;\">\n          <button class=\"edit-btn action-btn secondary\" data-id=\"${r.id || ''}\" \n                  style=\"padding: 4px 8px; margin-right: 4px; background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.18); border-radius: 3px; font-size: 11px; cursor: pointer;\">\n            編集\n          </button>\n          <button class=\"delete-btn action-btn secondary\" data-id=\"${r.id || ''}\" \n                  style=\"padding: 4px 8px; background: transparent; color: #ff6b6b; border: 1px solid #ff6b6b; border-radius: 3px; font-size: 11px; cursor: pointer;\">\n            削除\n          </button>\n        </td>\n      </tr>\n    `).join(\"\");\n  }\n\n  function getStatusColor(status) {\n    switch(status) {\n      case '新規': return '#3b82f6';\n      case '検討中': return '#f59e0b';\n      case '見積済み': return '#8b5cf6';\n      case '受注': return '#10b981';\n      case '失注': return '#ef4444';\n      default: return '#6b7280';\n    }\n  }\n\n  // 2. 初期データを即座に描画\n  renderRows(tables[0]?.records || []);\n\n  // 3. 検索ボタンのイベントリスナー\n  container.querySelector(\"#btn-search\").addEventListener(\"click\", async () => {\n    const customerSearch = container.querySelector(\"#customer-search\").value.toLowerCase();\n    const statusFilter = container.querySelector(\"#status-filter\").value;\n    const salesFilter = container.querySelector(\"#sales-filter\").value;\n    \n    const rows = await window.aivicApi.list(0);\n    if (rows) {\n      const filtered = rows.filter(r => {\n        const matchCustomer = !customerSearch || (r.顧客名 || r.customerName || '').toLowerCase().includes(customerSearch);\n        const matchStatus = !statusFilter || (r.ステータス || r.status) === statusFilter;\n        const matchSales = !salesFilter || (r.担当営業 || r.salesPerson) === salesFilter;\n        return matchCustomer && matchStatus && matchSales;\n      });\n      renderRows(filtered);\n    }\n  });\n\n  // 4. 保存ボタンのイベントリスナー\n  container.querySelector(\"#btn-save\").addEventListener(\"click\", async (e) => {\n    e.preventDefault();\n    \n    const editId = container.querySelector(\"#edit-id\").value;\n    const customerName = container.querySelector(\"#customer-select\").value;\n    const productName = container.querySelector(\"#product-select\").value;\n    const quantity = container.querySelector(\"#quantity-input\").value;\n    const deliveryDate = container.querySelector(\"#delivery-date\").value;\n    const status = container.querySelector(\"#status-select\").value;\n    const salesPerson = container.querySelector(\"#sales-select\").value;\n    const notes = container.querySelector(\"#notes-input\").value;\n\n    if (!customerName || !productName || !quantity || !deliveryDate || !status || !salesPerson) {\n      alert(\"必須項目を入力してください\");\n      return;\n    }\n\n    const data = {\n      顧客名: customerName,\n      customerName: customerName,\n      製品名: productName,\n      productName: productName,\n      数量: parseInt(quantity),\n      quantity: parseInt(quantity),\n      希望納期: deliveryDate,\n      deliveryDate: deliveryDate,\n      ステータス: status,\n      status: status,\n      担当営業: salesPerson,\n      salesPerson: salesPerson,\n      備考: notes,\n      notes: notes,\n      要求ID: editId || `REQ-${Date.now()}`,\n      id: editId || undefined\n    };\n\n    let result;\n    if (editId) {\n      result = await window.aivicApi.update(0, editId, data);\n    } else {\n      result = await window.aivicApi.save(0, data);\n    }\n\n    if (result) {\n      const rows = await window.aivicApi.list(0);\n      if (rows) renderRows(rows);\n      \n      // フォームクリア\n      container.querySelector(\"#request-form\").reset();\n      container.querySelector(\"#edit-id\").value = \"\";\n    }\n  });\n\n  // 5. クリアボタン\n  container.querySelector(\"#btn-clear\").addEventListener(\"click\", () => {\n    container.querySelector(\"#request-form\").reset();\n    container.querySelector(\"#edit-id\").value = \"\";\n  });\n\n  // 6. 行レベル操作のイベントデリゲーション\n  container.addEventListener(\"click\", async (e) => {\n    // 削除ボタン\n    const deleteBtn = e.target.closest(\".delete-btn\");\n    if (deleteBtn) {\n      if (!confirm(\"この要求を削除しますか？\")) return;\n      \n      const id = deleteBtn.dataset.id;\n      await window.aivicApi.delete(0, id);\n      \n      const rows = await window.aivicApi.list(0);\n      if (rows) renderRows(rows);\n      return;\n    }\n\n    // 編集ボタン\n    const editBtn = e.target.closest(\".edit-btn\");\n    if (editBtn) {\n      const id = editBtn.dataset.id;\n      const rows = await window.aivicApi.list(0);\n      if (rows) {\n        const record = rows.find(r => r.id === id);\n        if (record) {\n          container.querySelector(\"#edit-id\").value = record.id;\n          container.querySelector(\"#customer-select\").value = record.顧客名 || record.customerName || '';\n          container.querySelector(\"#product-select\").value = record.製品名 || record.productName || '';\n          container.querySelector(\"#quantity-input\").value = record.数量 || record.quantity || '';\n          container.querySelector(\"#delivery-date\").value = record.希望納期 || record.deliveryDate || '';\n          container.querySelector(\"#status-select\").value = record.ステータス || record.status || '';\n          container.querySelector(\"#sales-select\").value = record.担当営業 || record.salesPerson || '';\n          container.querySelector(\"#notes-input\").value = record.備考 || record.notes || '';\n        }\n      }\n      return;\n    }\n\n    // 行クリック（詳細表示）\n    const row = e.target.closest(\"tr[data-id]\");\n    if (row && !e.target.closest(\"button\")) {\n      const id = row.dataset.id;\n      const rows = await window.aivicApi.list(0);\n      if (rows) {\n        const record = rows.find(r => r.id === id);\n        if (record) {\n          container.querySelector(\"#edit-id\").value = record.id;\n          container.querySelector(\"#customer-select\").value = record.顧客名 || record.customerName || '';\n          container.querySelector(\"#product-select\").value = record.製品名 || record.productName || '';\n          container.querySelector(\"#quantity-input\").value = record.数量 || record.quantity || '';\n          container.querySelector(\"#delivery-date\").value = record.希望納期 || record.deliveryDate || '';\n          container.querySelector(\"#status-select\").value = record.ステータス || record.status || '';\n          container.querySelector(\"#sales-select\").value = record.担当営業 || record.salesPerson || '';\n          container.querySelector(\"#notes-input\").value = record.備考 || record.notes || '';\n        }\n      }\n    }\n  });\n\n  // 7. CSVエクスポート\n  container.querySelector(\"#btn-export\").addEventListener(\"click\", async () => {\n    const rows = await window.aivicApi.list(0);\n    if (rows && rows.length > 0) {\n      const headers = [\"要求ID\", \"顧客名\", \"製品名\", \"数量\", \"希望納期\", \"ステータス\", \"担当営業\", \"備考\"];\n      const csvContent = [\n        headers.join(\",\"),\n        ...rows.map(r => [\n          r.要求ID || r.id || '',\n          r.顧客名 || r.customerName || '',\n          r.製品名 || r.productName || '',\n          r.数量 || r.quantity || '',\n          r.希望納期 || r.deliveryDate || '',\n          r.ステータス || r.status || '',\n          r.担当営業 || r.salesPerson || '',\n          (r.備考 || r.notes || '').replace(/,/g, '，')\n        ].map(field => `\"${field}\"`).join(\",\"))\n      ].join(\"\\n\");\n      \n      const blob = new Blob([\"\\uFEFF\" + csvContent], { type: \"text/csv;charset=utf-8;\" });\n      const link = document.createElement(\"a\");\n      link.href = URL.createObjectURL(blob);\n      link.download = `顧客要求一覧_${new Date().toISOString().split('T')[0]}.csv`;\n      link.click();\n    }\n  });\n\n  // 8. アクションボタン\n  container.querySelector(\"#btn-quote\").addEventListener(\"click\", () => {\n    window.showScreen(\"scr-1780996206790\"); // 納期回答作成画面\n  });\n\n  container.querySelector(\"#btn-competitor-price\").addEventListener(\"click\", () => {\n    window.showScreen(\"scr-1780996176503\"); // 競合価格統合分析・最適価格算出画面\n  });\n\n  container.querySelector(\"#btn-price-history\").addEventListener(\"click\", () => {\n    window.showScreen(\"scr-1780996166162\"); // 価格推移・利益率分析画面\n  });\n\n  container.querySelector(\"#btn-new-request\").addEventListener(\"click\", () => {\n    container.querySelector(\"#request-form\").reset();\n    container.querySelector(\"#edit-id\").value = \"\";\n  });\n\n  // 顧客・製品選択肢を動的に設定\n  const customerSelect = container.querySelector(\"#customer-select\");\n  const productSelect = container.querySelector(\"#product-select\");\n  \n  // 顧客データがある場合は選択肢を追加\n  if (tables[3]?.records) { // 顧客テーブル\n    tables[3].records.forEach(customer => {\n      const option = document.createElement(\"option\");\n      option.value = customer.顧客名 || customer.customerName || '';\n      option.textContent = customer.顧客名 || customer.customerName || '';\n      customerSelect.appendChild(option);\n    });\n  }\n\n  // 製品データがある場合は選択肢を追加\n  if (tables[4]?.records) { // 製品テーブル\n    tables[4].records.forEach(product => {\n      const option = document.createElement(\"option\");\n      option.value = product.製品名 || product.productName || '';\n      option.textContent = product.製品名 || product.productName || '';\n      productSelect.appendChild(option);\n    });\n  }\n}";
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -93,7 +93,189 @@ canvas { display:block; max-height:280px !important; }
   </aside>
   <main class="main">
     <section class="card" data-aivic-panel="scr-1780996196756" style="margin-top:0">
-<p class="muted">顧客要求管理画面</p>
+<div class="customer-request-management" style="padding: 16px; background: var(--bg-main); min-height: 100vh;">
+  <!-- 検索・フィルタエリア -->
+  <div class="card" style="margin-bottom: 16px; padding: 16px; background: var(--bg-card); border-radius: 8px;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 12px; align-items: end;">
+      <div>
+        <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">顧客検索</label>
+        <input type="text" id="customer-search" data-testid="customer-search" placeholder="顧客名で検索" 
+               style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+      </div>
+      <div>
+        <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">ステータス</label>
+        <select id="status-filter" data-testid="status-filter" 
+                style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+          <option value="">全て</option>
+          <option value="新規">新規</option>
+          <option value="検討中">検討中</option>
+          <option value="見積済み">見積済み</option>
+          <option value="受注">受注</option>
+          <option value="失注">失注</option>
+        </select>
+      </div>
+      <div>
+        <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">担当営業</label>
+        <select id="sales-filter" data-testid="sales-filter" 
+                style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+          <option value="">全て</option>
+          <option value="田中太郎">田中太郎</option>
+          <option value="佐藤花子">佐藤花子</option>
+          <option value="山田次郎">山田次郎</option>
+        </select>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button id="btn-search" data-testid="search-button" class="action-btn" 
+                style="padding: 8px 16px; background: var(--primary); color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">
+          検索
+        </button>
+        <button id="btn-export" data-testid="export-button" class="action-btn secondary" 
+                style="padding: 8px 16px; background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; font-size: 14px; cursor: pointer;">
+          CSV出力
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- メインコンテンツエリア（左右分割） -->
+  <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px; height: calc(100vh - 200px);">
+    
+    <!-- 左側：要求一覧 -->
+    <div class="card" style="padding: 16px; background: var(--bg-card); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h2 style="margin: 0; font-size: 18px; color: var(--text); font-weight: 600;">顧客要求一覧</h2>
+        <button id="btn-new-request" data-testid="new-request-button" class="action-btn" 
+                style="padding: 6px 12px; background: var(--primary); color: #fff; border: none; border-radius: 4px; font-size: 13px; cursor: pointer;">
+          新規要求登録
+        </button>
+      </div>
+      
+      <div class="table-wrap" style="flex: 1; overflow: auto;">
+        <table data-testid="request-list" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+          <thead>
+            <tr style="background: rgba(255,255,255,0.05);">
+              <th style="padding: 8px 12px; text-align: left; color: var(--text); border-bottom: 1px solid var(--border); font-weight: 500;">要求ID</th>
+              <th style="padding: 8px 12px; text-align: left; color: var(--text); border-bottom: 1px solid var(--border); font-weight: 500;">顧客名</th>
+              <th style="padding: 8px 12px; text-align: left; color: var(--text); border-bottom: 1px solid var(--border); font-weight: 500;">製品</th>
+              <th style="padding: 8px 12px; text-align: left; color: var(--text); border-bottom: 1px solid var(--border); font-weight: 500;">数量</th>
+              <th style="padding: 8px 12px; text-align: left; color: var(--text); border-bottom: 1px solid var(--border); font-weight: 500;">希望納期</th>
+              <th style="padding: 8px 12px; text-align: left; color: var(--text); border-bottom: 1px solid var(--border); font-weight: 500;">ステータス</th>
+              <th style="padding: 8px 12px; text-align: left; color: var(--text); border-bottom: 1px solid var(--border); font-weight: 500;">担当営業</th>
+              <th style="padding: 8px 12px; text-align: left; color: var(--text); border-bottom: 1px solid var(--border); font-weight: 500;">操作</th>
+            </tr>
+          </thead>
+          <tbody id="request-tbody" data-testid="request-tbody">
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 右側：詳細・編集エリア -->
+    <div class="card" style="padding: 16px; background: var(--bg-card); border-radius: 8px; display: flex; flex-direction: column;">
+      <h3 style="margin: 0 0 16px 0; font-size: 16px; color: var(--text); font-weight: 600;">要求詳細・編集</h3>
+      
+      <form id="request-form" style="flex: 1; display: flex; flex-direction: column; gap: 12px;">
+        <input type="hidden" id="edit-id" data-testid="edit-id">
+        
+        <div>
+          <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">顧客</label>
+          <select id="customer-select" data-testid="customer-select" required
+                  style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+            <option value="">選択してください</option>
+            <option value="株式会社アルファ">株式会社アルファ</option>
+            <option value="ベータ工業">ベータ工業</option>
+            <option value="ガンマ商事">ガンマ商事</option>
+            <option value="デルタ製作所">デルタ製作所</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">製品</label>
+          <select id="product-select" data-testid="product-select" required
+                  style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+            <option value="">選択してください</option>
+            <option value="製品A">製品A</option>
+            <option value="製品B">製品B</option>
+            <option value="製品C">製品C</option>
+            <option value="製品D">製品D</option>
+          </select>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">数量</label>
+            <input type="number" id="quantity-input" data-testid="quantity-input" required min="1"
+                   style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+          </div>
+          <div>
+            <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">希望納期</label>
+            <input type="date" id="delivery-date" data-testid="delivery-date" required
+                   style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+          </div>
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">ステータス</label>
+          <select id="status-select" data-testid="status-select" required
+                  style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+            <option value="">選択してください</option>
+            <option value="新規">新規</option>
+            <option value="検討中">検討中</option>
+            <option value="見積済み">見積済み</option>
+            <option value="受注">受注</option>
+            <option value="失注">失注</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">担当営業</label>
+          <select id="sales-select" data-testid="sales-select" required
+                  style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+            <option value="">選択してください</option>
+            <option value="田中太郎">田中太郎</option>
+            <option value="佐藤花子">佐藤花子</option>
+            <option value="山田次郎">山田次郎</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">備考</label>
+          <textarea id="notes-input" data-testid="notes-input" rows="3"
+                    style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px; resize: vertical;"></textarea>
+        </div>
+
+        <div style="margin-top: auto; display: flex; gap: 8px;">
+          <button type="submit" id="btn-save" data-testid="save-button" class="action-btn" 
+                  style="flex: 1; padding: 10px; background: var(--primary); color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">
+            保存
+          </button>
+          <button type="button" id="btn-clear" data-testid="clear-button" class="action-btn secondary" 
+                  style="padding: 10px 16px; background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; font-size: 14px; cursor: pointer;">
+            クリア
+          </button>
+        </div>
+      </form>
+
+      <!-- アクションボタン群 -->
+      <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px;">
+        <button id="btn-quote" data-testid="quote-button" class="action-btn" 
+                style="width: 100%; padding: 8px; background: var(--primary); color: #fff; border: none; border-radius: 4px; font-size: 13px; cursor: pointer;">
+          見積作成
+        </button>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <button id="btn-competitor-price" data-testid="competitor-price-button" class="action-btn secondary" 
+                  style="padding: 8px; background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; font-size: 13px; cursor: pointer;">
+            競合価格参照
+          </button>
+          <button id="btn-price-history" data-testid="price-history-button" class="action-btn secondary" 
+                  style="padding: 8px; background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; font-size: 13px; cursor: pointer;">
+            過去価格履歴
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
     </section>
   </main>
 </div>

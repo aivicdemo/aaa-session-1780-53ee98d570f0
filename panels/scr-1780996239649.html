@@ -93,7 +93,201 @@ canvas { display:block; max-height:280px !important; }
   </aside>
   <main class="main">
     <section class="card" data-aivic-panel="scr-1780996239649" style="margin-top:0">
-<p class="muted">提案書作成画面</p>
+<div class="proposal-creation-screen" style="padding: 16px; background: var(--bg-main); min-height: 100vh;">
+  <!-- ヘッダー -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1 style="font-size: 24px; font-weight: 600; color: var(--text); margin: 0;">提案書作成</h1>
+    <div style="display: flex; gap: 8px;">
+      <button class="action-btn secondary" data-testid="preview-button" id="btn-preview">プレビュー</button>
+      <button class="action-btn" data-testid="save-proposal-button" id="btn-save-proposal">提案書保存</button>
+    </div>
+  </div>
+
+  <!-- メインコンテンツ：左右分割レイアウト -->
+  <div style="display: grid; grid-template-columns: 1fr 400px; gap: 20px; height: calc(100vh - 120px);">
+    
+    <!-- 左側：提案書作成フォーム -->
+    <div class="card" style="padding: 20px; overflow-y: auto;">
+      <h2 style="font-size: 18px; font-weight: 500; color: var(--text); margin: 0 0 16px 0;">基本情報</h2>
+      
+      <!-- 基本情報フォーム -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+        <div>
+          <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">顧客</label>
+          <select data-testid="customer-select" id="customer-select" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+            <option value="">顧客を選択してください</option>
+            <option value="customer-1">株式会社テクノロジー</option>
+            <option value="customer-2">グローバル商事株式会社</option>
+            <option value="customer-3">イノベーション工業</option>
+            <option value="customer-4">スマートソリューションズ</option>
+          </select>
+        </div>
+        <div>
+          <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">提案書タイトル</label>
+          <input data-testid="proposal-title" id="proposal-title" type="text" placeholder="提案書のタイトルを入力" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+        </div>
+        <div>
+          <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">提案日</label>
+          <input data-testid="proposal-date" id="proposal-date" type="date" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+        </div>
+        <div>
+          <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">有効期限</label>
+          <input data-testid="expiry-date" id="expiry-date" type="date" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+        </div>
+      </div>
+
+      <!-- 製品選択セクション -->
+      <h2 style="font-size: 18px; font-weight: 500; color: var(--text); margin: 0 0 16px 0;">製品選択</h2>
+      <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+        <div style="flex: 1;">
+          <input data-testid="product-search" id="product-search" type="text" placeholder="製品名・製品コードで検索" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+        </div>
+        <button class="action-btn secondary" data-testid="search-product-button" id="btn-search-product">検索</button>
+        <button class="action-btn" data-testid="add-product-button" id="btn-add-product">製品追加</button>
+      </div>
+
+      <!-- 製品検索結果 -->
+      <div id="product-search-results" style="margin-bottom: 20px; max-height: 200px; overflow-y: auto;">
+        <table class="table-wrap" style="width: 100%; font-size: 13px;">
+          <thead>
+            <tr style="background: rgba(255,255,255,0.05);">
+              <th style="padding: 8px; text-align: left; color: var(--text); font-weight: 500;">製品コード</th>
+              <th style="padding: 8px; text-align: left; color: var(--text); font-weight: 500;">製品名</th>
+              <th style="padding: 8px; text-align: left; color: var(--text); font-weight: 500;">標準価格</th>
+              <th style="padding: 8px; text-align: left; color: var(--text); font-weight: 500;">操作</th>
+            </tr>
+          </thead>
+          <tbody id="product-search-tbody">
+            <tr>
+              <td style="padding: 8px; color: var(--text);">PRD-001</td>
+              <td style="padding: 8px; color: var(--text);">高性能センサー</td>
+              <td style="padding: 8px; color: var(--text);">¥50,000</td>
+              <td style="padding: 8px;"><button class="action-btn secondary select-product-btn" data-product-id="prd-1">選択</button></td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; color: var(--text);">PRD-002</td>
+              <td style="padding: 8px; color: var(--text);">制御システム</td>
+              <td style="padding: 8px; color: var(--text);">¥120,000</td>
+              <td style="padding: 8px;"><button class="action-btn secondary select-product-btn" data-product-id="prd-2">選択</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 選択済み製品一覧 -->
+      <h2 style="font-size: 18px; font-weight: 500; color: var(--text); margin: 0 0 16px 0;">選択済み製品</h2>
+      <div class="table-wrap">
+        <table data-testid="selected-products-table" style="width: 100%; font-size: 13px;">
+          <thead>
+            <tr style="background: rgba(255,255,255,0.05);">
+              <th style="padding: 8px; text-align: left; color: var(--text); font-weight: 500;">製品名</th>
+              <th style="padding: 8px; text-align: left; color: var(--text); font-weight: 500;">数量</th>
+              <th style="padding: 8px; text-align: left; color: var(--text); font-weight: 500;">単価</th>
+              <th style="padding: 8px; text-align: left; color: var(--text); font-weight: 500;">割引率</th>
+              <th style="padding: 8px; text-align: left; color: var(--text); font-weight: 500;">小計</th>
+              <th style="padding: 8px; text-align: left; color: var(--text); font-weight: 500;">操作</th>
+            </tr>
+          </thead>
+          <tbody id="selected-products-tbody">
+            <!-- 選択済み製品がここに表示される -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 右側：プレビュー・計算結果 -->
+    <div class="card" style="padding: 20px; overflow-y: auto;">
+      <h2 style="font-size: 18px; font-weight: 500; color: var(--text); margin: 0 0 16px 0;">見積もり金額</h2>
+      
+      <!-- 金額計算表示 -->
+      <div style="background: rgba(255,255,255,0.03); padding: 16px; border-radius: 6px; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="color: var(--text-muted); font-size: 14px;">小計</span>
+          <span id="subtotal-amount" style="color: var(--text); font-size: 14px; font-weight: 500;">¥0</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="color: var(--text-muted); font-size: 14px;">消費税（10%）</span>
+          <span id="tax-amount" style="color: var(--text); font-size: 14px; font-weight: 500;">¥0</span>
+        </div>
+        <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px; margin-top: 8px;">
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--text); font-size: 16px; font-weight: 600;">合計金額</span>
+            <span id="total-amount" style="color: var(--primary); font-size: 18px; font-weight: 700;">¥0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 利益率表示 -->
+      <div style="background: rgba(255,255,255,0.03); padding: 16px; border-radius: 6px; margin-bottom: 20px;">
+        <h3 style="font-size: 14px; font-weight: 500; color: var(--text); margin: 0 0 12px 0;">利益率分析</h3>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="color: var(--text-muted); font-size: 13px;">売上金額</span>
+          <span id="revenue-amount" style="color: var(--text); font-size: 13px;">¥0</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="color: var(--text-muted); font-size: 13px;">原価金額</span>
+          <span id="cost-amount" style="color: var(--text); font-size: 13px;">¥0</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="color: var(--text-muted); font-size: 13px;">利益金額</span>
+          <span id="profit-amount" style="color: var(--text); font-size: 13px;">¥0</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text); font-size: 14px; font-weight: 500;">利益率</span>
+          <span id="profit-rate" style="color: var(--primary); font-size: 14px; font-weight: 600;">0%</span>
+        </div>
+      </div>
+
+      <!-- クイックアクション -->
+      <div style="margin-bottom: 20px;">
+        <h3 style="font-size: 14px; font-weight: 500; color: var(--text); margin: 0 0 12px 0;">クイックアクション</h3>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <button class="action-btn secondary" data-testid="view-customer-history-button" onclick="window.showScreen('scr-1780996155972')" style="width: 100%; font-size: 13px;">顧客受注履歴を確認</button>
+          <button class="action-btn secondary" data-testid="check-competitive-price-button" onclick="window.showScreen('scr-1780996176503')" style="width: 100%; font-size: 13px;">競合価格を確認</button>
+          <button class="action-btn secondary" data-testid="analyze-profit-button" onclick="window.showScreen('scr-1780996166162')" style="width: 100%; font-size: 13px;">価格推移分析</button>
+        </div>
+      </div>
+
+      <!-- 提案書プレビュー -->
+      <div id="proposal-preview" style="background: rgba(255,255,255,0.03); padding: 16px; border-radius: 6px;">
+        <h3 style="font-size: 14px; font-weight: 500; color: var(--text); margin: 0 0 12px 0;">提案書プレビュー</h3>
+        <div id="preview-content" style="font-size: 12px; color: var(--text-muted); line-height: 1.4;">
+          提案書の内容がここにプレビューされます
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 製品追加モーダル -->
+  <div id="add-product-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-card); padding: 24px; border-radius: 8px; width: 500px; max-width: 90vw;">
+      <h3 style="font-size: 16px; font-weight: 500; color: var(--text); margin: 0 0 16px 0;">製品を提案書に追加</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+        <div>
+          <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">数量</label>
+          <input data-testid="modal-quantity" id="modal-quantity" type="number" min="1" value="1" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+        </div>
+        <div>
+          <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">単価</label>
+          <input data-testid="modal-unit-price" id="modal-unit-price" type="number" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+        </div>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">割引率（%）</label>
+        <input data-testid="modal-discount-rate" id="modal-discount-rate" type="range" min="0" max="50" value="0" style="width: 100%; margin-bottom: 4px;">
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted);">
+          <span>0%</span>
+          <span id="discount-display">0%</span>
+          <span>50%</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+        <button class="action-btn secondary" data-testid="modal-cancel-button" id="modal-cancel">キャンセル</button>
+        <button class="action-btn" data-testid="modal-add-button" id="modal-add">追加</button>
+      </div>
+    </div>
+  </div>
+</div>
     </section>
   </main>
 </div>

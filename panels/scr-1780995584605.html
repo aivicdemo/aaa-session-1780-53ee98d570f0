@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>在庫確定処理 - AAA</title>
+  <script>
+window.AIVIC_API_URL = "https://mkwmoife37uqyv4zhy4yhweozq0oddxn.lambda-url.us-east-1.on.aws/";
+window.AIVIC_APP_ID = "session-1780478987683";
+window.AIVIC_SYSTEM_NAME = "在庫管理システム";
+window.AIVIC_TABLES = [{"tableName":"ユーザー","purpose":"生産管理システムを利用するユーザーの基本情報と認証情報を管理する","columns":[{"name":"ユーザーID","type":"uuid","required":true,"description":"ユーザーを一意に識別するID"},{"name":"ユーザー名","type":"varchar(100)","required":true,"description":"システムログイン用のユーザー名"},{"name":"パスワードハッシュ","type":"varchar(100)","required":true,"description":"暗号化されたパスワード"},{"name":"氏名","type":"varchar(100)","required":true,"description":"ユーザーの実名"},{"name":"メールアドレス","type":"varchar(100)","required":false,"description":"連絡用メールアドレス"},{"name":"部署","type":"varchar(100)","required":false,"description":"所属部署名"},{"name":"役職","type":"varchar(100)","required":false,"description":"役職名"},{"name":"権限レベル","type":"integer","required":true,"description":"システム操作権限レベル（1:参照のみ、2:入力、3:管理者等）"},{"name":"有効フラグ","type":"boolean","required":true,"description":"アカウントの有効/無効状態"},{"name":"最終ログイン日時","type":"timestamp","required":false,"description":"最後にログインした日時"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"uuid","required":true,"description":"レコードを作成したユーザーのID"}]},{"tableName":"商品マスタ","purpose":"商品の基本情報を管理し、在庫管理や販売管理の基準となるマスタデータを提供する","columns":[{"name":"商品ID","type":"uuid","required":true,"description":"商品を一意に識別するID（主キー）"},{"name":"商品コード","type":"varchar(100)","required":true,"description":"商品の業務用コード（ユニーク）"},{"name":"商品名","type":"varchar(100)","required":true,"description":"商品の名称"},{"name":"商品説明","type":"text","required":false,"description":"商品の詳細説明"},{"name":"カテゴリ","type":"varchar(100)","required":false,"description":"商品のカテゴリ分類"},{"name":"単位","type":"varchar(100)","required":true,"description":"在庫管理の単位（個、箱、kg等）"},{"name":"標準価格","type":"integer","required":false,"description":"商品の標準販売価格"},{"name":"仕入価格","type":"integer","required":false,"description":"商品の仕入価格"},{"name":"安全在庫数","type":"integer","required":false,"description":"最低限保持すべき在庫数"},{"name":"発注点","type":"integer","required":false,"description":"発注をかけるべき在庫数の閾値"},{"name":"有効フラグ","type":"boolean","required":true,"description":"商品が有効かどうか（論理削除用）"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"uuid","required":true,"description":"レコード作成者のユーザーID"},{"name":"更新者","type":"uuid","required":true,"description":"レコード最終更新者のユーザーID"}]},{"tableName":"倉庫マスタ","purpose":"倉庫の基本情報を管理し、在庫管理における保管場所の識別と運用情報を提供する","columns":[{"name":"倉庫ID","type":"uuid","required":true,"description":"倉庫を一意に識別するプライマリキー"},{"name":"倉庫コード","type":"varchar(100)","required":true,"description":"業務で使用する倉庫の識別コード（ユニーク）"},{"name":"倉庫名","type":"varchar(100)","required":true,"description":"倉庫の名称"},{"name":"住所","type":"text","required":false,"description":"倉庫の所在地"},{"name":"電話番号","type":"varchar(100)","required":false,"description":"倉庫の連絡先電話番号"},{"name":"責任者名","type":"varchar(100)","required":false,"description":"倉庫の管理責任者名"},{"name":"有効フラグ","type":"boolean","required":true,"description":"倉庫が使用可能かどうかを示すフラグ"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコードを作成したユーザーのID"},{"name":"更新者ID","type":"uuid","required":true,"description":"レコードを最後に更新したユーザーのID"}]},{"tableName":"在庫","purpose":"商品の倉庫別在庫数量と在庫状態を管理する","columns":[{"name":"在庫ID","type":"uuid","required":true,"description":"在庫レコードの一意識別子"},{"name":"商品ID","type":"uuid","required":true,"description":"商品マスタへの外部キー"},{"name":"倉庫ID","type":"uuid","required":true,"description":"倉庫マスタへの外部キー"},{"name":"現在庫数","type":"integer","required":true,"description":"現在の在庫数量"},{"name":"引当済数量","type":"integer","required":true,"description":"出荷予定で引当済みの数量"},{"name":"発注点","type":"integer","required":false,"description":"自動発注を行う在庫数の閾値"},{"name":"最大在庫数","type":"integer","required":false,"description":"保管可能な最大在庫数"},{"name":"最終入庫日","type":"timestamp","required":false,"description":"最後に入庫があった日時"},{"name":"最終出庫日","type":"timestamp","required":false,"description":"最後に出庫があった日時"},{"name":"在庫状態","type":"varchar(100)","required":true,"description":"在庫の状態（正常/欠品/過剰/停止等）"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者のユーザーID"},{"name":"更新者ID","type":"uuid","required":true,"description":"レコード最終更新者のユーザーID"}]},{"tableName":"入出庫履歴","purpose":"商品の入庫・出庫の履歴を記録し、在庫変動の追跡と監査証跡を提供する","columns":[{"name":"履歴ID","type":"uuid","required":true,"description":"入出庫履歴の一意識別子"},{"name":"商品ID","type":"uuid","required":true,"description":"商品マスタへの外部キー"},{"name":"倉庫ID","type":"uuid","required":true,"description":"倉庫マスタへの外部キー"},{"name":"入出庫区分","type":"varchar(100)","required":true,"description":"入庫・出庫の区分（入庫/出庫/調整等）"},{"name":"数量","type":"integer","required":true,"description":"入出庫数量（出庫時は負の値）"},{"name":"処理前在庫数","type":"integer","required":true,"description":"入出庫処理前の在庫数量"},{"name":"処理後在庫数","type":"integer","required":true,"description":"入出庫処理後の在庫数量"},{"name":"理由コード","type":"varchar(100)","required":false,"description":"入出庫の理由（販売/仕入/返品/調整等）"},{"name":"備考","type":"text","required":false,"description":"入出庫に関する補足情報"},{"name":"処理日時","type":"timestamp","required":true,"description":"入出庫が実際に処理された日時"},{"name":"処理者ID","type":"uuid","required":true,"description":"入出庫処理を実行したユーザーID"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"}]},{"tableName":"棚卸実施","purpose":"棚卸作業の実施記録を管理し、在庫の実地調査結果を記録する","columns":[{"name":"棚卸実施ID","type":"uuid","required":true,"description":"棚卸実施の一意識別子（主キー）"},{"name":"倉庫ID","type":"uuid","required":true,"description":"棚卸を実施した倉庫の識別子"},{"name":"商品ID","type":"uuid","required":true,"description":"棚卸対象商品の識別子"},{"name":"帳簿在庫数","type":"integer","required":true,"description":"棚卸実施時点でのシステム上の在庫数量"},{"name":"実地在庫数","type":"integer","required":true,"description":"実際に数えた在庫数量"},{"name":"差異数量","type":"integer","required":true,"description":"実地在庫数 - 帳簿在庫数の差異"},{"name":"棚卸実施日","type":"timestamp","required":true,"description":"棚卸作業を実施した日時"},{"name":"実施者ID","type":"uuid","required":true,"description":"棚卸作業を実施したユーザーの識別子"},{"name":"承認者ID","type":"uuid","required":false,"description":"棚卸結果を承認したユーザーの識別子"},{"name":"承認日時","type":"timestamp","required":false,"description":"棚卸結果が承認された日時"},{"name":"ステータス","type":"varchar(100)","required":true,"description":"棚卸の状態（実施中/完了/承認済み等）"},{"name":"備考","type":"text","required":false,"description":"棚卸実施時の特記事項や差異の原因等"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者のユーザーID"}]},{"tableName":"棚卸実績","purpose":"棚卸実施時の各商品の実際の在庫数量と理論在庫との差異を記録し、在庫調整の根拠データを管理する","columns":[{"name":"棚卸実績ID","type":"uuid","required":true,"description":"棚卸実績の一意識別子（主キー）"},{"name":"棚卸実施ID","type":"uuid","required":true,"description":"棚卸実施テーブルへの外部キー"},{"name":"商品ID","type":"uuid","required":true,"description":"商品マスタへの外部キー"},{"name":"倉庫ID","type":"uuid","required":true,"description":"倉庫マスタへの外部キー"},{"name":"理論在庫数","type":"integer","required":true,"description":"システム上の理論在庫数量"},{"name":"実在庫数","type":"integer","required":true,"description":"実際にカウントした在庫数量"},{"name":"差異数","type":"integer","required":true,"description":"実在庫数 - 理論在庫数の差異"},{"name":"調整済フラグ","type":"boolean","required":true,"description":"在庫調整処理が完了しているかのフラグ"},{"name":"備考","type":"text","required":false,"description":"差異の原因や特記事項"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"棚卸実績を登録したユーザーID"}]},{"tableName":"棚卸差異","purpose":"棚卸実施時に発見された帳簿在庫と実地在庫の差異を記録し、差異原因の分析と在庫調整の根拠として管理する","columns":[{"name":"棚卸差異ID","type":"uuid","required":true,"description":"棚卸差異レコードの一意識別子"},{"name":"棚卸実施ID","type":"uuid","required":true,"description":"関連する棚卸実施への外部キー"},{"name":"棚卸実績ID","type":"uuid","required":true,"description":"関連する棚卸実績への外部キー"},{"name":"商品ID","type":"uuid","required":true,"description":"差異が発生した商品への外部キー"},{"name":"倉庫ID","type":"uuid","required":true,"description":"差異が発生した倉庫への外部キー"},{"name":"帳簿在庫数","type":"integer","required":true,"description":"システム上の理論在庫数量"},{"name":"実地在庫数","type":"integer","required":true,"description":"実際に数えた在庫数量"},{"name":"差異数量","type":"integer","required":true,"description":"実地在庫数 - 帳簿在庫数の差異"},{"name":"差異区分","type":"varchar(100)","required":true,"description":"過不足、品違い、破損等の差異種別"},{"name":"差異原因","type":"varchar(100)","required":false,"description":"入力ミス、紛失、盗難等の推定原因"},{"name":"調整済フラグ","type":"boolean","required":true,"description":"在庫調整処理が完了しているかの状態"},{"name":"備考","type":"text","required":false,"description":"差異に関する詳細情報や特記事項"},{"name":"作成日時","type":"timestamp","required":true,"description":"差異レコードの作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"差異レコードの最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"差異を登録したユーザーID"}]}];
+window.AIVIC_PRESET_SEED = {};
+window.AIVIC_PAGE_SCREEN_ID = "scr-1780995584605";
+window.AIVIC_PAGE_INIT_JS = "function(container, apiUrl, tables) {\n  const tbody = container.querySelector('#difference-tbody');\n  const selectAllCheckbox = container.querySelector('#select-all');\n  \n  // 差異データを結合して表示用データを作成\n  function createDifferenceData() {\n    const stocktakingResults = tables.find(t => t.tableName === '棚卸実績')?.records || [];\n    const differences = tables.find(t => t.tableName === '棚卸差異')?.records || [];\n    const products = tables.find(t => t.tableName === '商品マスタ')?.records || [];\n    const warehouses = tables.find(t => t.tableName === '倉庫マスタ')?.records || [];\n    \n    return differences.map(diff => {\n      const product = products.find(p => p.商品ID === diff.商品ID) || {};\n      const warehouse = warehouses.find(w => w.倉庫ID === diff.倉庫ID) || {};\n      const result = stocktakingResults.find(r => r.棚卸実績ID === diff.棚卸実績ID) || {};\n      \n      return {\n        id: diff.棚卸差異ID,\n        商品コード: product.商品コード || '',\n        商品名: product.商品名 || '',\n        倉庫名: warehouse.倉庫名 || '',\n        理論在庫数: diff.帳簿在庫数 || 0,\n        実地在庫数: diff.実地在庫数 || 0,\n        差異数量: diff.差異数量 || 0,\n        差異区分: diff.差異区分 || '',\n        差異原因: diff.差異原因 || '',\n        調整済フラグ: diff.調整済フラグ || false,\n        備考: diff.備考 || ''\n      };\n    });\n  }\n  \n  // テーブル再描画関数\n  function renderRows(rows) {\n    tbody.innerHTML = rows.map(row => `\n      <tr data-id=\"${row.id}\" style=\"${row.調整済フラグ ? 'opacity: 0.6;' : ''}\">\n        <td style=\"text-align: center;\">\n          <input type=\"checkbox\" class=\"row-checkbox\" data-id=\"${row.id}\" ${row.調整済フラグ ? 'disabled' : ''} style=\"accent-color: var(--primary);\">\n        </td>\n        <td style=\"font-family: monospace;\">${row.商品コード}</td>\n        <td>${row.商品名}</td>\n        <td>${row.倉庫名}</td>\n        <td style=\"text-align: right; font-family: monospace;\">${row.理論在庫数.toLocaleString()}</td>\n        <td style=\"text-align: right; font-family: monospace;\">${row.実地在庫数.toLocaleString()}</td>\n        <td style=\"text-align: right; font-family: monospace; color: ${row.差異数量 > 0 ? '#22c55e' : row.差異数量 < 0 ? '#ef4444' : 'var(--text)'};\">\n          ${row.差異数量 > 0 ? '+' : ''}${row.差異数量.toLocaleString()}\n        </td>\n        <td>\n          <select class=\"reason-select\" data-id=\"${row.id}\" ${row.調整済フラグ ? 'disabled' : ''} style=\"width: 100%; padding: 4px 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 3px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 12px;\">\n            <option value=\"\">選択</option>\n            <option value=\"counting-error\" ${row.差異原因 === 'counting-error' ? 'selected' : ''}>カウントミス</option>\n            <option value=\"system-error\" ${row.差異原因 === 'system-error' ? 'selected' : ''}>入力ミス</option>\n            <option value=\"damage\" ${row.差異原因 === 'damage' ? 'selected' : ''}>破損</option>\n            <option value=\"theft\" ${row.差異原因 === 'theft' ? 'selected' : ''}>紛失</option>\n            <option value=\"other\" ${row.差異原因 === 'other' ? 'selected' : ''}>その他</option>\n          </select>\n        </td>\n        <td>\n          <input type=\"text\" class=\"adjustment-input\" data-id=\"${row.id}\" value=\"${row.備考}\" ${row.調整済フラグ ? 'disabled' : ''} placeholder=\"調整理由\" style=\"width: 100%; padding: 4px 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 3px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 12px;\">\n        </td>\n        <td>\n          <span style=\"padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 500; ${row.調整済フラグ ? 'background: #22c55e; color: #fff;' : 'background: rgba(255,165,0,0.2); color: #ffa500; border: 1px solid #ffa500;'}\">\n            ${row.調整済フラグ ? '確定済' : '未確定'}\n          </span>\n        </td>\n        <td>\n          ${!row.調整済フラグ ? `<button class=\"action-btn secondary confirm-btn\" data-id=\"${row.id}\" style=\"padding: 4px 8px; font-size: 12px;\">確定</button>` : ''}\n        </td>\n      </tr>\n    `).join('');\n    \n    updateSelectAllState();\n  }\n  \n  // 全選択チェックボックスの状態更新\n  function updateSelectAllState() {\n    const checkboxes = container.querySelectorAll('.row-checkbox:not([disabled])');\n    const checkedBoxes = container.querySelectorAll('.row-checkbox:checked');\n    \n    if (checkboxes.length === 0) {\n      selectAllCheckbox.indeterminate = false;\n      selectAllCheckbox.checked = false;\n    } else if (checkedBoxes.length === checkboxes.length) {\n      selectAllCheckbox.indeterminate = false;\n      selectAllCheckbox.checked = true;\n    } else if (checkedBoxes.length > 0) {\n      selectAllCheckbox.indeterminate = true;\n      selectAllCheckbox.checked = false;\n    } else {\n      selectAllCheckbox.indeterminate = false;\n      selectAllCheckbox.checked = false;\n    }\n  }\n  \n  // 初期データ表示\n  let currentData = createDifferenceData();\n  renderRows(currentData);\n  \n  // 検索機能\n  container.querySelector('#btn-search').addEventListener('click', () => {\n    const stocktakingId = container.querySelector('#stocktaking-select').value;\n    const warehouseId = container.querySelector('#warehouse-select').value;\n    const productSearch = container.querySelector('#product-search').value.toLowerCase();\n    \n    let filteredData = createDifferenceData();\n    \n    if (stocktakingId) {\n      // 実際の実装では棚卸実施IDでフィルタリング\n      filteredData = filteredData.filter(row => true); // プレースホルダー\n    }\n    \n    if (warehouseId) {\n      filteredData = filteredData.filter(row => row.倉庫名.includes(warehouseId));\n    }\n    \n    if (productSearch) {\n      filteredData = filteredData.filter(row => \n        row.商品コード.toLowerCase().includes(productSearch) ||\n        row.商品名.toLowerCase().includes(productSearch)\n      );\n    }\n    \n    renderRows(filteredData);\n  });\n  \n  // 全選択チェックボックス\n  selectAllCheckbox.addEventListener('change', (e) => {\n    const checkboxes = container.querySelectorAll('.row-checkbox:not([disabled])');\n    checkboxes.forEach(cb => cb.checked = e.target.checked);\n  });\n  \n  // 個別チェックボックス\n  container.addEventListener('change', (e) => {\n    if (e.target.classList.contains('row-checkbox')) {\n      updateSelectAllState();\n    }\n  });\n  \n  // 選択項目確定\n  container.querySelector('#btn-confirm-selected').addEventListener('click', async () => {\n    const checkedBoxes = container.querySelectorAll('.row-checkbox:checked');\n    if (checkedBoxes.length === 0) {\n      alert('確定する項目を選択してください。');\n      return;\n    }\n    \n    if (!confirm(`選択した${checkedBoxes.length}件の差異を確定しますか？`)) {\n      return;\n    }\n    \n    const differenceTableIndex = tables.findIndex(t => t.tableName === '棚卸差異');\n    \n    for (const checkbox of checkedBoxes) {\n      const id = checkbox.dataset.id;\n      const reasonSelect = container.querySelector(`.reason-select[data-id=\"${id}\"]`);\n      const adjustmentInput = container.querySelector(`.adjustment-input[data-id=\"${id}\"]`);\n      \n      await window.aivicApi.update(differenceTableIndex, id, {\n        調整済フラグ: true,\n        差異原因: reasonSelect.value,\n        備考: adjustmentInput.value,\n        更新日時: new Date().toISOString()\n      });\n    }\n    \n    // データ再読み込み\n    const updatedDifferences = await window.aivicApi.list(differenceTableIndex);\n    if (updatedDifferences) {\n      tables[differenceTableIndex].records = updatedDifferences;\n      currentData = createDifferenceData();\n      renderRows(currentData);\n    }\n  });\n  \n  // 一括確定\n  container.querySelector('#btn-bulk-confirm').addEventListener('click', async () => {\n    const reasonSelect = container.querySelector('#reason-select');\n    const adjustmentReason = container.querySelector('#adjustment-reason');\n    \n    if (!reasonSelect.value) {\n      alert('差異理由を選択してください。');\n      return;\n    }\n    \n    const uncheckedBoxes = container.querySelectorAll('.row-checkbox:not([disabled]):not(:checked)');\n    if (uncheckedBoxes.length === 0) {\n      alert('確定する項目がありません。');\n      return;\n    }\n    \n    if (!confirm('未確定の全ての差異を一括確定しますか？')) {\n      return;\n    }\n    \n    const differenceTableIndex = tables.findIndex(t => t.tableName === '棚卸差異');\n    \n    for (const checkbox of container.querySelectorAll('.row-checkbox:not([disabled])')) {\n      const id = checkbox.dataset.id;\n      \n      await window.aivicApi.update(differenceTableIndex, id, {\n        調整済フラグ: true,\n        差異原因: reasonSelect.value,\n        備考: adjustmentReason.value,\n        更新日時: new Date().toISOString()\n      });\n    }\n    \n    // データ再読み込み\n    const updatedDifferences = await window.aivicApi.list(differenceTableIndex);\n    if (updatedDifferences) {\n      tables[differenceTableIndex].records = updatedDifferences;\n      currentData = createDifferenceData();\n      renderRows(currentData);\n    }\n    \n    // フォームリセット\n    reasonSelect.value = '';\n    adjustmentReason.value = '';\n  });\n  \n  // 個別確定ボタン\n  container.addEventListener('click', async (e) => {\n    const confirmBtn = e.target.closest('.confirm-btn');\n    if (confirmBtn) {\n      const id = confirmBtn.dataset.id;\n      const reasonSelect = container.querySelector(`.reason-select[data-id=\"${id}\"]`);\n      const adjustmentInput = container.querySelector(`.adjustment-input[data-id=\"${id}\"]`);\n      \n      if (!reasonSelect.value) {\n        alert('差異理由を選択してください。');\n        return;\n      }\n      \n      if (!confirm('この差異を確定しますか？')) {\n        return;\n      }\n      \n      const differenceTableIndex = tables.findIndex(t => t.tableName === '棚卸差異');\n      \n      const updated = await window.aivicApi.update(differenceTableIndex, id, {\n        調整済フラグ: true,\n        差異原因: reasonSelect.value,\n        備考: adjustmentInput.value,\n        更新日時: new Date().toISOString()\n      });\n      \n      if (updated) {\n        // データ再読み込み\n        const updatedDifferences = await window.aivicApi.list(differenceTableIndex);\n        if (updatedDifferences) {\n          tables[differenceTableIndex].records = updatedDifferences;\n          currentData = createDifferenceData();\n          renderRows(currentData);\n        }\n      }\n    }\n  });\n}";
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+:root {
+  --primary: #8B4513;
+  --primary-hover: #A0522D;
+  --bg-main: #FAF7F2;
+  --bg-card: #F5F1E8;
+  --bg-sidebar: #F0EBE0;
+  --border: #D2B48C;
+  --text: #2F1B14;
+  --text-muted: #5D4037;
+  --top-bar-bg: #EFEBE2;
+  --top-bar-border: #C8A882;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg-main); color:var(--text); display:flex; flex-direction:column; height:100vh; overflow:hidden; }
+.top-bar { display:flex; align-items:center; gap:0; background:var(--top-bar-bg, var(--bg-sidebar)); border-bottom:1px solid var(--top-bar-border, var(--border)); padding:0 16px; height:48px; flex-shrink:0; }
+.top-bar .app-name { font-size:14px; font-weight:700; color:var(--text); margin-right:20px; white-space:nowrap; }
+.sys-tab { background:transparent; color:var(--text); opacity:0.6; border:none; border-bottom:2px solid transparent; padding:0 16px; height:48px; cursor:pointer; font-size:13px; white-space:nowrap; transition:color .15s, border-color .15s, opacity .15s; text-decoration:none; display:flex; align-items:center; }
+.sys-tab:hover { opacity:0.85; }
+.sys-tab.active, .sys-tab.aivic-active { color:var(--text); opacity:1; border-bottom-color:var(--primary); font-weight:600; }
+.app-body { display:flex; flex:1; overflow:hidden; }
+.sidebar { width:220px; background:var(--bg-sidebar); border-right:1px solid var(--border); padding:12px 8px; overflow-y:auto; flex-shrink:0; }
+.sidebar-sys-name { margin:0 0 8px; padding:4px 8px; font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.06em; }
+.nav-btn { display:block; width:100%; text-align:left; background:transparent; color:var(--text); opacity:0.65; border:none; border-radius:8px; padding:8px 12px; cursor:pointer; font-size:13px; margin-bottom:2px; transition:opacity .15s,background .15s; text-decoration:none; }
+.nav-btn:hover { background:var(--border); opacity:0.9; }
+.nav-btn.active, .nav-btn.aivic-active { background:var(--primary); color:#fff; opacity:1; }
+.main { flex:1; padding:16px; overflow-y:auto; }
+.card { border:1px solid var(--border); border-radius:12px; padding:16px; background:var(--bg-card); margin-bottom:12px; }
+.hidden { display:none !important; }
+.action-btn { background:var(--primary); color:#fff; border:0; border-radius:8px; padding:8px 14px; cursor:pointer; font-size:13px; }
+.action-btn:hover { background:var(--primary-hover, #1a55ef); }
+.action-btn.secondary { background:var(--border); color:var(--text); }
+.input { background:var(--bg-main); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:7px 10px; font-size:13px; }
+.muted { color:var(--text-muted); font-size:13px; }
+.table-wrap { overflow:auto; border:1px solid var(--border); border-radius:8px; }
+table { width:100%; border-collapse:collapse; }
+th, td { border-bottom:1px solid var(--border); padding:8px 10px; text-align:left; font-size:13px; }
+th { color:var(--text); background:var(--bg-sidebar); position:sticky; top:0; font-weight:600; }
+tr:hover { background:var(--bg-sidebar); cursor:pointer; }
+canvas { display:block; max-height:280px !important; }
+.chart-wrap, .chart-container, [class*="chart"] { position:relative; height:260px; max-height:280px; }
+@media (max-width:768px) {
+  .top-bar { overflow-x:auto; }
+  .app-body { flex-direction:column; }
+  .sidebar { width:100%; height:auto; display:flex; flex-wrap:wrap; gap:4px; padding:8px; }
+  .sidebar-sys-name { display:none; }
+  .nav-btn { width:auto; border-radius:999px; padding:5px 12px; }
+}
+  </style>
+</head>
+<body>
+<header class="top-bar">
+  <span class="app-name">AAA</span>
+    <a href="./scr-1780995483399.html" class="sys-tab active" data-aivic-nav-system="itg-2">在庫管理システム</a>
+    <a href="./scr-1780995849791.html" class="sys-tab" data-aivic-nav-system="itg-3">購買管理システム</a>
+    <a href="./scr-1780996145775.html" class="sys-tab" data-aivic-nav-system="itg-4">営業支援システム</a>
+    <a href="./scr-1780996340834.html" class="sys-tab" data-aivic-nav-system="itg-5">経営情報システム</a>
+    <a href="./scr-1780996536358.html" class="sys-tab" data-aivic-nav-system="itg-6">住宅建設会社向け納期管理ポータル</a>
+    <a href="./scr-1780996682301.html" class="sys-tab" data-aivic-nav-system="itg-7">仕入先向け情報共有システム</a>
+    <a href="./scr-1780996842878.html" class="sys-tab" data-aivic-nav-system="itg-1-br-1780551331069-2-1-1">納期管理システム</a>
+    <a href="./scr-1780996954228.html" class="sys-tab" data-aivic-nav-system="itg-2-br-1780551363302-2-1-2">仕入先情報ポータル</a>
+    <a href="./scr-1780995137049.html" class="sys-tab" data-aivic-nav-system="itg-1">生産管理システム</a>
+</header>
+<div class="app-body">
+  <aside class="sidebar">
+    <p class="sidebar-sys-name">在庫管理システム</p>
+      <a href="./scr-1780995483399.html" class="nav-btn" data-aivic-nav="scr-1780995483399">在庫入出庫登録画面</a>
+      <a href="./scr-1780995495139.html" class="nav-btn" data-aivic-nav="scr-1780995495139">棚卸実施管理画面</a>
+      <a href="./scr-1780995505965.html" class="nav-btn" data-aivic-nav="scr-1780995505965">棚卸実績入力画面</a>
+      <a href="./scr-1780995516133.html" class="nav-btn" data-aivic-nav="scr-1780995516133">棚卸差異分析画面</a>
+      <a href="./scr-1780995527376.html" class="nav-btn" data-aivic-nav="scr-1780995527376">在庫更新処理</a>
+      <a href="./scr-1780995536402.html" class="nav-btn" data-aivic-nav="scr-1780995536402">入出庫入力画面</a>
+      <a href="./scr-1780995547312.html" class="nav-btn" data-aivic-nav="scr-1780995547312">データ統合処理</a>
+      <a href="./scr-1780995557997.html" class="nav-btn" data-aivic-nav="scr-1780995557997">棚卸リスト出力画面</a>
+      <a href="./scr-1780995566409.html" class="nav-btn" data-aivic-nav="scr-1780995566409">差異分析処理</a>
+      <a href="./scr-1780995578605-wghb.html" class="nav-btn" data-aivic-nav="scr-1780995578605-wghb">製造履歴照会画面</a>
+      <a href="./scr-1780995584605.html" class="nav-btn active" data-aivic-nav="scr-1780995584605">在庫確定処理</a>
+      <a href="./scr-1780995594850.html" class="nav-btn" data-aivic-nav="scr-1780995594850">在庫実績照会画面</a>
+      <a href="./scr-1780995603768.html" class="nav-btn" data-aivic-nav="scr-1780995603768">在庫履歴照会画面</a>
+      <a href="./scr-1780995614537.html" class="nav-btn" data-aivic-nav="scr-1780995614537">在庫照会画面</a>
+      <a href="./scr-1780995624543.html" class="nav-btn" data-aivic-nav="scr-1780995624543">消費実績分析機能</a>
+      <a href="./scr-1780995634676.html" class="nav-btn" data-aivic-nav="scr-1780995634676">リアルタイム在庫照会画面</a>
+      <a href="./scr-1780995645045.html" class="nav-btn" data-aivic-nav="scr-1780995645045">棚卸結果照会画面</a>
+      <a href="./scr-1780995654167.html" class="nav-btn" data-aivic-nav="scr-1780995654167">在庫確定画面</a>
+  </aside>
+  <main class="main">
+    <section class="card" data-aivic-panel="scr-1780995584605" style="margin-top:0">
+<div class="inventory-confirmation-container" style="padding: 16px; background: var(--bg-main); min-height: 100vh;">
+  <!-- ヘッダー部分 -->
+  <div style="margin-bottom: 20px;">
+    <h1 style="font-size: 24px; font-weight: 600; color: var(--text); margin: 0 0 8px 0;">在庫確定処理</h1>
+    <p style="color: var(--text-muted); font-size: 14px; margin: 0;">棚卸実績と理論在庫の差異を確認し、在庫数量を確定します</p>
+  </div>
+
+  <!-- 検索・フィルター部分 -->
+  <div class="card" style="margin-bottom: 20px; padding: 16px;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 12px; align-items: end;">
+      <div>
+        <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">棚卸実施</label>
+        <select id="stocktaking-select" data-testid="stocktaking-select" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+          <option value="">選択してください</option>
+          <option value="2024-01-15">2024年1月定期棚卸</option>
+          <option value="2024-02-15">2024年2月定期棚卸</option>
+          <option value="2024-03-15">2024年3月定期棚卸</option>
+        </select>
+      </div>
+      <div>
+        <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">倉庫</label>
+        <select id="warehouse-select" data-testid="warehouse-select" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+          <option value="">全倉庫</option>
+          <option value="WH001">第1倉庫</option>
+          <option value="WH002">第2倉庫</option>
+          <option value="WH003">第3倉庫</option>
+        </select>
+      </div>
+      <div>
+        <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">商品検索</label>
+        <input type="text" id="product-search" data-testid="product-search" placeholder="商品コード・商品名" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+      </div>
+      <button id="btn-search" data-testid="search-button" class="action-btn" style="padding: 8px 16px; height: 36px;">検索</button>
+    </div>
+  </div>
+
+  <!-- 差異一覧テーブル -->
+  <div class="card" style="margin-bottom: 20px;">
+    <div style="padding: 16px 16px 12px 16px; border-bottom: 1px solid var(--border);">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="font-size: 16px; font-weight: 600; color: var(--text); margin: 0;">差異一覧</h2>
+        <div style="display: flex; gap: 8px;">
+          <label style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);">
+            <input type="checkbox" id="select-all" data-testid="select-all-checkbox" style="accent-color: var(--primary);">
+            一括選択
+          </label>
+          <button id="btn-confirm-selected" data-testid="confirm-selected-button" class="action-btn" style="padding: 6px 12px; font-size: 14px;">選択項目を確定</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="table-wrap">
+      <table data-testid="difference-list">
+        <thead>
+          <tr>
+            <th style="width: 40px;">選択</th>
+            <th style="width: 100px;">商品コード</th>
+            <th style="width: 200px;">商品名</th>
+            <th style="width: 80px;">倉庫</th>
+            <th style="width: 80px;">理論在庫</th>
+            <th style="width: 80px;">実地在庫</th>
+            <th style="width: 80px;">差異数量</th>
+            <th style="width: 120px;">差異理由</th>
+            <th style="width: 200px;">調整理由</th>
+            <th style="width: 80px;">状態</th>
+            <th style="width: 100px;">操作</th>
+          </tr>
+        </thead>
+        <tbody id="difference-tbody">
+          <!-- データは JavaScript で動的に生成 -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 確定処理パネル -->
+  <div class="card" style="padding: 16px;">
+    <h2 style="font-size: 16px; font-weight: 600; color: var(--text); margin: 0 0 12px 0;">確定処理</h2>
+    <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; align-items: end;">
+      <div>
+        <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">差異理由</label>
+        <select id="reason-select" data-testid="reason-select" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+          <option value="">選択してください</option>
+          <option value="counting-error">棚卸カウントミス</option>
+          <option value="system-error">システム入力ミス</option>
+          <option value="damage">商品破損</option>
+          <option value="theft">盗難・紛失</option>
+          <option value="other">その他</option>
+        </select>
+      </div>
+      <div>
+        <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">調整理由</label>
+        <input type="text" id="adjustment-reason" data-testid="adjustment-reason" placeholder="詳細な理由を入力" style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 14px;">
+      </div>
+      <button id="btn-bulk-confirm" data-testid="bulk-confirm-button" class="action-btn" style="padding: 8px 16px; height: 36px;">一括確定</button>
+    </div>
+  </div>
+
+  <!-- 関連画面へのナビゲーション -->
+  <div style="margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap;">
+    <button onclick="window.showScreen('scr-1780995495139')" class="action-btn secondary" style="padding: 8px 16px;">棚卸実施管理</button>
+    <button onclick="window.showScreen('scr-1780995505965')" class="action-btn secondary" style="padding: 8px 16px;">棚卸実績入力</button>
+    <button onclick="window.showScreen('scr-1780995516133')" class="action-btn secondary" style="padding: 8px 16px;">棚卸差異分析</button>
+    <button onclick="window.showScreen('scr-1780995527376')" class="action-btn secondary" style="padding: 8px 16px;">在庫更新処理</button>
+  </div>
+</div>
+    </section>
+  </main>
+</div>
+<script>
+(function() {
+  var TABLE_DEFS = window.AIVIC_TABLES || [];
+  var PRESET_SEED = window.AIVIC_PRESET_SEED || {};
+  var SYSTEM_NAME = window.AIVIC_SYSTEM_NAME || "";
+  var APP_ID = window.AIVIC_APP_ID || "";
+  var API_URL = (window.AIVIC_API_URL && window.AIVIC_API_URL !== "REPLACE_WITH_API_URL")
+    ? window.AIVIC_API_URL : window.location.origin;
+
+  // 通知 helper（SPA 版と同じ）
+  window.aivicNotify = (function() {
+    function ensureContainer() {
+      var c = document.getElementById("aivic-toast-container");
+      if (c) return c;
+      c = document.createElement("div");
+      c.id = "aivic-toast-container";
+      c.style.cssText = "position:fixed;top:16px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:360px;";
+      document.body.appendChild(c);
+      return c;
+    }
+    function show(msg, type) {
+      var c = ensureContainer();
+      var el = document.createElement("div");
+      el.textContent = msg;
+      el.style.cssText = "padding:10px 16px;border-radius:8px;font-size:13px;line-height:1.4;pointer-events:auto;color:#fff;background:" + (type === "error" ? "#dc2626" : "#d97706");
+      c.appendChild(el);
+      setTimeout(function() {
+        el.style.transition = "opacity .3s";
+        el.style.opacity = "0";
+        setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 320);
+      }, type === "error" ? 6000 : 4500);
+    }
+    return {
+      error: function(msg) { show("❌ " + msg, "error"); },
+      warn:  function(msg) { show("⚠️ " + msg, "warn"); },
+    };
+  })();
+
+  // CRUD API（SPA 版と同じ）
+  window.aivicApi = (function() {
+    function dbErr(op) { window.aivicNotify.error("データベースエラー（" + op + "）: APIサーバーに接続できません。"); }
+    function newId() { return typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : "id-" + Date.now() + "-" + Math.random().toString(36).slice(2); }
+    function q(i) {
+      var t = TABLE_DEFS[i];
+      var dbP = (window.AIVIC_DB_TYPE && window.AIVIC_DB_TYPE !== "dynamodb") ? "&db=" + encodeURIComponent(window.AIVIC_DB_TYPE) : "";
+      return "?app=" + encodeURIComponent(APP_ID) + "&system=" + encodeURIComponent(SYSTEM_NAME) + "&table=" + encodeURIComponent(t ? t.tableName : "table" + i) + dbP;
+    }
+    return {
+      list: async function(tableIndex) {
+        if (!API_URL) return [];
+        try { var r = await fetch(API_URL + "/api/" + tableIndex + q(tableIndex)); var d = await r.json(); return Array.isArray(d) ? d : (d.items || []); }
+        catch(e) { dbErr("データ取得"); return []; }
+      },
+      save: async function(tableIndex, item) {
+        if (!API_URL) { dbErr("保存"); return null; }
+        var now = new Date().toISOString();
+        var rec = Object.assign({}, item, { id: item.id || newId(), createdAt: item.createdAt || now, updatedAt: now });
+        try { var r = await fetch(API_URL + "/api/" + tableIndex + q(tableIndex), { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(rec) }); return await r.json(); }
+        catch(e) { dbErr("保存"); return null; }
+      },
+      update: async function(tableIndex, id, changes) {
+        if (!API_URL) { dbErr("更新"); return null; }
+        try { var r = await fetch(API_URL + "/api/" + tableIndex + "/" + id + q(tableIndex), { method:"PUT", headers:{"Content-Type":"application/json"}, body:JSON.stringify(Object.assign({}, changes, {updatedAt: new Date().toISOString()})) }); return await r.json(); }
+        catch(e) { dbErr("更新"); return null; }
+      },
+      delete: async function(tableIndex, id) {
+        if (!API_URL) { dbErr("削除"); return {deleted:false}; }
+        try { await fetch(API_URL + "/api/" + tableIndex + "/" + id + q(tableIndex), {method:"DELETE"}); return {deleted:true}; }
+        catch(e) { dbErr("削除"); return {deleted:false}; }
+      },
+    };
+  })();
+
+  // showScreen はマルチページ構成ではページ遷移として動く。
+  // パネル切替 (旧 SPA 動作) ではなく ./<id>.html への navigate に再定義する。
+  // 既存の AI 生成 shell が onclick="showScreen('x')" の形で書いていても透過的に動く。
+  //
+  // 防御層:
+  // (a) 同じ画面 ID なら no-op（AIVIC_PAGE_SCREEN_ID 一致 / pathname 一致のどちらか）
+  // (b) 同じ navigate を 100ms 以内に繰り返したら break loop（onclick 連打ではなく自動ループ対策）
+  // (c) DOMContentLoaded 直後 1.5s 以内の「自動 navigate」は警告 + 抑制（手動 click は通す）
+  var _aivicNavLastTime = 0;
+  var _aivicNavLastTarget = "";
+  var _aivicReady = false;
+  window.showScreen = function(screenId) {
+    if (!screenId) return;
+    if (screenId === window.AIVIC_PAGE_SCREEN_ID) return; // 既に該当ページに居る
+    // pathname ベースの保険: AIVIC_PAGE_SCREEN_ID が未設定でも、現在 URL と一致したら抑制
+    var targetPath = './' + encodeURIComponent(screenId) + '.html';
+    var currentName = (window.location.pathname.split('/').pop() || '');
+    if (currentName === (encodeURIComponent(screenId) + '.html') ||
+        currentName === (screenId + '.html')) {
+      return;
+    }
+    var now = Date.now();
+    if (_aivicNavLastTarget === targetPath && (now - _aivicNavLastTime) < 100) {
+      console.warn('[aivic] showScreen 連続呼び出し検知。無限ループ防止のため抑制:', screenId);
+      return;
+    }
+    if (!_aivicReady) {
+      // ページロード直後の自動 navigate は AI shell の load-time 副作用の可能性が高い。
+      // ボタンクリック等のユーザー操作は ready 後なので影響しない。
+      console.warn('[aivic] DOMContentLoaded 前の showScreen 呼び出し。抑制:', screenId);
+      return;
+    }
+    _aivicNavLastTime = now;
+    _aivicNavLastTarget = targetPath;
+    window.location.href = targetPath;
+  };
+
+  // 初回マウント時のサンプルデータ投入
+  function seedAllIfEmpty() {
+    if (!API_URL) return Promise.resolve();
+    return Promise.all(TABLE_DEFS.map(function(t, i) {
+      var preset = PRESET_SEED[t.tableName];
+      if (!Array.isArray(preset) || preset.length === 0) return Promise.resolve();
+      return window.aivicApi.list(i).then(function(existing) {
+        if (existing && existing.length > 0) return;
+        return Promise.all(preset.map(function(row) { return window.aivicApi.save(i, row); }));
+      }).catch(function() {});
+    }));
+  }
+
+  // ── 初期表示: このページ専用の panel に initFn を実行 ──
+  // window.AIVIC_PAGE_SCREEN_ID と AIVIC_PAGE_INIT_JS は composeMultipagePages
+  // でページ単位に埋め込まれる。
+  document.addEventListener("DOMContentLoaded", function() {
+    // 1.5 秒後に必ず _aivicReady を立てる（initFn が走らないページや失敗ページでも
+    // ユーザーが操作できるようにする保険）。initFn 完了時にも立てるので早い方が勝つ。
+    setTimeout(function() { _aivicReady = true; }, 1500);
+    var pageScreenId = window.AIVIC_PAGE_SCREEN_ID;
+    if (!pageScreenId) return;
+
+    // sidebar / nav の active class を付与（現在ページのリンクを強調）
+    document.querySelectorAll('[data-aivic-nav]').forEach(function(btn) {
+      var isActive = btn.getAttribute("data-aivic-nav") === pageScreenId;
+      btn.classList.toggle("aivic-active", isActive);
+      btn.setAttribute("aria-current", isActive ? "page" : "false");
+    });
+
+    var container = document.querySelector('[data-aivic-panel="' + pageScreenId + '"]');
+    if (!container) return;
+
+    // **content 要素の hidden 強制除去（2026-05-24 Playwright 大量 fail 対応）**:
+    // AI が生成した panel HTML には class="hidden" / hidden 属性 / style="display:none"
+    // が content 要素（#xxx-tbody / #xxx-list / [data-testid="error-message"] 等）に付いて
+    // いることがある。それを Playwright が toBeVisible() で待ち続けて timeout する事故が頻発。
+    //
+    // ポリシー: panel コンテナ配下の全要素について以下を実行:
+    //   - class="hidden" / display:none / hidden 属性を **content 要素では除去**
+    //   - **modal 系**（.modal, .modal-backdrop, [role="dialog"], [data-modal] 等）は除外
+    //     （これらは仕様上初期非表示が正しい）
+    var isModalLike = function(el) {
+      if (!el || !el.classList) return false;
+      var cn = String(el.className || "");
+      if (/modal|dialog|overlay|popup|dropdown|tooltip/i.test(cn)) return true;
+      var role = el.getAttribute && el.getAttribute("role");
+      if (role === "dialog" || role === "alertdialog" || role === "tooltip" || role === "menu") return true;
+      if (el.hasAttribute && (el.hasAttribute("data-modal") || el.hasAttribute("data-dropdown") || el.hasAttribute("data-popup"))) return true;
+      return false;
+    };
+    var unhideContentElements = function(root) {
+      var all = root.querySelectorAll('.hidden, [hidden], [style*="display:none"], [style*="display: none"]');
+      for (var k = 0; k < all.length; k++) {
+        var el = all[k];
+        // modal 系は触らない
+        if (isModalLike(el)) continue;
+        // parent chain で modal 内なら触らない
+        var p = el.parentElement;
+        var insideModal = false;
+        while (p && p !== root) {
+          if (isModalLike(p)) { insideModal = true; break; }
+          p = p.parentElement;
+        }
+        if (insideModal) continue;
+        // 除去
+        el.classList.remove('hidden');
+        el.removeAttribute('hidden');
+        if (el.style && el.style.display === 'none') el.style.display = '';
+      }
+    };
+    try { unhideContentElements(container); } catch (e) { console.warn('[aivic] unhideContent failed:', e); }
+
+    var initJsSource = window.AIVIC_PAGE_INIT_JS;
+    if (!initJsSource) {
+      // initJs が無くてもサンプルデータ投入は走らせる
+      seedAllIfEmpty();
+      return;
+    }
+    var initFn = null;
+    try {
+      initFn = (new Function("return (" + initJsSource + ")"))();
+    } catch (e) {
+      console.error("[aivic] initJs compile error:", pageScreenId, e);
+      return;
+    }
+    if (typeof initFn !== "function") return;
+
+    seedAllIfEmpty().then(function() {
+      return Promise.all(TABLE_DEFS.map(function(t, i) {
+        return window.aivicApi.list(i)
+          .then(function(records) { return Object.assign({}, t, { records: records }); })
+          .catch(function() { return Object.assign({}, t, { records: [] }); });
+      }));
+    }).then(function(tables) {
+      try { initFn(container, API_URL, tables); } catch (e) { console.error("[aivic] initFn error:", pageScreenId, e); }
+      // 初期 panel init が一巡したら _aivicReady を立てる。以降のユーザー操作 (onclick) で
+      // showScreen が呼ばれた場合は通常通り navigate する。
+      _aivicReady = true;
+    });
+  });
+})();
+
+</script>
+</body>
+</html>

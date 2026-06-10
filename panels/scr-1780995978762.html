@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>発注処理画面 - AAA</title>
+  <script>
+window.AIVIC_API_URL = "https://mkwmoife37uqyv4zhy4yhweozq0oddxn.lambda-url.us-east-1.on.aws/";
+window.AIVIC_APP_ID = "session-1780478987683";
+window.AIVIC_SYSTEM_NAME = "購買管理システム";
+window.AIVIC_TABLES = [{"tableName":"商品マスタ","purpose":"商品の基本情報を管理し、在庫管理や販売管理の基準となるマスタデータを提供する","columns":[{"name":"商品ID","type":"uuid","required":true,"description":"商品を一意に識別するID（主キー）"},{"name":"商品コード","type":"varchar(100)","required":true,"description":"商品の業務用コード（ユニーク）"},{"name":"商品名","type":"varchar(100)","required":true,"description":"商品の名称"},{"name":"商品説明","type":"text","required":false,"description":"商品の詳細説明"},{"name":"カテゴリ","type":"varchar(100)","required":false,"description":"商品のカテゴリ分類"},{"name":"単位","type":"varchar(100)","required":true,"description":"在庫管理の単位（個、箱、kg等）"},{"name":"標準価格","type":"integer","required":false,"description":"商品の標準販売価格"},{"name":"仕入価格","type":"integer","required":false,"description":"商品の仕入価格"},{"name":"安全在庫数","type":"integer","required":false,"description":"最低限保持すべき在庫数"},{"name":"発注点","type":"integer","required":false,"description":"発注をかけるべき在庫数の閾値"},{"name":"有効フラグ","type":"boolean","required":true,"description":"商品が有効かどうか（論理削除用）"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"uuid","required":true,"description":"レコード作成者のユーザーID"},{"name":"更新者","type":"uuid","required":true,"description":"レコード最終更新者のユーザーID"}]},{"tableName":"仕入先マスタ","purpose":"購買管理システムにおける仕入先の基本情報を管理するマスタテーブル","columns":[{"name":"仕入先ID","type":"uuid","required":true,"description":"仕入先を一意に識別するID（主キー）"},{"name":"仕入先コード","type":"varchar(100)","required":true,"description":"業務で使用する仕入先の識別コード"},{"name":"仕入先名","type":"varchar(100)","required":true,"description":"仕入先の正式名称"},{"name":"仕入先名カナ","type":"varchar(100)","required":false,"description":"仕入先名の読み仮名（検索・ソート用）"},{"name":"郵便番号","type":"varchar(100)","required":false,"description":"仕入先の郵便番号"},{"name":"住所","type":"text","required":false,"description":"仕入先の住所"},{"name":"電話番号","type":"varchar(100)","required":false,"description":"仕入先の電話番号"},{"name":"FAX番号","type":"varchar(100)","required":false,"description":"仕入先のFAX番号"},{"name":"メールアドレス","type":"varchar(100)","required":false,"description":"仕入先のメールアドレス"},{"name":"担当者名","type":"varchar(100)","required":false,"description":"仕入先の担当者名"},{"name":"支払条件","type":"varchar(100)","required":false,"description":"支払条件（月末締翌月末払い等）"},{"name":"取引開始日","type":"timestamp","required":false,"description":"取引を開始した日付"},{"name":"有効フラグ","type":"boolean","required":true,"description":"仕入先が有効かどうか（true:有効、false:無効）"},{"name":"備考","type":"text","required":false,"description":"仕入先に関する備考・メモ"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"varchar(100)","required":true,"description":"レコード作成者"},{"name":"更新者","type":"varchar(100)","required":true,"description":"レコード最終更新者"}]},{"tableName":"在庫管理","purpose":"商品の在庫数量と在庫状況を管理し、入出庫履歴を追跡する","columns":[{"name":"在庫ID","type":"uuid","required":true,"description":"在庫レコードの一意識別子"},{"name":"商品ID","type":"uuid","required":true,"description":"商品マスタへの外部キー"},{"name":"倉庫コード","type":"varchar(100)","required":true,"description":"在庫を保管している倉庫の識別コード"},{"name":"現在庫数","type":"integer","required":true,"description":"現在の在庫数量"},{"name":"安全在庫数","type":"integer","required":true,"description":"最低限維持すべき在庫数量"},{"name":"発注点","type":"integer","required":true,"description":"発注を行うべき在庫数量の閾値"},{"name":"最大在庫数","type":"integer","required":false,"description":"保管可能な最大在庫数量"},{"name":"引当済数量","type":"integer","required":true,"description":"受注等で引当済みの数量"},{"name":"有効在庫数","type":"integer","required":true,"description":"現在庫数から引当済数量を差し引いた利用可能数量"},{"name":"最終入庫日","type":"timestamp","required":false,"description":"最後に入庫があった日時"},{"name":"最終出庫日","type":"timestamp","required":false,"description":"最後に出庫があった日時"},{"name":"在庫状態","type":"varchar(100)","required":true,"description":"在庫の状態（正常/不足/過剰/停止等）"},{"name":"備考","type":"text","required":false,"description":"在庫に関する特記事項"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"varchar(100)","required":true,"description":"レコード作成者"},{"name":"更新者","type":"varchar(100)","required":true,"description":"レコード最終更新者"}]},{"tableName":"消費実績","purpose":"商品の消費実績を記録し、在庫管理や発注計画に活用するためのトランザクションテーブル","columns":[{"name":"消費実績ID","type":"uuid","required":true,"description":"消費実績の一意識別子（主キー）"},{"name":"商品ID","type":"uuid","required":true,"description":"消費された商品の識別子（商品マスタへの外部キー）"},{"name":"消費日","type":"timestamp","required":true,"description":"商品が消費された日付"},{"name":"消費数量","type":"integer","required":true,"description":"消費された商品の数量"},{"name":"消費理由","type":"varchar(100)","required":true,"description":"消費の理由（販売、廃棄、サンプル提供等）"},{"name":"部署コード","type":"varchar(100)","required":false,"description":"消費を行った部署のコード"},{"name":"担当者ID","type":"varchar(100)","required":false,"description":"消費処理を行った担当者の識別子"},{"name":"備考","type":"text","required":false,"description":"消費に関する補足情報"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"作成者","type":"varchar(100)","required":true,"description":"レコード作成者"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"更新者","type":"varchar(100)","required":true,"description":"レコード最終更新者"}]},{"tableName":"発注履歴","purpose":"商品の発注取引を記録し、発注状況の追跡と管理を行う","columns":[{"name":"発注履歴ID","type":"uuid","required":true,"description":"発注履歴の一意識別子（主キー）"},{"name":"発注番号","type":"varchar(100)","required":true,"description":"業務上の発注管理番号"},{"name":"商品ID","type":"uuid","required":true,"description":"発注対象商品の識別子（商品マスタへの外部キー）"},{"name":"仕入先ID","type":"uuid","required":true,"description":"発注先仕入先の識別子（仕入先マスタへの外部キー）"},{"name":"発注数量","type":"integer","required":true,"description":"発注した商品の数量"},{"name":"発注単価","type":"integer","required":true,"description":"発注時の商品単価（円）"},{"name":"発注金額","type":"integer","required":true,"description":"発注総額（発注数量×発注単価）"},{"name":"発注日","type":"timestamp","required":true,"description":"発注を行った日時"},{"name":"納期予定日","type":"timestamp","required":true,"description":"商品納入予定日"},{"name":"発注ステータス","type":"varchar(100)","required":true,"description":"発注状況（発注済み、入荷済み、キャンセル等）"},{"name":"入荷日","type":"timestamp","required":false,"description":"実際の商品入荷日時"},{"name":"入荷数量","type":"integer","required":false,"description":"実際に入荷した数量"},{"name":"備考","type":"text","required":false,"description":"発注に関する特記事項"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"varchar(100)","required":true,"description":"発注を作成したユーザー"}]},{"tableName":"納期実績","purpose":"発注した商品の納期予定と実際の納期を記録し、仕入先の納期パフォーマンスを管理する","columns":[{"name":"納期実績ID","type":"uuid","required":true,"description":"納期実績の一意識別子"},{"name":"発注履歴ID","type":"uuid","required":true,"description":"発注履歴テーブルへの外部キー"},{"name":"商品ID","type":"uuid","required":true,"description":"商品マスタへの外部キー"},{"name":"仕入先ID","type":"uuid","required":true,"description":"仕入先マスタへの外部キー"},{"name":"発注数量","type":"integer","required":true,"description":"発注した数量"},{"name":"納期予定日","type":"timestamp","required":true,"description":"仕入先が約束した納期日"},{"name":"納期実績日","type":"timestamp","required":false,"description":"実際に納品された日時"},{"name":"納品数量","type":"integer","required":false,"description":"実際に納品された数量"},{"name":"納期遅延日数","type":"integer","required":false,"description":"予定日からの遅延日数（マイナスは早期納品）"},{"name":"納品ステータス","type":"varchar(100)","required":true,"description":"納品状況（発注中/一部納品/完納/キャンセル等）"},{"name":"備考","type":"text","required":false,"description":"納期に関する特記事項や遅延理由等"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"varchar(100)","required":true,"description":"レコード作成者"}]},{"tableName":"価格履歴","purpose":"商品の価格変動を時系列で管理し、発注時の価格決定や原価分析に使用する","columns":[{"name":"価格履歴ID","type":"uuid","required":true,"description":"価格履歴の一意識別子（主キー）"},{"name":"商品ID","type":"uuid","required":true,"description":"商品マスタへの外部キー"},{"name":"仕入先ID","type":"uuid","required":true,"description":"仕入先マスタへの外部キー"},{"name":"適用開始日","type":"timestamp","required":true,"description":"この価格が適用される開始日時"},{"name":"適用終了日","type":"timestamp","required":false,"description":"この価格が適用される終了日時（NULL=現在有効）"},{"name":"単価","type":"integer","required":true,"description":"商品の単価（円）"},{"name":"最小発注数量","type":"integer","required":false,"description":"この価格が適用される最小発注数量"},{"name":"価格変更理由","type":"varchar(100)","required":false,"description":"価格変更の理由（原材料費上昇、為替変動等）"},{"name":"有効フラグ","type":"boolean","required":true,"description":"この価格履歴が有効かどうか"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"作成者","type":"varchar(100)","required":true,"description":"レコード作成者"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"更新者","type":"varchar(100)","required":true,"description":"レコード最終更新者"}]},{"tableName":"発注点設定","purpose":"商品ごとの発注点（在庫が下回ったら発注を行う基準値）と発注量を管理し、自動発注や発注タイミングの判定に使用する","columns":[{"name":"発注点設定ID","type":"uuid","required":true,"description":"発注点設定の一意識別子（主キー）"},{"name":"商品ID","type":"uuid","required":true,"description":"商品マスタへの外部キー"},{"name":"仕入先ID","type":"uuid","required":true,"description":"仕入先マスタへの外部キー"},{"name":"発注点","type":"integer","required":true,"description":"在庫がこの数量を下回ったら発注を行う基準値"},{"name":"発注量","type":"integer","required":true,"description":"発注時の標準発注数量"},{"name":"安全在庫","type":"integer","required":true,"description":"欠品を防ぐための安全在庫数量"},{"name":"リードタイム日数","type":"integer","required":true,"description":"発注から納品までの標準日数"},{"name":"有効フラグ","type":"boolean","required":true,"description":"この発注点設定が有効かどうか"},{"name":"適用開始日","type":"timestamp","required":true,"description":"この発注点設定の適用開始日時"},{"name":"適用終了日","type":"timestamp","required":false,"description":"この発注点設定の適用終了日時"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"varchar(100)","required":true,"description":"レコード作成者"},{"name":"更新者","type":"varchar(100)","required":true,"description":"レコード最終更新者"}]},{"tableName":"需要予測","purpose":"商品の将来需要を予測し、適切な発注計画立案を支援する","columns":[{"name":"予測ID","type":"uuid","required":true,"description":"需要予測の一意識別子"},{"name":"商品ID","type":"uuid","required":true,"description":"予測対象商品の識別子"},{"name":"予測対象年月","type":"varchar(100)","required":true,"description":"予測対象の年月（YYYY-MM形式）"},{"name":"予測数量","type":"integer","required":true,"description":"予測される需要数量"},{"name":"予測方法","type":"varchar(100)","required":true,"description":"予測手法（移動平均、指数平滑化、回帰分析等）"},{"name":"信頼度","type":"integer","required":false,"description":"予測の信頼度（パーセンテージ）"},{"name":"季節調整フラグ","type":"boolean","required":true,"description":"季節性を考慮した予測かどうか"},{"name":"実績数量","type":"integer","required":false,"description":"実際の消費数量（予測後に更新）"},{"name":"予測精度","type":"integer","required":false,"description":"予測と実績の精度（パーセンテージ）"},{"name":"備考","type":"text","required":false,"description":"予測に関する補足情報"},{"name":"作成日時","type":"timestamp","required":true,"description":"予測データの作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"予測データの最終更新日時"},{"name":"作成者","type":"varchar(100)","required":true,"description":"予測データの作成者"}]},{"tableName":"季節変動パターン","purpose":"商品の季節による需要変動パターンを管理し、需要予測や発注計画の精度向上を支援する","columns":[{"name":"季節変動パターンID","type":"uuid","required":true,"description":"季節変動パターンの一意識別子"},{"name":"商品ID","type":"uuid","required":true,"description":"商品マスタへの外部キー"},{"name":"年度","type":"integer","required":true,"description":"対象年度"},{"name":"月","type":"integer","required":true,"description":"対象月（1-12）"},{"name":"季節変動係数","type":"varchar(100)","required":true,"description":"基準値に対する変動倍率"},{"name":"パターン種別","type":"varchar(100)","required":true,"description":"季節変動の種別（春夏秋冬、イベント等）"},{"name":"適用開始日","type":"timestamp","required":true,"description":"パターン適用開始日"},{"name":"適用終了日","type":"timestamp","required":false,"description":"パターン適用終了日"},{"name":"有効フラグ","type":"boolean","required":true,"description":"パターンの有効/無効状態"},{"name":"備考","type":"text","required":false,"description":"季節変動の要因や特記事項"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"varchar(100)","required":true,"description":"レコード作成者"},{"name":"更新者","type":"varchar(100)","required":true,"description":"レコード最終更新者"}]},{"tableName":"仕入先評価指標","purpose":"仕入先の納期遵守率、品質、価格競争力等の評価指標を管理し、仕入先選定や契約更新の判断材料とする","columns":[{"name":"評価ID","type":"uuid","required":true,"description":"評価レコードの一意識別子"},{"name":"仕入先ID","type":"uuid","required":true,"description":"評価対象の仕入先を識別する外部キー"},{"name":"評価期間開始日","type":"timestamp","required":true,"description":"評価対象期間の開始日"},{"name":"評価期間終了日","type":"timestamp","required":true,"description":"評価対象期間の終了日"},{"name":"納期遵守率","type":"integer","required":true,"description":"期間内の納期遵守率（パーセント）"},{"name":"品質評価点","type":"integer","required":true,"description":"品質に関する評価点数（1-100点）"},{"name":"価格競争力評価点","type":"integer","required":true,"description":"価格競争力の評価点数（1-100点）"},{"name":"対応品質評価点","type":"integer","required":true,"description":"問い合わせ対応等の評価点数（1-100点）"},{"name":"総合評価点","type":"integer","required":true,"description":"各項目を総合した評価点数（1-100点）"},{"name":"評価ランク","type":"varchar(100)","required":true,"description":"A/B/C等の評価ランク"},{"name":"改善要望事項","type":"text","required":false,"description":"仕入先への改善要望内容"},{"name":"評価者ID","type":"uuid","required":true,"description":"評価を実施した担当者ID"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"}]}];
+window.AIVIC_PRESET_SEED = {};
+window.AIVIC_PAGE_SCREEN_ID = "scr-1780995978762";
+window.AIVIC_PAGE_INIT_JS = "function(container, apiUrl, tables) {}";
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+:root {
+  --primary: #8B4513;
+  --primary-hover: #A0522D;
+  --bg-main: #FAF7F2;
+  --bg-card: #F5F1E8;
+  --bg-sidebar: #F0EBE0;
+  --border: #D2B48C;
+  --text: #2F1B14;
+  --text-muted: #5D4037;
+  --top-bar-bg: #EFEBE2;
+  --top-bar-border: #C8A882;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg-main); color:var(--text); display:flex; flex-direction:column; height:100vh; overflow:hidden; }
+.top-bar { display:flex; align-items:center; gap:0; background:var(--top-bar-bg, var(--bg-sidebar)); border-bottom:1px solid var(--top-bar-border, var(--border)); padding:0 16px; height:48px; flex-shrink:0; }
+.top-bar .app-name { font-size:14px; font-weight:700; color:var(--text); margin-right:20px; white-space:nowrap; }
+.sys-tab { background:transparent; color:var(--text); opacity:0.6; border:none; border-bottom:2px solid transparent; padding:0 16px; height:48px; cursor:pointer; font-size:13px; white-space:nowrap; transition:color .15s, border-color .15s, opacity .15s; text-decoration:none; display:flex; align-items:center; }
+.sys-tab:hover { opacity:0.85; }
+.sys-tab.active, .sys-tab.aivic-active { color:var(--text); opacity:1; border-bottom-color:var(--primary); font-weight:600; }
+.app-body { display:flex; flex:1; overflow:hidden; }
+.sidebar { width:220px; background:var(--bg-sidebar); border-right:1px solid var(--border); padding:12px 8px; overflow-y:auto; flex-shrink:0; }
+.sidebar-sys-name { margin:0 0 8px; padding:4px 8px; font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.06em; }
+.nav-btn { display:block; width:100%; text-align:left; background:transparent; color:var(--text); opacity:0.65; border:none; border-radius:8px; padding:8px 12px; cursor:pointer; font-size:13px; margin-bottom:2px; transition:opacity .15s,background .15s; text-decoration:none; }
+.nav-btn:hover { background:var(--border); opacity:0.9; }
+.nav-btn.active, .nav-btn.aivic-active { background:var(--primary); color:#fff; opacity:1; }
+.main { flex:1; padding:16px; overflow-y:auto; }
+.card { border:1px solid var(--border); border-radius:12px; padding:16px; background:var(--bg-card); margin-bottom:12px; }
+.hidden { display:none !important; }
+.action-btn { background:var(--primary); color:#fff; border:0; border-radius:8px; padding:8px 14px; cursor:pointer; font-size:13px; }
+.action-btn:hover { background:var(--primary-hover, #1a55ef); }
+.action-btn.secondary { background:var(--border); color:var(--text); }
+.input { background:var(--bg-main); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:7px 10px; font-size:13px; }
+.muted { color:var(--text-muted); font-size:13px; }
+.table-wrap { overflow:auto; border:1px solid var(--border); border-radius:8px; }
+table { width:100%; border-collapse:collapse; }
+th, td { border-bottom:1px solid var(--border); padding:8px 10px; text-align:left; font-size:13px; }
+th { color:var(--text); background:var(--bg-sidebar); position:sticky; top:0; font-weight:600; }
+tr:hover { background:var(--bg-sidebar); cursor:pointer; }
+canvas { display:block; max-height:280px !important; }
+.chart-wrap, .chart-container, [class*="chart"] { position:relative; height:260px; max-height:280px; }
+@media (max-width:768px) {
+  .top-bar { overflow-x:auto; }
+  .app-body { flex-direction:column; }
+  .sidebar { width:100%; height:auto; display:flex; flex-wrap:wrap; gap:4px; padding:8px; }
+  .sidebar-sys-name { display:none; }
+  .nav-btn { width:auto; border-radius:999px; padding:5px 12px; }
+}
+  </style>
+</head>
+<body>
+<header class="top-bar">
+  <span class="app-name">AAA</span>
+    <a href="./scr-1780995483399.html" class="sys-tab" data-aivic-nav-system="itg-2">在庫管理システム</a>
+    <a href="./scr-1780995849791.html" class="sys-tab active" data-aivic-nav-system="itg-3">購買管理システム</a>
+    <a href="./scr-1780996145775.html" class="sys-tab" data-aivic-nav-system="itg-4">営業支援システム</a>
+    <a href="./scr-1780996340834.html" class="sys-tab" data-aivic-nav-system="itg-5">経営情報システム</a>
+    <a href="./scr-1780996536358.html" class="sys-tab" data-aivic-nav-system="itg-6">住宅建設会社向け納期管理ポータル</a>
+    <a href="./scr-1780996682301.html" class="sys-tab" data-aivic-nav-system="itg-7">仕入先向け情報共有システム</a>
+    <a href="./scr-1780996842878.html" class="sys-tab" data-aivic-nav-system="itg-1-br-1780551331069-2-1-1">納期管理システム</a>
+    <a href="./scr-1780996954228.html" class="sys-tab" data-aivic-nav-system="itg-2-br-1780551363302-2-1-2">仕入先情報ポータル</a>
+    <a href="./scr-1780995137049.html" class="sys-tab" data-aivic-nav-system="itg-1">生産管理システム</a>
+</header>
+<div class="app-body">
+  <aside class="sidebar">
+    <p class="sidebar-sys-name">購買管理システム</p>
+      <a href="./scr-1780995849791.html" class="nav-btn" data-aivic-nav="scr-1780995849791">在庫状況・発注点管理画面</a>
+      <a href="./scr-1780995859623.html" class="nav-btn" data-aivic-nav="scr-1780995859623">発注実行・履歴管理画面</a>
+      <a href="./scr-1780995872840.html" class="nav-btn" data-aivic-nav="scr-1780995872840">仕入先評価・選定支援画面</a>
+      <a href="./scr-1780995883650.html" class="nav-btn" data-aivic-nav="scr-1780995883650">需要予測・季節変動分析画面</a>
+      <a href="./scr-1780995894147.html" class="nav-btn" data-aivic-nav="scr-1780995894147">納期実績分析・信頼性評価画面</a>
+      <a href="./scr-1780995903931.html" class="nav-btn" data-aivic-nav="scr-1780995903931">発注点管理画面</a>
+      <a href="./scr-1780995914314.html" class="nav-btn" data-aivic-nav="scr-1780995914314">仕入先評価画面</a>
+      <a href="./scr-1780995925870.html" class="nav-btn" data-aivic-nav="scr-1780995925870">仕入先価格照会画面</a>
+      <a href="./scr-1780995936014.html" class="nav-btn" data-aivic-nav="scr-1780995936014">仕入先情報照会画面</a>
+      <a href="./scr-1780995945695.html" class="nav-btn" data-aivic-nav="scr-1780995945695">発注計算処理</a>
+      <a href="./scr-1780995956244.html" class="nav-btn" data-aivic-nav="scr-1780995956244">発注計画登録画面</a>
+      <a href="./scr-1780995966450.html" class="nav-btn" data-aivic-nav="scr-1780995966450">仕入先実績照会画面</a>
+      <a href="./scr-1780995978762.html" class="nav-btn active" data-aivic-nav="scr-1780995978762">発注処理画面</a>
+  </aside>
+  <main class="main">
+    <section class="card" data-aivic-panel="scr-1780995978762" style="margin-top:0">
+<div class="order-processing-screen" style="padding: 12px; background: var(--bg-main);">
+  <!-- ヘッダー部分 -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+    <h1 style="font-size: 20px; font-weight: 600; color: var(--text); margin: 0;">発注処理</h1>
+    <div style="display: flex; gap: 8px;">
+      <button class="action-btn secondary" data-testid="inventory-management-btn" onclick="window.showScreen('scr-1780995849791')">在庫管理</button>
+      <button class="action-btn secondary" data-testid="order-history-btn" onclick="window.showScreen('scr-1780995859623')">発注履歴</button>
+      <button class="action-btn secondary" data-testid="supplier-evaluation-btn" onclick="window.showScreen('scr-1780995872840')">仕入先評価</button>
+    </div>
+  </div>
+
+  <!-- メインコンテンツ - 3列レイアウト -->
+  <div style="display: grid; grid-template-columns: 1fr 320px 280px; gap: 16px; height: calc(100vh - 120px);">
+    
+    <!-- 左列: 商品検索・一覧 -->
+    <div class="card" style="padding: 16px; overflow: hidden; display: flex; flex-direction: column;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h2 style="font-size: 16px; font-weight: 500; color: var(--text); margin: 0;">商品一覧</h2>
+        <button class="action-btn secondary" data-testid="demand-forecast-btn" onclick="window.showScreen('scr-1780995883650')" style="font-size: 12px; padding: 4px 8px;">需要予測</button>
+      </div>
+      
+      <!-- 検索フィールド -->
+      <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <input type="text" id="product-search" data-testid="product-search" placeholder="商品名・コードで検索" 
+               style="flex: 1; padding: 6px 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 13px;">
+        <button class="action-btn secondary" id="btn-search" data-testid="search-button" style="padding: 6px 12px; font-size: 13px;">検索</button>
+      </div>
+
+      <!-- 商品テーブル -->
+      <div class="table-wrap" style="flex: 1; overflow-y: auto;">
+        <table data-testid="product-list" style="font-size: 12px;">
+          <thead>
+            <tr>
+              <th style="width: 80px;">商品コード</th>
+              <th style="width: 120px;">商品名</th>
+              <th style="width: 60px;">現在庫</th>
+              <th style="width: 50px;">発注点</th>
+              <th style="width: 60px;">状態</th>
+              <th style="width: 60px;">操作</th>
+            </tr>
+          </thead>
+          <tbody id="product-tbody">
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 中央列: 発注フォーム・需要予測 -->
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      
+      <!-- 発注フォーム -->
+      <div class="card" style="padding: 16px;">
+        <h3 style="font-size: 14px; font-weight: 500; color: var(--text); margin: 0 0 12px 0;">発注処理</h3>
+        
+        <div style="display: grid; gap: 10px;">
+          <div>
+            <label style="display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 2px;">選択商品</label>
+            <input type="text" id="selected-product" data-testid="selected-product" readonly 
+                   style="width: 100%; padding: 6px 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.15); color: var(--text-muted); font-size: 12px;">
+          </div>
+          
+          <div>
+            <label style="display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 2px;">仕入先</label>
+            <select id="supplier-select" data-testid="supplier-select" 
+                    style="width: 100%; padding: 6px 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 12px;">
+              <option value="">選択してください</option>
+              <option value="supplier-1">株式会社サプライヤーA</option>
+              <option value="supplier-2">有限会社部品商事</option>
+              <option value="supplier-3">東京資材販売</option>
+              <option value="supplier-4">関西物産株式会社</option>
+            </select>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <div>
+              <label style="display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 2px;">発注数量</label>
+              <input type="number" id="order-quantity" data-testid="order-quantity" min="1" 
+                     style="width: 100%; padding: 6px 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 12px;">
+            </div>
+            <div>
+              <label style="display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 2px;">単価</label>
+              <input type="text" id="unit-price" data-testid="unit-price" readonly 
+                     style="width: 100%; padding: 6px 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.15); color: var(--text-muted); font-size: 12px;">
+            </div>
+          </div>
+          
+          <div>
+            <label style="display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 2px;">希望納期</label>
+            <input type="date" id="delivery-date" data-testid="delivery-date" 
+                   style="width: 100%; padding: 6px 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 12px;">
+          </div>
+          
+          <div style="padding: 8px; background: rgba(0,0,0,0.15); border-radius: 4px; margin: 4px 0;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text);">
+              <span>合計金額:</span>
+              <span id="total-amount" style="font-weight: 500;">¥0</span>
+            </div>
+          </div>
+          
+          <button class="action-btn" id="btn-order" data-testid="order-button" style="margin-top: 8px;">発注実行</button>
+        </div>
+      </div>
+
+      <!-- 需要予測グラフ -->
+      <div class="card" style="padding: 16px; flex: 1;">
+        <h3 style="font-size: 14px; font-weight: 500; color: var(--text); margin: 0 0 12px 0;">需要予測</h3>
+        <canvas id="demand-chart" width="280" height="180" style="width: 100%; max-height: 180px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px;"></canvas>
+      </div>
+    </div>
+
+    <!-- 右列: 仕入先情報・季節変動 -->
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      
+      <!-- 仕入先評価 -->
+      <div class="card" style="padding: 16px;">
+        <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 12px;">
+          <h3 style="font-size: 14px; font-weight: 500; color: var(--text); margin: 0;">仕入先評価</h3>
+          <button class="action-btn secondary" onclick="window.showScreen('scr-1780995914314')" style="font-size: 11px; padding: 3px 6px; margin-left: auto;">詳細</button>
+        </div>
+        
+        <div id="supplier-evaluation" style="font-size: 12px;">
+          <div style="margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+              <span style="color: var(--text-muted);">納期遵守率</span>
+              <span style="color: var(--text);">--%</span>
+            </div>
+            <div style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+              <div style="height: 100%; width: 0%; background: var(--primary); border-radius: 2px; transition: width 0.3s;"></div>
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+              <span style="color: var(--text-muted);">品質評価</span>
+              <span style="color: var(--text);">--点</span>
+            </div>
+            <div style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+              <div style="height: 100%; width: 0%; background: var(--primary); border-radius: 2px; transition: width 0.3s;"></div>
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+              <span style="color: var(--text-muted);">価格競争力</span>
+              <span style="color: var(--text);">--点</span>
+            </div>
+            <div style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;">
+              <div style="height: 100%; width: 0%; background: var(--primary); border-radius: 2px; transition: width 0.3s;"></div>
+            </div>
+          </div>
+          
+          <div style="text-align: center; padding: 8px; background: rgba(0,0,0,0.15); border-radius: 4px; margin-top: 8px;">
+            <div style="font-size: 11px; color: var(--text-muted);">総合評価</div>
+            <div style="font-size: 16px; font-weight: 600; color: var(--text);" id="overall-rating">-</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 季節変動パターン -->
+      <div class="card" style="padding: 16px; flex: 1;">
+        <h3 style="font-size: 14px; font-weight: 500; color: var(--text); margin: 0 0 12px 0;">季節変動パターン</h3>
+        <canvas id="seasonal-chart" width="240" height="120" style="width: 100%; max-height: 120px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px;"></canvas>
+        
+        <div style="margin-top: 12px; font-size: 11px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span style="color: var(--text-muted);">今月予測係数</span>
+            <span style="color: var(--text);" id="current-factor">1.0</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span style="color: var(--text-muted);">来月予測係数</span>
+            <span style="color: var(--text);" id="next-factor">1.0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 発注履歴サマリー -->
+      <div class="card" style="padding: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h3 style="font-size: 14px; font-weight: 500; color: var(--text); margin: 0;">最近の発注</h3>
+          <button class="action-btn secondary" onclick="window.showScreen('scr-1780995859623')" style="font-size: 11px; padding: 3px 6px;">履歴</button>
+        </div>
+        
+        <div id="recent-orders" style="font-size: 11px;">
+          <div style="padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <div style="color: var(--text-muted);">データを選択してください</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    </section>
+  </main>
+</div>
+<script>
+(function() {
+  var TABLE_DEFS = window.AIVIC_TABLES || [];
+  var PRESET_SEED = window.AIVIC_PRESET_SEED || {};
+  var SYSTEM_NAME = window.AIVIC_SYSTEM_NAME || "";
+  var APP_ID = window.AIVIC_APP_ID || "";
+  var API_URL = (window.AIVIC_API_URL && window.AIVIC_API_URL !== "REPLACE_WITH_API_URL")
+    ? window.AIVIC_API_URL : window.location.origin;
+
+  // 通知 helper（SPA 版と同じ）
+  window.aivicNotify = (function() {
+    function ensureContainer() {
+      var c = document.getElementById("aivic-toast-container");
+      if (c) return c;
+      c = document.createElement("div");
+      c.id = "aivic-toast-container";
+      c.style.cssText = "position:fixed;top:16px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:360px;";
+      document.body.appendChild(c);
+      return c;
+    }
+    function show(msg, type) {
+      var c = ensureContainer();
+      var el = document.createElement("div");
+      el.textContent = msg;
+      el.style.cssText = "padding:10px 16px;border-radius:8px;font-size:13px;line-height:1.4;pointer-events:auto;color:#fff;background:" + (type === "error" ? "#dc2626" : "#d97706");
+      c.appendChild(el);
+      setTimeout(function() {
+        el.style.transition = "opacity .3s";
+        el.style.opacity = "0";
+        setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 320);
+      }, type === "error" ? 6000 : 4500);
+    }
+    return {
+      error: function(msg) { show("❌ " + msg, "error"); },
+      warn:  function(msg) { show("⚠️ " + msg, "warn"); },
+    };
+  })();
+
+  // CRUD API（SPA 版と同じ）
+  window.aivicApi = (function() {
+    function dbErr(op) { window.aivicNotify.error("データベースエラー（" + op + "）: APIサーバーに接続できません。"); }
+    function newId() { return typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : "id-" + Date.now() + "-" + Math.random().toString(36).slice(2); }
+    function q(i) {
+      var t = TABLE_DEFS[i];
+      var dbP = (window.AIVIC_DB_TYPE && window.AIVIC_DB_TYPE !== "dynamodb") ? "&db=" + encodeURIComponent(window.AIVIC_DB_TYPE) : "";
+      return "?app=" + encodeURIComponent(APP_ID) + "&system=" + encodeURIComponent(SYSTEM_NAME) + "&table=" + encodeURIComponent(t ? t.tableName : "table" + i) + dbP;
+    }
+    return {
+      list: async function(tableIndex) {
+        if (!API_URL) return [];
+        try { var r = await fetch(API_URL + "/api/" + tableIndex + q(tableIndex)); var d = await r.json(); return Array.isArray(d) ? d : (d.items || []); }
+        catch(e) { dbErr("データ取得"); return []; }
+      },
+      save: async function(tableIndex, item) {
+        if (!API_URL) { dbErr("保存"); return null; }
+        var now = new Date().toISOString();
+        var rec = Object.assign({}, item, { id: item.id || newId(), createdAt: item.createdAt || now, updatedAt: now });
+        try { var r = await fetch(API_URL + "/api/" + tableIndex + q(tableIndex), { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(rec) }); return await r.json(); }
+        catch(e) { dbErr("保存"); return null; }
+      },
+      update: async function(tableIndex, id, changes) {
+        if (!API_URL) { dbErr("更新"); return null; }
+        try { var r = await fetch(API_URL + "/api/" + tableIndex + "/" + id + q(tableIndex), { method:"PUT", headers:{"Content-Type":"application/json"}, body:JSON.stringify(Object.assign({}, changes, {updatedAt: new Date().toISOString()})) }); return await r.json(); }
+        catch(e) { dbErr("更新"); return null; }
+      },
+      delete: async function(tableIndex, id) {
+        if (!API_URL) { dbErr("削除"); return {deleted:false}; }
+        try { await fetch(API_URL + "/api/" + tableIndex + "/" + id + q(tableIndex), {method:"DELETE"}); return {deleted:true}; }
+        catch(e) { dbErr("削除"); return {deleted:false}; }
+      },
+    };
+  })();
+
+  // showScreen はマルチページ構成ではページ遷移として動く。
+  // パネル切替 (旧 SPA 動作) ではなく ./<id>.html への navigate に再定義する。
+  // 既存の AI 生成 shell が onclick="showScreen('x')" の形で書いていても透過的に動く。
+  //
+  // 防御層:
+  // (a) 同じ画面 ID なら no-op（AIVIC_PAGE_SCREEN_ID 一致 / pathname 一致のどちらか）
+  // (b) 同じ navigate を 100ms 以内に繰り返したら break loop（onclick 連打ではなく自動ループ対策）
+  // (c) DOMContentLoaded 直後 1.5s 以内の「自動 navigate」は警告 + 抑制（手動 click は通す）
+  var _aivicNavLastTime = 0;
+  var _aivicNavLastTarget = "";
+  var _aivicReady = false;
+  window.showScreen = function(screenId) {
+    if (!screenId) return;
+    if (screenId === window.AIVIC_PAGE_SCREEN_ID) return; // 既に該当ページに居る
+    // pathname ベースの保険: AIVIC_PAGE_SCREEN_ID が未設定でも、現在 URL と一致したら抑制
+    var targetPath = './' + encodeURIComponent(screenId) + '.html';
+    var currentName = (window.location.pathname.split('/').pop() || '');
+    if (currentName === (encodeURIComponent(screenId) + '.html') ||
+        currentName === (screenId + '.html')) {
+      return;
+    }
+    var now = Date.now();
+    if (_aivicNavLastTarget === targetPath && (now - _aivicNavLastTime) < 100) {
+      console.warn('[aivic] showScreen 連続呼び出し検知。無限ループ防止のため抑制:', screenId);
+      return;
+    }
+    if (!_aivicReady) {
+      // ページロード直後の自動 navigate は AI shell の load-time 副作用の可能性が高い。
+      // ボタンクリック等のユーザー操作は ready 後なので影響しない。
+      console.warn('[aivic] DOMContentLoaded 前の showScreen 呼び出し。抑制:', screenId);
+      return;
+    }
+    _aivicNavLastTime = now;
+    _aivicNavLastTarget = targetPath;
+    window.location.href = targetPath;
+  };
+
+  // 初回マウント時のサンプルデータ投入
+  function seedAllIfEmpty() {
+    if (!API_URL) return Promise.resolve();
+    return Promise.all(TABLE_DEFS.map(function(t, i) {
+      var preset = PRESET_SEED[t.tableName];
+      if (!Array.isArray(preset) || preset.length === 0) return Promise.resolve();
+      return window.aivicApi.list(i).then(function(existing) {
+        if (existing && existing.length > 0) return;
+        return Promise.all(preset.map(function(row) { return window.aivicApi.save(i, row); }));
+      }).catch(function() {});
+    }));
+  }
+
+  // ── 初期表示: このページ専用の panel に initFn を実行 ──
+  // window.AIVIC_PAGE_SCREEN_ID と AIVIC_PAGE_INIT_JS は composeMultipagePages
+  // でページ単位に埋め込まれる。
+  document.addEventListener("DOMContentLoaded", function() {
+    // 1.5 秒後に必ず _aivicReady を立てる（initFn が走らないページや失敗ページでも
+    // ユーザーが操作できるようにする保険）。initFn 完了時にも立てるので早い方が勝つ。
+    setTimeout(function() { _aivicReady = true; }, 1500);
+    var pageScreenId = window.AIVIC_PAGE_SCREEN_ID;
+    if (!pageScreenId) return;
+
+    // sidebar / nav の active class を付与（現在ページのリンクを強調）
+    document.querySelectorAll('[data-aivic-nav]').forEach(function(btn) {
+      var isActive = btn.getAttribute("data-aivic-nav") === pageScreenId;
+      btn.classList.toggle("aivic-active", isActive);
+      btn.setAttribute("aria-current", isActive ? "page" : "false");
+    });
+
+    var container = document.querySelector('[data-aivic-panel="' + pageScreenId + '"]');
+    if (!container) return;
+
+    // **content 要素の hidden 強制除去（2026-05-24 Playwright 大量 fail 対応）**:
+    // AI が生成した panel HTML には class="hidden" / hidden 属性 / style="display:none"
+    // が content 要素（#xxx-tbody / #xxx-list / [data-testid="error-message"] 等）に付いて
+    // いることがある。それを Playwright が toBeVisible() で待ち続けて timeout する事故が頻発。
+    //
+    // ポリシー: panel コンテナ配下の全要素について以下を実行:
+    //   - class="hidden" / display:none / hidden 属性を **content 要素では除去**
+    //   - **modal 系**（.modal, .modal-backdrop, [role="dialog"], [data-modal] 等）は除外
+    //     （これらは仕様上初期非表示が正しい）
+    var isModalLike = function(el) {
+      if (!el || !el.classList) return false;
+      var cn = String(el.className || "");
+      if (/modal|dialog|overlay|popup|dropdown|tooltip/i.test(cn)) return true;
+      var role = el.getAttribute && el.getAttribute("role");
+      if (role === "dialog" || role === "alertdialog" || role === "tooltip" || role === "menu") return true;
+      if (el.hasAttribute && (el.hasAttribute("data-modal") || el.hasAttribute("data-dropdown") || el.hasAttribute("data-popup"))) return true;
+      return false;
+    };
+    var unhideContentElements = function(root) {
+      var all = root.querySelectorAll('.hidden, [hidden], [style*="display:none"], [style*="display: none"]');
+      for (var k = 0; k < all.length; k++) {
+        var el = all[k];
+        // modal 系は触らない
+        if (isModalLike(el)) continue;
+        // parent chain で modal 内なら触らない
+        var p = el.parentElement;
+        var insideModal = false;
+        while (p && p !== root) {
+          if (isModalLike(p)) { insideModal = true; break; }
+          p = p.parentElement;
+        }
+        if (insideModal) continue;
+        // 除去
+        el.classList.remove('hidden');
+        el.removeAttribute('hidden');
+        if (el.style && el.style.display === 'none') el.style.display = '';
+      }
+    };
+    try { unhideContentElements(container); } catch (e) { console.warn('[aivic] unhideContent failed:', e); }
+
+    var initJsSource = window.AIVIC_PAGE_INIT_JS;
+    if (!initJsSource) {
+      // initJs が無くてもサンプルデータ投入は走らせる
+      seedAllIfEmpty();
+      return;
+    }
+    var initFn = null;
+    try {
+      initFn = (new Function("return (" + initJsSource + ")"))();
+    } catch (e) {
+      console.error("[aivic] initJs compile error:", pageScreenId, e);
+      return;
+    }
+    if (typeof initFn !== "function") return;
+
+    seedAllIfEmpty().then(function() {
+      return Promise.all(TABLE_DEFS.map(function(t, i) {
+        return window.aivicApi.list(i)
+          .then(function(records) { return Object.assign({}, t, { records: records }); })
+          .catch(function() { return Object.assign({}, t, { records: [] }); });
+      }));
+    }).then(function(tables) {
+      try { initFn(container, API_URL, tables); } catch (e) { console.error("[aivic] initFn error:", pageScreenId, e); }
+      // 初期 panel init が一巡したら _aivicReady を立てる。以降のユーザー操作 (onclick) で
+      // showScreen が呼ばれた場合は通常通り navigate する。
+      _aivicReady = true;
+    });
+  });
+})();
+
+</script>
+</body>
+</html>

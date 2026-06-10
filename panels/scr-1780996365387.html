@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>レポート設定・生成画面 - AAA</title>
+  <script>
+window.AIVIC_API_URL = "https://mkwmoife37uqyv4zhy4yhweozq0oddxn.lambda-url.us-east-1.on.aws/";
+window.AIVIC_APP_ID = "session-1780478987683";
+window.AIVIC_SYSTEM_NAME = "経営情報システム";
+window.AIVIC_TABLES = [{"tableName":"ユーザー","purpose":"生産管理システムを利用するユーザーの基本情報と認証情報を管理する","columns":[{"name":"ユーザーID","type":"uuid","required":true,"description":"ユーザーを一意に識別するID"},{"name":"ユーザー名","type":"varchar(100)","required":true,"description":"システムログイン用のユーザー名"},{"name":"パスワードハッシュ","type":"varchar(100)","required":true,"description":"暗号化されたパスワード"},{"name":"氏名","type":"varchar(100)","required":true,"description":"ユーザーの実名"},{"name":"メールアドレス","type":"varchar(100)","required":false,"description":"連絡用メールアドレス"},{"name":"部署","type":"varchar(100)","required":false,"description":"所属部署名"},{"name":"役職","type":"varchar(100)","required":false,"description":"役職名"},{"name":"権限レベル","type":"integer","required":true,"description":"システム操作権限レベル（1:参照のみ、2:入力、3:管理者等）"},{"name":"有効フラグ","type":"boolean","required":true,"description":"アカウントの有効/無効状態"},{"name":"最終ログイン日時","type":"timestamp","required":false,"description":"最後にログインした日時"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"uuid","required":true,"description":"レコードを作成したユーザーのID"}]},{"tableName":"生産ライン","purpose":"製品の生産を行う生産ラインの管理。生産計画の実行単位として使用され、各ラインの稼働状況や生産能力を管理する","columns":[{"name":"生産ラインID","type":"uuid","required":true,"description":"生産ラインの一意識別子（主キー）"},{"name":"ライン名","type":"varchar(100)","required":true,"description":"生産ラインの名称"},{"name":"ライン番号","type":"varchar(100)","required":true,"description":"生産ラインの管理番号"},{"name":"製品ID","type":"uuid","required":false,"description":"このラインで生産可能な製品（製品テーブルへの外部キー）"},{"name":"生産能力","type":"integer","required":true,"description":"1日あたりの最大生産可能数量"},{"name":"稼働状況","type":"varchar(100)","required":true,"description":"稼働中/停止中/メンテナンス中等のステータス"},{"name":"場所","type":"varchar(100)","required":false,"description":"生産ラインの設置場所"},{"name":"備考","type":"text","required":false,"description":"生産ラインに関する補足情報"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"uuid","required":true,"description":"レコード作成者（ユーザーテーブルへの外部キー）"}]},{"tableName":"製品","purpose":"営業活動で扱う製品・サービスの基本情報を管理し、見積もりや提案書作成、売上分析に使用する","columns":[{"name":"製品ID","type":"uuid","required":true,"description":"製品の一意識別子（主キー）"},{"name":"製品コード","type":"varchar(100)","required":true,"description":"社内管理用の製品コード（検索・絞り込みで使用）"},{"name":"製品名","type":"varchar(100)","required":true,"description":"製品・サービスの名称"},{"name":"製品説明","type":"text","required":false,"description":"製品の詳細説明（提案書作成時に使用）"},{"name":"カテゴリ","type":"varchar(100)","required":true,"description":"製品分類（売上分析での集計軸として使用）"},{"name":"標準価格","type":"integer","required":true,"description":"標準販売価格（見積もり作成時の基準価格）"},{"name":"原価","type":"integer","required":false,"description":"製品原価（利益率計算で使用）"},{"name":"販売開始日","type":"timestamp","required":false,"description":"販売開始日（販売可能期間の判定で使用）"},{"name":"販売終了日","type":"timestamp","required":false,"description":"販売終了日（販売可能期間の判定で使用）"},{"name":"販売状態","type":"varchar(100)","required":true,"description":"販売状態（販売中/販売停止/廃止等、見積もり対象製品の絞り込みで使用）"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者のユーザーID"}]},{"tableName":"生産計画","purpose":"製品の生産スケジュールと数量を管理し、受注に対する生産能力と納期を計画する","columns":[{"name":"生産計画ID","type":"uuid","required":true,"description":"生産計画の一意識別子"},{"name":"製品ID","type":"uuid","required":true,"description":"生産対象製品への参照"},{"name":"計画年月","type":"varchar(100)","required":true,"description":"生産計画の対象年月（YYYY-MM形式）"},{"name":"計画数量","type":"integer","required":true,"description":"計画生産数量"},{"name":"生産開始予定日","type":"timestamp","required":true,"description":"生産開始予定日時"},{"name":"生産完了予定日","type":"timestamp","required":true,"description":"生産完了予定日時"},{"name":"ステータス","type":"varchar(100)","required":true,"description":"計画ステータス（計画中/承認済/生産中/完了/中止）"},{"name":"優先度","type":"integer","required":true,"description":"生産優先度（1が最高優先）"},{"name":"備考","type":"text","required":false,"description":"生産計画に関する備考・注意事項"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"計画作成者のユーザーID"}]},{"tableName":"生産実績","purpose":"生産ラインでの製品生産の実績データを記録し、生産計画との対比や生産効率の分析に使用する","columns":[{"name":"生産実績ID","type":"uuid","required":true,"description":"生産実績の一意識別子"},{"name":"生産ラインID","type":"uuid","required":true,"description":"生産を行った生産ラインの識別子"},{"name":"製品ID","type":"uuid","required":true,"description":"生産した製品の識別子"},{"name":"生産計画ID","type":"uuid","required":false,"description":"関連する生産計画の識別子"},{"name":"生産開始日時","type":"timestamp","required":true,"description":"生産作業の開始日時"},{"name":"生産終了日時","type":"timestamp","required":false,"description":"生産作業の終了日時"},{"name":"生産数量","type":"integer","required":true,"description":"実際に生産された製品数量"},{"name":"良品数量","type":"integer","required":true,"description":"品質基準を満たした製品数量"},{"name":"不良品数量","type":"integer","required":true,"description":"品質基準を満たさなかった製品数量"},{"name":"作業時間","type":"integer","required":false,"description":"実際の作業時間（分）"},{"name":"稼働率","type":"integer","required":false,"description":"生産ラインの稼働率（パーセント）"},{"name":"備考","type":"text","required":false,"description":"生産実績に関する特記事項や問題点"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者のユーザーID"}]},{"tableName":"レポート設定","purpose":"経営情報システムで使用するレポートの設定情報を管理する","columns":[{"name":"レポート設定ID","type":"uuid","required":true,"description":"レポート設定の一意識別子"},{"name":"レポート名","type":"varchar(100)","required":true,"description":"レポートの名称"},{"name":"レポート種別","type":"varchar(100)","required":true,"description":"生産実績、計画対実績、品質管理等のレポート分類"},{"name":"対象テーブル","type":"varchar(100)","required":true,"description":"レポートのデータソースとなるテーブル名"},{"name":"集計期間種別","type":"varchar(100)","required":true,"description":"日次、週次、月次等の集計期間"},{"name":"フィルタ条件","type":"text","required":false,"description":"レポート抽出時の条件設定"},{"name":"ソート順","type":"text","required":false,"description":"レポート出力時の並び順設定"},{"name":"出力形式","type":"varchar(100)","required":true,"description":"PDF、Excel、CSV等の出力フォーマット"},{"name":"自動実行フラグ","type":"boolean","required":true,"description":"定期自動実行の有無"},{"name":"実行スケジュール","type":"varchar(100)","required":false,"description":"自動実行時のスケジュール設定"},{"name":"有効フラグ","type":"boolean","required":true,"description":"レポート設定の有効無効状態"},{"name":"作成者ID","type":"uuid","required":true,"description":"レポート設定を作成したユーザーID"},{"name":"作成日時","type":"timestamp","required":true,"description":"レポート設定の作成日時"},{"name":"更新者ID","type":"uuid","required":false,"description":"レポート設定を最後に更新したユーザーID"},{"name":"更新日時","type":"timestamp","required":false,"description":"レポート設定の最終更新日時"}]},{"tableName":"生成レポート","purpose":"システムで生成されたレポートの管理と履歴保持","columns":[{"name":"レポートID","type":"uuid","required":true,"description":"生成レポートの一意識別子"},{"name":"レポート設定ID","type":"uuid","required":true,"description":"使用されたレポート設定への参照"},{"name":"レポート名","type":"varchar(100)","required":true,"description":"生成されたレポートの名称"},{"name":"レポート種別","type":"varchar(100)","required":true,"description":"生産実績、計画対実績、品質分析等のレポート分類"},{"name":"対象期間開始","type":"timestamp","required":true,"description":"レポート対象データの開始日時"},{"name":"対象期間終了","type":"timestamp","required":true,"description":"レポート対象データの終了日時"},{"name":"ファイルパス","type":"varchar(100)","required":true,"description":"生成されたレポートファイルの保存場所"},{"name":"ファイル形式","type":"varchar(100)","required":true,"description":"PDF、Excel、CSV等の出力形式"},{"name":"ステータス","type":"varchar(100)","required":true,"description":"生成中、完了、エラー等の処理状況"},{"name":"エラーメッセージ","type":"text","required":false,"description":"生成失敗時のエラー内容"},{"name":"ファイルサイズ","type":"integer","required":false,"description":"生成されたファイルのサイズ（バイト）"},{"name":"作成者ID","type":"uuid","required":true,"description":"レポートを生成したユーザー"},{"name":"作成日時","type":"timestamp","required":true,"description":"レポート生成開始日時"},{"name":"完了日時","type":"timestamp","required":false,"description":"レポート生成完了日時"}]},{"tableName":"操作履歴","purpose":"システム内でのユーザー操作を記録し、監査証跡とセキュリティ管理を提供する","columns":[{"name":"操作履歴ID","type":"uuid","required":true,"description":"操作履歴の一意識別子"},{"name":"ユーザーID","type":"uuid","required":true,"description":"操作を実行したユーザーの識別子"},{"name":"操作種別","type":"varchar(100)","required":true,"description":"実行された操作の種類（作成/更新/削除/参照/ログイン/ログアウト等）"},{"name":"対象テーブル","type":"varchar(100)","required":false,"description":"操作対象となったテーブル名"},{"name":"対象レコードID","type":"varchar(100)","required":false,"description":"操作対象となったレコードの識別子"},{"name":"操作内容","type":"text","required":false,"description":"操作の詳細内容や変更前後の値"},{"name":"IPアドレス","type":"varchar(100)","required":false,"description":"操作元のIPアドレス"},{"name":"ユーザーエージェント","type":"text","required":false,"description":"操作に使用されたブラウザやアプリケーション情報"},{"name":"実行結果","type":"varchar(100)","required":true,"description":"操作の実行結果（成功/失敗/エラー等）"},{"name":"エラーメッセージ","type":"text","required":false,"description":"操作失敗時のエラー詳細"},{"name":"操作日時","type":"timestamp","required":true,"description":"操作が実行された日時"}]}];
+window.AIVIC_PRESET_SEED = {};
+window.AIVIC_PAGE_SCREEN_ID = "scr-1780996365387";
+window.AIVIC_PAGE_INIT_JS = "function(container, apiUrl, tables) {\n  // 1. 履歴テーブル再描画関数\n  function renderHistory(reports) {\n    const tbody = container.querySelector('#history-tbody');\n    tbody.innerHTML = reports.map(r => `\n      <tr data-id=\"${r.id}\">\n        <td>${r.レポート名 || ''}</td>\n        <td>\n          <span style=\"padding: 2px 8px; border-radius: 12px; font-size: 12px; background: rgba(59, 130, 246, 0.15); color: #60a5fa;\">\n            ${r.レポート種別 || ''}\n          </span>\n        </td>\n        <td>${r.対象期間開始 ? new Date(r.対象期間開始).toLocaleDateString() : ''} - ${r.対象期間終了 ? new Date(r.対象期間終了).toLocaleDateString() : ''}</td>\n        <td>${r.ファイル形式 || ''}</td>\n        <td>\n          <span style=\"padding: 2px 8px; border-radius: 12px; font-size: 12px; ${r.ステータス === '完了' ? 'background: rgba(34, 197, 94, 0.15); color: #4ade80;' : r.ステータス === 'エラー' ? 'background: rgba(239, 68, 68, 0.15); color: #f87171;' : 'background: rgba(251, 191, 36, 0.15); color: #fbbf24;'}\">\n            ${r.ステータス || ''}\n          </span>\n        </td>\n        <td>${r.作成日時 ? new Date(r.作成日時).toLocaleString() : ''}</td>\n        <td>\n          <button class=\"action-btn secondary download-btn\" data-id=\"${r.id}\" style=\"padding: 4px 8px; font-size: 12px; margin-right: 4px;\">\n            ダウンロード\n          </button>\n          <button class=\"action-btn secondary delete-btn\" data-id=\"${r.id}\" style=\"padding: 4px 8px; font-size: 12px;\">\n            削除\n          </button>\n        </td>\n      </tr>\n    `).join('');\n  }\n\n  // 2. 初期データ表示（生成レポートテーブル）\n  const reportTableIndex = tables.findIndex(t => t.tableName === '生成レポート');\n  if (reportTableIndex >= 0) {\n    renderHistory(tables[reportTableIndex].records || []);\n  }\n\n  // 3. プレビュー生成関数\n  function generatePreview() {\n    const reportType = container.querySelector('#report-type').value;\n    const startDate = container.querySelector('#start-date').value;\n    const endDate = container.querySelector('#end-date').value;\n    const previewArea = container.querySelector('#preview-area');\n    \n    if (!reportType || !startDate || !endDate) {\n      previewArea.innerHTML = `\n        <div style=\"text-align: center; color: var(--text-muted); padding: 60px 20px;\">\n          <div style=\"font-size: 48px; margin-bottom: 12px;\">⚠️</div>\n          <p style=\"margin: 0; font-size: 14px;\">レポート種別と対象期間を選択してください</p>\n        </div>\n      `;\n      return;\n    }\n\n    // サンプルプレビューデータ生成\n    const sampleData = [\n      { ライン: 'ライン001', 計画: 1000, 実績: 950, 達成率: '95.0%' },\n      { ライン: 'ライン002', 計画: 800, 実績: 820, 達成率: '102.5%' },\n      { ライン: 'ライン003', 計画: 1200, 実績: 1180, 達成率: '98.3%' },\n      { ライン: 'ライン004', 計画: 600, 実績: 590, 達成率: '98.3%' }\n    ];\n\n    previewArea.innerHTML = `\n      <div style=\"margin-bottom: 16px;\">\n        <h3 style=\"font-size: 16px; color: var(--text); margin: 0 0 8px 0;\">${reportType} プレビュー</h3>\n        <p style=\"font-size: 12px; color: var(--text-muted); margin: 0;\">対象期間: ${startDate} - ${endDate}</p>\n      </div>\n      \n      <div style=\"margin-bottom: 20px;\">\n        <canvas id=\"preview-chart\" width=\"400\" height=\"200\" style=\"width: 100%; max-width: 400px; border: 1px solid rgba(255,255,255,0.1);\"></canvas>\n      </div>\n      \n      <table style=\"width: 100%; border-collapse: collapse;\">\n        <thead>\n          <tr style=\"background: rgba(255,255,255,0.05);\">\n            <th style=\"padding: 8px; text-align: left; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.1);\">生産ライン</th>\n            <th style=\"padding: 8px; text-align: right; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.1);\">計画</th>\n            <th style=\"padding: 8px; text-align: right; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.1);\">実績</th>\n            <th style=\"padding: 8px; text-align: right; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.1);\">達成率</th>\n          </tr>\n        </thead>\n        <tbody>\n          ${sampleData.map(row => `\n            <tr>\n              <td style=\"padding: 8px; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.05);\">${row.ライン}</td>\n              <td style=\"padding: 8px; text-align: right; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.05);\">${row.計画.toLocaleString()}</td>\n              <td style=\"padding: 8px; text-align: right; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.05);\">${row.実績.toLocaleString()}</td>\n              <td style=\"padding: 8px; text-align: right; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.05);\">${row.達成率}</td>\n            </tr>\n          `).join('')}\n        </tbody>\n      </table>\n    `;\n\n    // 簡単なチャート描画\n    setTimeout(() => {\n      const canvas = container.querySelector('#preview-chart');\n      if (canvas) {\n        const ctx = canvas.getContext('2d');\n        ctx.fillStyle = '#3b82f6';\n        sampleData.forEach((item, i) => {\n          const height = (item.実績 / 1200) * 150;\n          ctx.fillRect(i * 80 + 20, 180 - height, 60, height);\n          ctx.fillStyle = '#9fb0d1';\n          ctx.font = '12px sans-serif';\n          ctx.fillText(item.ライン, i * 80 + 25, 195);\n          ctx.fillStyle = '#3b82f6';\n        });\n      }\n    }, 100);\n  }\n\n  // 4. イベントリスナー設定\n  \n  // プレビューボタン\n  container.querySelector('#btn-preview').addEventListener('click', generatePreview);\n\n  // 詳細設定トグル\n  container.querySelector('#toggle-advanced').addEventListener('click', () => {\n    const options = container.querySelector('#advanced-options');\n    const button = container.querySelector('#toggle-advanced');\n    if (options.style.display === 'none') {\n      options.style.display = 'block';\n      button.textContent = '詳細設定を非表示';\n    } else {\n      options.style.display = 'none';\n      button.textContent = '詳細設定を表示';\n    }\n  });\n\n  // テンプレート保存\n  container.querySelector('#btn-save-template').addEventListener('click', async () => {\n    const reportName = container.querySelector('#report-name').value;\n    const reportType = container.querySelector('#report-type').value;\n    \n    if (!reportName || !reportType) {\n      alert('レポート名と種別を入力してください');\n      return;\n    }\n\n    const templateData = {\n      レポート名: reportName,\n      レポート種別: reportType,\n      対象テーブル: '生産実績',\n      集計期間種別: container.querySelector('#aggregation-unit').value,\n      出力形式: container.querySelector('input[name=\"output-format\"]:checked').value,\n      有効フラグ: true,\n      作成者ID: 'current-user-id',\n      作成日時: new Date().toISOString()\n    };\n\n    const settingsTableIndex = tables.findIndex(t => t.tableName === 'レポート設定');\n    if (settingsTableIndex >= 0) {\n      const saved = await window.aivicApi.save(settingsTableIndex, templateData);\n      if (saved) {\n        alert('テンプレートを保存しました');\n      }\n    }\n  });\n\n  // レポート生成\n  container.querySelector('#btn-generate').addEventListener('click', async () => {\n    const reportName = container.querySelector('#report-name').value;\n    const reportType = container.querySelector('#report-type').value;\n    const startDate = container.querySelector('#start-date').value;\n    const endDate = container.querySelector('#end-date').value;\n    \n    if (!reportName || !reportType || !startDate || !endDate) {\n      alert('必須項目を入力してください');\n      return;\n    }\n\n    const reportData = {\n      レポート名: reportName,\n      レポート種別: reportType,\n      対象期間開始: startDate,\n      対象期間終了: endDate,\n      ファイル形式: container.querySelector('input[name=\"output-format\"]:checked').value,\n      ステータス: '生成中',\n      作成者ID: 'current-user-id',\n      作成日時: new Date().toISOString()\n    };\n\n    if (reportTableIndex >= 0) {\n      const saved = await window.aivicApi.save(reportTableIndex, reportData);\n      if (saved) {\n        alert('レポート生成を開始しました');\n        // 履歴を再読み込み\n        const reports = await window.aivicApi.list(reportTableIndex);\n        if (reports) renderHistory(reports);\n      }\n    }\n  });\n\n  // CSV出力\n  container.querySelector('[data-testid=\"export-csv\"]').addEventListener('click', async () => {\n    if (reportTableIndex >= 0) {\n      const reports = await window.aivicApi.list(reportTableIndex);\n      if (reports) {\n        const headers = ['レポート名', 'レポート種別', '対象期間開始', '対象期間終了', 'ファイル形式', 'ステータス', '作成日時'];\n        const csvContent = '\\uFEFF' + [\n          headers.join(','),\n          ...reports.map(r => [\n            r.レポート名 || '',\n            r.レポート種別 || '',\n            r.対象期間開始 || '',\n            r.対象期間終了 || '',\n            r.ファイル形式 || '',\n            r.ステータス || '',\n            r.作成日時 || ''\n          ].map(field => `\"${field}\"`).join(','))\n        ].join('\\n');\n        \n        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });\n        const link = document.createElement('a');\n        link.href = URL.createObjectURL(blob);\n        link.download = 'report_history.csv';\n        link.click();\n      }\n    }\n  });\n\n  // 5. 行レベル操作（削除・ダウンロード）\n  container.addEventListener('click', async (e) => {\n    const deleteBtn = e.target.closest('.delete-btn');\n    const downloadBtn = e.target.closest('.download-btn');\n    \n    if (deleteBtn && reportTableIndex >= 0) {\n      if (!confirm('このレポートを削除しますか？')) return;\n      \n      await window.aivicApi.delete(reportTableIndex, deleteBtn.dataset.id);\n      const reports = await window.aivicApi.list(reportTableIndex);\n      if (reports) renderHistory(reports);\n    }\n    \n    if (downloadBtn) {\n      // ダウンロード処理（実際の実装では生成されたファイルをダウンロード）\n      alert('レポートファイルをダウンロードします');\n    }\n  });\n\n  // 初期日付設定\n  const today = new Date();\n  const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);\n  container.querySelector('#start-date').value = firstDay.toISOString().split('T')[0];\n  container.querySelector('#end-date').value = today.toISOString().split('T')[0];\n}";
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+:root {
+  --primary: #8B4513;
+  --primary-hover: #A0522D;
+  --bg-main: #FAF7F2;
+  --bg-card: #F5F1E8;
+  --bg-sidebar: #F0EBE0;
+  --border: #D2B48C;
+  --text: #2F1B14;
+  --text-muted: #5D4037;
+  --top-bar-bg: #EFEBE2;
+  --top-bar-border: #C8A882;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg-main); color:var(--text); display:flex; flex-direction:column; height:100vh; overflow:hidden; }
+.top-bar { display:flex; align-items:center; gap:0; background:var(--top-bar-bg, var(--bg-sidebar)); border-bottom:1px solid var(--top-bar-border, var(--border)); padding:0 16px; height:48px; flex-shrink:0; }
+.top-bar .app-name { font-size:14px; font-weight:700; color:var(--text); margin-right:20px; white-space:nowrap; }
+.sys-tab { background:transparent; color:var(--text); opacity:0.6; border:none; border-bottom:2px solid transparent; padding:0 16px; height:48px; cursor:pointer; font-size:13px; white-space:nowrap; transition:color .15s, border-color .15s, opacity .15s; text-decoration:none; display:flex; align-items:center; }
+.sys-tab:hover { opacity:0.85; }
+.sys-tab.active, .sys-tab.aivic-active { color:var(--text); opacity:1; border-bottom-color:var(--primary); font-weight:600; }
+.app-body { display:flex; flex:1; overflow:hidden; }
+.sidebar { width:220px; background:var(--bg-sidebar); border-right:1px solid var(--border); padding:12px 8px; overflow-y:auto; flex-shrink:0; }
+.sidebar-sys-name { margin:0 0 8px; padding:4px 8px; font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.06em; }
+.nav-btn { display:block; width:100%; text-align:left; background:transparent; color:var(--text); opacity:0.65; border:none; border-radius:8px; padding:8px 12px; cursor:pointer; font-size:13px; margin-bottom:2px; transition:opacity .15s,background .15s; text-decoration:none; }
+.nav-btn:hover { background:var(--border); opacity:0.9; }
+.nav-btn.active, .nav-btn.aivic-active { background:var(--primary); color:#fff; opacity:1; }
+.main { flex:1; padding:16px; overflow-y:auto; }
+.card { border:1px solid var(--border); border-radius:12px; padding:16px; background:var(--bg-card); margin-bottom:12px; }
+.hidden { display:none !important; }
+.action-btn { background:var(--primary); color:#fff; border:0; border-radius:8px; padding:8px 14px; cursor:pointer; font-size:13px; }
+.action-btn:hover { background:var(--primary-hover, #1a55ef); }
+.action-btn.secondary { background:var(--border); color:var(--text); }
+.input { background:var(--bg-main); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:7px 10px; font-size:13px; }
+.muted { color:var(--text-muted); font-size:13px; }
+.table-wrap { overflow:auto; border:1px solid var(--border); border-radius:8px; }
+table { width:100%; border-collapse:collapse; }
+th, td { border-bottom:1px solid var(--border); padding:8px 10px; text-align:left; font-size:13px; }
+th { color:var(--text); background:var(--bg-sidebar); position:sticky; top:0; font-weight:600; }
+tr:hover { background:var(--bg-sidebar); cursor:pointer; }
+canvas { display:block; max-height:280px !important; }
+.chart-wrap, .chart-container, [class*="chart"] { position:relative; height:260px; max-height:280px; }
+@media (max-width:768px) {
+  .top-bar { overflow-x:auto; }
+  .app-body { flex-direction:column; }
+  .sidebar { width:100%; height:auto; display:flex; flex-wrap:wrap; gap:4px; padding:8px; }
+  .sidebar-sys-name { display:none; }
+  .nav-btn { width:auto; border-radius:999px; padding:5px 12px; }
+}
+  </style>
+</head>
+<body>
+<header class="top-bar">
+  <span class="app-name">AAA</span>
+    <a href="./scr-1780995483399.html" class="sys-tab" data-aivic-nav-system="itg-2">在庫管理システム</a>
+    <a href="./scr-1780995849791.html" class="sys-tab" data-aivic-nav-system="itg-3">購買管理システム</a>
+    <a href="./scr-1780996145775.html" class="sys-tab" data-aivic-nav-system="itg-4">営業支援システム</a>
+    <a href="./scr-1780996340834.html" class="sys-tab active" data-aivic-nav-system="itg-5">経営情報システム</a>
+    <a href="./scr-1780996536358.html" class="sys-tab" data-aivic-nav-system="itg-6">住宅建設会社向け納期管理ポータル</a>
+    <a href="./scr-1780996682301.html" class="sys-tab" data-aivic-nav-system="itg-7">仕入先向け情報共有システム</a>
+    <a href="./scr-1780996842878.html" class="sys-tab" data-aivic-nav-system="itg-1-br-1780551331069-2-1-1">納期管理システム</a>
+    <a href="./scr-1780996954228.html" class="sys-tab" data-aivic-nav-system="itg-2-br-1780551363302-2-1-2">仕入先情報ポータル</a>
+    <a href="./scr-1780995137049.html" class="sys-tab" data-aivic-nav-system="itg-1">生産管理システム</a>
+</header>
+<div class="app-body">
+  <aside class="sidebar">
+    <p class="sidebar-sys-name">経営情報システム</p>
+      <a href="./scr-1780996340834.html" class="nav-btn" data-aivic-nav="scr-1780996340834">生産実績データ入力・編集画面</a>
+      <a href="./scr-1780996353810.html" class="nav-btn" data-aivic-nav="scr-1780996353810">生産実績集計・分析画面</a>
+      <a href="./scr-1780996365387.html" class="nav-btn active" data-aivic-nav="scr-1780996365387">レポート設定・生成画面</a>
+      <a href="./scr-1780996376817.html" class="nav-btn" data-aivic-nav="scr-1780996376817">データ統合・分析処理</a>
+      <a href="./scr-1780996391676.html" class="nav-btn" data-aivic-nav="scr-1780996391676">報告書作成画面</a>
+      <a href="./scr-1780996401346.html" class="nav-btn" data-aivic-nav="scr-1780996401346">市場情報検索画面</a>
+  </aside>
+  <main class="main">
+    <section class="card" data-aivic-panel="scr-1780996365387" style="margin-top:0">
+<div class="report-generation-panel" style="padding: 16px; max-width: 1200px;">
+  <!-- ヘッダー -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1 style="font-size: 24px; font-weight: 600; color: var(--text); margin: 0;">レポート設定・生成</h1>
+    <div style="display: flex; gap: 8px;">
+      <button class="action-btn secondary" data-testid="template-list-btn" onclick="window.showScreen('scr-1780996401346')">
+        テンプレート管理
+      </button>
+      <button class="action-btn secondary" data-testid="report-history-btn" onclick="window.showScreen('scr-1780996391676')">
+        生成履歴
+      </button>
+    </div>
+  </div>
+
+  <!-- メインレイアウト: 左側設定フォーム + 右側プレビュー -->
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; height: calc(100vh - 120px);">
+    
+    <!-- 左側: レポート設定フォーム -->
+    <div class="card" style="padding: 20px; overflow-y: auto;">
+      <h2 style="font-size: 18px; font-weight: 600; color: var(--text); margin: 0 0 16px 0;">レポート設定</h2>
+      
+      <form id="report-form">
+        <!-- レポート基本情報 -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+          <div>
+            <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">レポート名</label>
+            <input type="text" id="report-name" data-testid="report-name" 
+                   style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);"
+                   placeholder="生産実績月次レポート">
+          </div>
+          <div>
+            <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">レポート種別</label>
+            <select id="report-type" data-testid="report-type-select" 
+                    style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
+              <option value="">選択してください</option>
+              <option value="production-performance">生産実績レポート</option>
+              <option value="plan-vs-actual">計画対実績レポート</option>
+              <option value="quality-analysis">品質分析レポート</option>
+              <option value="line-efficiency">ライン効率レポート</option>
+              <option value="defect-analysis">不良品分析レポート</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 対象期間 -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+          <div>
+            <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">開始日</label>
+            <input type="date" id="start-date" data-testid="start-date" 
+                   style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
+          </div>
+          <div>
+            <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">終了日</label>
+            <input type="date" id="end-date" data-testid="end-date" 
+                   style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
+          </div>
+        </div>
+
+        <!-- 生産ライン選択 -->
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">対象生産ライン</label>
+          <div id="production-lines" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.15);">
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);">
+              <input type="checkbox" value="line-001" style="accent-color: var(--primary);">
+              ライン001 (組立)
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);">
+              <input type="checkbox" value="line-002" style="accent-color: var(--primary);">
+              ライン002 (塗装)
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);">
+              <input type="checkbox" value="line-003" style="accent-color: var(--primary);">
+              ライン003 (検査)
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);">
+              <input type="checkbox" value="line-004" style="accent-color: var(--primary);">
+              ライン004 (梱包)
+            </label>
+          </div>
+        </div>
+
+        <!-- 製品カテゴリ・出力形式 -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+          <div>
+            <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">製品カテゴリ</label>
+            <select id="product-category" data-testid="product-category-select" 
+                    style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
+              <option value="">全カテゴリ</option>
+              <option value="electronics">電子部品</option>
+              <option value="machinery">機械部品</option>
+              <option value="automotive">自動車部品</option>
+              <option value="medical">医療機器</option>
+            </select>
+          </div>
+          <div>
+            <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">データ集計単位</label>
+            <select id="aggregation-unit" data-testid="aggregation-unit-select" 
+                    style="width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);">
+              <option value="daily">日次</option>
+              <option value="weekly">週次</option>
+              <option value="monthly">月次</option>
+              <option value="quarterly">四半期</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 出力形式 -->
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">出力形式</label>
+          <div style="display: flex; gap: 16px;">
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);">
+              <input type="radio" name="output-format" value="pdf" checked style="accent-color: var(--primary);">
+              PDF
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);">
+              <input type="radio" name="output-format" value="excel" style="accent-color: var(--primary);">
+              Excel
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);">
+              <input type="radio" name="output-format" value="csv" style="accent-color: var(--primary);">
+              CSV
+            </label>
+          </div>
+        </div>
+
+        <!-- 詳細オプション -->
+        <div style="margin-bottom: 20px;">
+          <button type="button" id="toggle-advanced" class="action-btn secondary" style="margin-bottom: 12px;">
+            詳細設定を表示
+          </button>
+          <div id="advanced-options" style="display: none;">
+            <div style="display: grid; gap: 12px;">
+              <label style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);">
+                <input type="checkbox" id="include-graphs" style="accent-color: var(--primary);" checked>
+                グラフを含める
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);">
+                <input type="checkbox" id="include-summary" style="accent-color: var(--primary);" checked>
+                サマリーページを含める
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);">
+                <input type="checkbox" id="auto-schedule" style="accent-color: var(--primary);">
+                定期自動生成
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- アクションボタン -->
+        <div style="display: flex; gap: 8px; margin-top: 24px;">
+          <button type="button" id="btn-preview" class="action-btn secondary" data-testid="preview-button">
+            プレビュー
+          </button>
+          <button type="button" id="btn-save-template" class="action-btn secondary" data-testid="save-template-button">
+            テンプレート保存
+          </button>
+          <button type="button" id="btn-generate" class="action-btn" data-testid="generate-button">
+            レポート生成
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- 右側: プレビューエリア -->
+    <div class="card" style="padding: 20px; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h2 style="font-size: 18px; font-weight: 600; color: var(--text); margin: 0;">プレビュー</h2>
+        <button class="action-btn secondary" data-testid="fullscreen-preview" style="padding: 6px 12px; font-size: 12px;">
+          全画面表示
+        </button>
+      </div>
+      
+      <div id="preview-area" style="min-height: 400px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.15); padding: 16px;">
+        <div style="text-align: center; color: var(--text-muted); padding: 60px 20px;">
+          <div style="font-size: 48px; margin-bottom: 12px;">📊</div>
+          <p style="margin: 0; font-size: 14px;">レポート設定を選択してプレビューボタンを押してください</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 生成履歴テーブル -->
+  <div class="card" style="margin-top: 20px; padding: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <h2 style="font-size: 18px; font-weight: 600; color: var(--text); margin: 0;">最近の生成履歴</h2>
+      <button class="action-btn secondary" data-testid="export-csv" style="padding: 6px 12px; font-size: 12px;">
+        CSV出力
+      </button>
+    </div>
+    
+    <div class="table-wrap">
+      <table data-testid="report-history-table">
+        <thead>
+          <tr>
+            <th style="color: var(--text);">レポート名</th>
+            <th style="color: var(--text);">種別</th>
+            <th style="color: var(--text);">対象期間</th>
+            <th style="color: var(--text);">形式</th>
+            <th style="color: var(--text);">ステータス</th>
+            <th style="color: var(--text);">生成日時</th>
+            <th style="color: var(--text);">操作</th>
+          </tr>
+        </thead>
+        <tbody id="history-tbody">
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+    </section>
+  </main>
+</div>
+<script>
+(function() {
+  var TABLE_DEFS = window.AIVIC_TABLES || [];
+  var PRESET_SEED = window.AIVIC_PRESET_SEED || {};
+  var SYSTEM_NAME = window.AIVIC_SYSTEM_NAME || "";
+  var APP_ID = window.AIVIC_APP_ID || "";
+  var API_URL = (window.AIVIC_API_URL && window.AIVIC_API_URL !== "REPLACE_WITH_API_URL")
+    ? window.AIVIC_API_URL : window.location.origin;
+
+  // 通知 helper（SPA 版と同じ）
+  window.aivicNotify = (function() {
+    function ensureContainer() {
+      var c = document.getElementById("aivic-toast-container");
+      if (c) return c;
+      c = document.createElement("div");
+      c.id = "aivic-toast-container";
+      c.style.cssText = "position:fixed;top:16px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:360px;";
+      document.body.appendChild(c);
+      return c;
+    }
+    function show(msg, type) {
+      var c = ensureContainer();
+      var el = document.createElement("div");
+      el.textContent = msg;
+      el.style.cssText = "padding:10px 16px;border-radius:8px;font-size:13px;line-height:1.4;pointer-events:auto;color:#fff;background:" + (type === "error" ? "#dc2626" : "#d97706");
+      c.appendChild(el);
+      setTimeout(function() {
+        el.style.transition = "opacity .3s";
+        el.style.opacity = "0";
+        setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 320);
+      }, type === "error" ? 6000 : 4500);
+    }
+    return {
+      error: function(msg) { show("❌ " + msg, "error"); },
+      warn:  function(msg) { show("⚠️ " + msg, "warn"); },
+    };
+  })();
+
+  // CRUD API（SPA 版と同じ）
+  window.aivicApi = (function() {
+    function dbErr(op) { window.aivicNotify.error("データベースエラー（" + op + "）: APIサーバーに接続できません。"); }
+    function newId() { return typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : "id-" + Date.now() + "-" + Math.random().toString(36).slice(2); }
+    function q(i) {
+      var t = TABLE_DEFS[i];
+      var dbP = (window.AIVIC_DB_TYPE && window.AIVIC_DB_TYPE !== "dynamodb") ? "&db=" + encodeURIComponent(window.AIVIC_DB_TYPE) : "";
+      return "?app=" + encodeURIComponent(APP_ID) + "&system=" + encodeURIComponent(SYSTEM_NAME) + "&table=" + encodeURIComponent(t ? t.tableName : "table" + i) + dbP;
+    }
+    return {
+      list: async function(tableIndex) {
+        if (!API_URL) return [];
+        try { var r = await fetch(API_URL + "/api/" + tableIndex + q(tableIndex)); var d = await r.json(); return Array.isArray(d) ? d : (d.items || []); }
+        catch(e) { dbErr("データ取得"); return []; }
+      },
+      save: async function(tableIndex, item) {
+        if (!API_URL) { dbErr("保存"); return null; }
+        var now = new Date().toISOString();
+        var rec = Object.assign({}, item, { id: item.id || newId(), createdAt: item.createdAt || now, updatedAt: now });
+        try { var r = await fetch(API_URL + "/api/" + tableIndex + q(tableIndex), { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(rec) }); return await r.json(); }
+        catch(e) { dbErr("保存"); return null; }
+      },
+      update: async function(tableIndex, id, changes) {
+        if (!API_URL) { dbErr("更新"); return null; }
+        try { var r = await fetch(API_URL + "/api/" + tableIndex + "/" + id + q(tableIndex), { method:"PUT", headers:{"Content-Type":"application/json"}, body:JSON.stringify(Object.assign({}, changes, {updatedAt: new Date().toISOString()})) }); return await r.json(); }
+        catch(e) { dbErr("更新"); return null; }
+      },
+      delete: async function(tableIndex, id) {
+        if (!API_URL) { dbErr("削除"); return {deleted:false}; }
+        try { await fetch(API_URL + "/api/" + tableIndex + "/" + id + q(tableIndex), {method:"DELETE"}); return {deleted:true}; }
+        catch(e) { dbErr("削除"); return {deleted:false}; }
+      },
+    };
+  })();
+
+  // showScreen はマルチページ構成ではページ遷移として動く。
+  // パネル切替 (旧 SPA 動作) ではなく ./<id>.html への navigate に再定義する。
+  // 既存の AI 生成 shell が onclick="showScreen('x')" の形で書いていても透過的に動く。
+  //
+  // 防御層:
+  // (a) 同じ画面 ID なら no-op（AIVIC_PAGE_SCREEN_ID 一致 / pathname 一致のどちらか）
+  // (b) 同じ navigate を 100ms 以内に繰り返したら break loop（onclick 連打ではなく自動ループ対策）
+  // (c) DOMContentLoaded 直後 1.5s 以内の「自動 navigate」は警告 + 抑制（手動 click は通す）
+  var _aivicNavLastTime = 0;
+  var _aivicNavLastTarget = "";
+  var _aivicReady = false;
+  window.showScreen = function(screenId) {
+    if (!screenId) return;
+    if (screenId === window.AIVIC_PAGE_SCREEN_ID) return; // 既に該当ページに居る
+    // pathname ベースの保険: AIVIC_PAGE_SCREEN_ID が未設定でも、現在 URL と一致したら抑制
+    var targetPath = './' + encodeURIComponent(screenId) + '.html';
+    var currentName = (window.location.pathname.split('/').pop() || '');
+    if (currentName === (encodeURIComponent(screenId) + '.html') ||
+        currentName === (screenId + '.html')) {
+      return;
+    }
+    var now = Date.now();
+    if (_aivicNavLastTarget === targetPath && (now - _aivicNavLastTime) < 100) {
+      console.warn('[aivic] showScreen 連続呼び出し検知。無限ループ防止のため抑制:', screenId);
+      return;
+    }
+    if (!_aivicReady) {
+      // ページロード直後の自動 navigate は AI shell の load-time 副作用の可能性が高い。
+      // ボタンクリック等のユーザー操作は ready 後なので影響しない。
+      console.warn('[aivic] DOMContentLoaded 前の showScreen 呼び出し。抑制:', screenId);
+      return;
+    }
+    _aivicNavLastTime = now;
+    _aivicNavLastTarget = targetPath;
+    window.location.href = targetPath;
+  };
+
+  // 初回マウント時のサンプルデータ投入
+  function seedAllIfEmpty() {
+    if (!API_URL) return Promise.resolve();
+    return Promise.all(TABLE_DEFS.map(function(t, i) {
+      var preset = PRESET_SEED[t.tableName];
+      if (!Array.isArray(preset) || preset.length === 0) return Promise.resolve();
+      return window.aivicApi.list(i).then(function(existing) {
+        if (existing && existing.length > 0) return;
+        return Promise.all(preset.map(function(row) { return window.aivicApi.save(i, row); }));
+      }).catch(function() {});
+    }));
+  }
+
+  // ── 初期表示: このページ専用の panel に initFn を実行 ──
+  // window.AIVIC_PAGE_SCREEN_ID と AIVIC_PAGE_INIT_JS は composeMultipagePages
+  // でページ単位に埋め込まれる。
+  document.addEventListener("DOMContentLoaded", function() {
+    // 1.5 秒後に必ず _aivicReady を立てる（initFn が走らないページや失敗ページでも
+    // ユーザーが操作できるようにする保険）。initFn 完了時にも立てるので早い方が勝つ。
+    setTimeout(function() { _aivicReady = true; }, 1500);
+    var pageScreenId = window.AIVIC_PAGE_SCREEN_ID;
+    if (!pageScreenId) return;
+
+    // sidebar / nav の active class を付与（現在ページのリンクを強調）
+    document.querySelectorAll('[data-aivic-nav]').forEach(function(btn) {
+      var isActive = btn.getAttribute("data-aivic-nav") === pageScreenId;
+      btn.classList.toggle("aivic-active", isActive);
+      btn.setAttribute("aria-current", isActive ? "page" : "false");
+    });
+
+    var container = document.querySelector('[data-aivic-panel="' + pageScreenId + '"]');
+    if (!container) return;
+
+    // **content 要素の hidden 強制除去（2026-05-24 Playwright 大量 fail 対応）**:
+    // AI が生成した panel HTML には class="hidden" / hidden 属性 / style="display:none"
+    // が content 要素（#xxx-tbody / #xxx-list / [data-testid="error-message"] 等）に付いて
+    // いることがある。それを Playwright が toBeVisible() で待ち続けて timeout する事故が頻発。
+    //
+    // ポリシー: panel コンテナ配下の全要素について以下を実行:
+    //   - class="hidden" / display:none / hidden 属性を **content 要素では除去**
+    //   - **modal 系**（.modal, .modal-backdrop, [role="dialog"], [data-modal] 等）は除外
+    //     （これらは仕様上初期非表示が正しい）
+    var isModalLike = function(el) {
+      if (!el || !el.classList) return false;
+      var cn = String(el.className || "");
+      if (/modal|dialog|overlay|popup|dropdown|tooltip/i.test(cn)) return true;
+      var role = el.getAttribute && el.getAttribute("role");
+      if (role === "dialog" || role === "alertdialog" || role === "tooltip" || role === "menu") return true;
+      if (el.hasAttribute && (el.hasAttribute("data-modal") || el.hasAttribute("data-dropdown") || el.hasAttribute("data-popup"))) return true;
+      return false;
+    };
+    var unhideContentElements = function(root) {
+      var all = root.querySelectorAll('.hidden, [hidden], [style*="display:none"], [style*="display: none"]');
+      for (var k = 0; k < all.length; k++) {
+        var el = all[k];
+        // modal 系は触らない
+        if (isModalLike(el)) continue;
+        // parent chain で modal 内なら触らない
+        var p = el.parentElement;
+        var insideModal = false;
+        while (p && p !== root) {
+          if (isModalLike(p)) { insideModal = true; break; }
+          p = p.parentElement;
+        }
+        if (insideModal) continue;
+        // 除去
+        el.classList.remove('hidden');
+        el.removeAttribute('hidden');
+        if (el.style && el.style.display === 'none') el.style.display = '';
+      }
+    };
+    try { unhideContentElements(container); } catch (e) { console.warn('[aivic] unhideContent failed:', e); }
+
+    var initJsSource = window.AIVIC_PAGE_INIT_JS;
+    if (!initJsSource) {
+      // initJs が無くてもサンプルデータ投入は走らせる
+      seedAllIfEmpty();
+      return;
+    }
+    var initFn = null;
+    try {
+      initFn = (new Function("return (" + initJsSource + ")"))();
+    } catch (e) {
+      console.error("[aivic] initJs compile error:", pageScreenId, e);
+      return;
+    }
+    if (typeof initFn !== "function") return;
+
+    seedAllIfEmpty().then(function() {
+      return Promise.all(TABLE_DEFS.map(function(t, i) {
+        return window.aivicApi.list(i)
+          .then(function(records) { return Object.assign({}, t, { records: records }); })
+          .catch(function() { return Object.assign({}, t, { records: [] }); });
+      }));
+    }).then(function(tables) {
+      try { initFn(container, API_URL, tables); } catch (e) { console.error("[aivic] initFn error:", pageScreenId, e); }
+      // 初期 panel init が一巡したら _aivicReady を立てる。以降のユーザー操作 (onclick) で
+      // showScreen が呼ばれた場合は通常通り navigate する。
+      _aivicReady = true;
+    });
+  });
+})();
+
+</script>
+</body>
+</html>

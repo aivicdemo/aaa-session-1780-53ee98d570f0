@@ -1,0 +1,710 @@
+{
+  "systemId": "itg-2-br-1780551363302-2-1-2",
+  "systemName": "仕入先情報ポータル",
+  "cssTheme": ":root {\n  --primary: #8B4513;\n  --primary-hover: #A0522D;\n  --bg-main: #FAF7F2;\n  --bg-card: #F5F1E8;\n  --bg-sidebar: #F0EBE0;\n  --border: #D2B48C;\n  --text: #2F1B14;\n  --text-muted: #5D4037;\n  --top-bar-bg: #EFEBE2;\n  --top-bar-border: #CD853F;\n}",
+  "screens": [
+    {
+      "id": "scr-1780996954228",
+      "name": "統計分析実行画面",
+      "purpose": "仕入先の納期実績や発注データを基に統計分析を実行し、結果を表示・保存する画面",
+      "items": [
+        "分析対象期間選択（開始日・終了日）",
+        "仕入先選択（複数選択可能）",
+        "商品カテゴリ選択",
+        "分析種別選択（納期遵守率・品質評価・コスト分析等）",
+        "グループ化条件選択（月別・四半期別・年別）",
+        "分析実行ボタン",
+        "進捗表示バー",
+        "分析結果表示エリア（グラフ・チャート）",
+        "分析結果データテーブル",
+        "結果エクスポートボタン（CSV・Excel・PDF）",
+        "分析結果保存ボタン",
+        "保存済み分析履歴一覧"
+      ]
+    },
+    {
+      "id": "scr-1780996965402",
+      "name": "仕入先納期パターン分析結果画面",
+      "purpose": "仕入先の納期実績データを分析し、パターンや傾向を可視化して表示する画面",
+      "items": [
+        "分析期間選択フィルター",
+        "仕入先選択ドロップダウン",
+        "商品カテゴリフィルター",
+        "納期パフォーマンス概要カード",
+        "平均納期日数表示",
+        "納期遵守率グラフ",
+        "月別納期トレンドチャート",
+        "仕入先別納期比較表",
+        "遅延パターン分析結果",
+        "季節性分析グラフ",
+        "リードタイム分布ヒストグラム",
+        "異常値検出アラート表示"
+      ]
+    }
+  ],
+  "screenPanels": [
+    {
+      "screenId": "scr-1780996954228",
+      "panelHtml": "<div class=\"p-4\">\n  <!-- ヘッダー -->\n  <div class=\"mb-4\">\n    <h1 class=\"text-xl font-semibold mb-2\" style=\"color: var(--text);\">統計分析実行</h1>\n    <p class=\"text-sm\" style=\"color: var(--text-muted);\">仕入先の納期実績・品質・コストデータを基に統計分析を実行し、結果を可視化します</p>\n  </div>\n\n  <!-- 分析条件設定エリア -->\n  <div class=\"card mb-4\" style=\"background: var(--bg-card); border: 1px solid var(--border);\">\n    <div class=\"p-4\">\n      <h2 class=\"text-lg font-medium mb-3\" style=\"color: var(--text);\">分析条件設定</h2>\n      \n      <div class=\"grid grid-cols-3 gap-4 mb-4\">\n        <div>\n          <label class=\"block text-xs mb-1\" style=\"color: var(--text-muted);\">分析期間（開始）</label>\n          <input type=\"date\" id=\"start-date\" data-testid=\"start-date\" class=\"w-full px-3 py-2 text-sm rounded border\" \n                 style=\"background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.18); color: var(--text);\">\n        </div>\n        <div>\n          <label class=\"block text-xs mb-1\" style=\"color: var(--text-muted);\">分析期間（終了）</label>\n          <input type=\"date\" id=\"end-date\" data-testid=\"end-date\" class=\"w-full px-3 py-2 text-sm rounded border\" \n                 style=\"background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.18); color: var(--text);\">\n        </div>\n        <div>\n          <label class=\"block text-xs mb-1\" style=\"color: var(--text-muted);\">グループ化</label>\n          <select id=\"group-by\" data-testid=\"group-by-select\" class=\"w-full px-3 py-2 text-sm rounded border\" \n                  style=\"background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.18); color: var(--text);\">\n            <option value=\"\">選択してください</option>\n            <option value=\"month\">月別</option>\n            <option value=\"quarter\">四半期別</option>\n            <option value=\"year\">年別</option>\n          </select>\n        </div>\n      </div>\n\n      <div class=\"grid grid-cols-2 gap-4 mb-4\">\n        <div>\n          <label class=\"block text-xs mb-1\" style=\"color: var(--text-muted);\">仕入先選択</label>\n          <select id=\"supplier-select\" data-testid=\"supplier-select\" class=\"w-full px-3 py-2 text-sm rounded border\" \n                  style=\"background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.18); color: var(--text);\">\n            <option value=\"\">全仕入先</option>\n            <option value=\"supplier1\">田中商事株式会社</option>\n            <option value=\"supplier2\">山田工業</option>\n            <option value=\"supplier3\">佐藤製作所</option>\n          </select>\n        </div>\n        <div>\n          <label class=\"block text-xs mb-1\" style=\"color: var(--text-muted);\">分析種別</label>\n          <select id=\"analysis-type\" data-testid=\"analysis-type-select\" class=\"w-full px-3 py-2 text-sm rounded border\" \n                  style=\"background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.18); color: var(--text);\">\n            <option value=\"\">選択してください</option>\n            <option value=\"delivery\">納期遵守率分析</option>\n            <option value=\"quality\">品質評価分析</option>\n            <option value=\"cost\">コスト分析</option>\n            <option value=\"comprehensive\">総合評価分析</option>\n          </select>\n        </div>\n      </div>\n\n      <div class=\"flex gap-2\">\n        <button id=\"btn-execute\" data-testid=\"execute-button\" class=\"action-btn px-4 py-2 text-sm rounded\" \n                style=\"background: var(--primary); color: #fff; border: none;\">\n          分析実行\n        </button>\n        <button id=\"btn-reset\" data-testid=\"reset-button\" class=\"action-btn secondary px-4 py-2 text-sm rounded\" \n                style=\"background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.18);\">\n          条件リセット\n        </button>\n      </div>\n\n      <!-- 進捗バー -->\n      <div id=\"progress-area\" class=\"mt-4 hidden\">\n        <div class=\"flex items-center gap-3\">\n          <div class=\"flex-1 bg-gray-200 rounded-full h-2\">\n            <div id=\"progress-bar\" class=\"h-2 rounded-full transition-all duration-300\" style=\"background: var(--primary); width: 0%;\"></div>\n          </div>\n          <span id=\"progress-text\" class=\"text-sm\" style=\"color: var(--text-muted);\">0%</span>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <!-- 分析結果表示エリア -->\n  <div id=\"results-area\" class=\"grid grid-cols-2 gap-4\">\n    <!-- KPIカード -->\n    <div class=\"card p-4\" style=\"background: var(--bg-card); border: 1px solid var(--border);\">\n      <h3 class=\"text-sm font-medium mb-2\" style=\"color: var(--text-muted);\">総合評価スコア</h3>\n      <div class=\"text-2xl font-bold\" style=\"color: var(--text);\" data-testid=\"kpi-total-score\">85</div>\n      <div class=\"text-xs mt-1\" style=\"color: var(--text-muted);\">前月比 +3pt</div>\n    </div>\n\n    <div class=\"card p-4\" style=\"background: var(--bg-card); border: 1px solid var(--border);\">\n      <h3 class=\"text-sm font-medium mb-2\" style=\"color: var(--text-muted);\">納期遵守率</h3>\n      <div class=\"text-2xl font-bold\" style=\"color: var(--text);\" data-testid=\"kpi-delivery-rate\">92%</div>\n      <div class=\"text-xs mt-1\" style=\"color: var(--text-muted);\">前月比 +2%</div>\n    </div>\n\n    <div class=\"card p-4\" style=\"background: var(--bg-card); border: 1px solid var(--border);\">\n      <h3 class=\"text-sm font-medium mb-2\" style=\"color: var(--text-muted);\">平均遅延日数</h3>\n      <div class=\"text-2xl font-bold\" style=\"color: var(--text);\" data-testid=\"kpi-delay-days\">2.3日</div>\n      <div class=\"text-xs mt-1\" style=\"color: var(--text-muted);\">前月比 -0.5日</div>\n    </div>\n\n    <div class=\"card p-4\" style=\"background: var(--bg-card); border: 1px solid var(--border);\">\n      <h3 class=\"text-sm font-medium mb-2\" style=\"color: var(--text-muted);\">分析対象件数</h3>\n      <div class=\"text-2xl font-bold\" style=\"color: var(--text);\" data-testid=\"kpi-total-count\">1,247件</div>\n      <div class=\"text-xs mt-1\" style=\"color: var(--text-muted);\">今月実績</div>\n    </div>\n  </div>\n\n  <!-- グラフエリア -->\n  <div class=\"grid grid-cols-2 gap-4 mt-4\">\n    <div class=\"card p-4\" style=\"background: var(--bg-card); border: 1px solid var(--border);\">\n      <h3 class=\"text-sm font-medium mb-3\" style=\"color: var(--text);\">月別納期遵守率推移</h3>\n      <div class=\"chart-wrap\" style=\"position:relative;height:260px;max-height:280px;\">\n        <canvas id=\"delivery-chart\"></canvas>\n      </div>\n    </div>\n\n    <div class=\"card p-4\" style=\"background: var(--bg-card); border: 1px solid var(--border);\">\n      <h3 class=\"text-sm font-medium mb-3\" style=\"color: var(--text);\">仕入先別評価分布</h3>\n      <div class=\"chart-wrap\" style=\"position:relative;height:260px;max-height:280px;\">\n        <canvas id=\"supplier-chart\"></canvas>\n      </div>\n    </div>\n  </div>\n\n  <!-- 分析結果データテーブル -->\n  <div class=\"card mt-4\" style=\"background: var(--bg-card); border: 1px solid var(--border);\">\n    <div class=\"p-4 border-b\" style=\"border-color: var(--border);\">\n      <div class=\"flex justify-between items-center\">\n        <h3 class=\"text-lg font-medium\" style=\"color: var(--text);\">分析結果詳細</h3>\n        <div class=\"flex gap-2\">\n          <button id=\"btn-export-csv\" data-testid=\"export-csv-button\" class=\"action-btn secondary px-3 py-1 text-sm rounded\" \n                  style=\"background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.18);\">\n            CSV出力\n          </button>\n          <button id=\"btn-export-excel\" data-testid=\"export-excel-button\" class=\"action-btn secondary px-3 py-1 text-sm rounded\" \n                  style=\"background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.18);\">\n            Excel出力\n          </button>\n          <button id=\"btn-save-analysis\" data-testid=\"save-analysis-button\" class=\"action-btn px-3 py-1 text-sm rounded\" \n                  style=\"background: var(--primary); color: #fff; border: none;\">\n            分析結果保存\n          </button>\n        </div>\n      </div>\n    </div>\n    \n    <div class=\"table-wrap\">\n      <table data-testid=\"analysis-results-table\">\n        <thead>\n          <tr>\n            <th style=\"color: var(--text);\">仕入先名</th>\n            <th style=\"color: var(--text);\">分析期間</th>\n            <th style=\"color: var(--text);\">発注件数</th>\n            <th style=\"color: var(--text);\">納期遵守率</th>\n            <th style=\"color: var(--text);\">平均遅延日数</th>\n            <th style=\"color: var(--text);\">品質スコア</th>\n            <th style=\"color: var(--text);\">総合評価</th>\n            <th style=\"color: var(--text);\">推奨アクション</th>\n          </tr>\n        </thead>\n        <tbody id=\"results-tbody\">\n          <!-- 分析結果がここに表示される -->\n        </tbody>\n      </table>\n    </div>\n  </div>\n\n  <!-- 保存済み分析履歴 -->\n  <div class=\"card mt-4\" style=\"background: var(--bg-card); border: 1px solid var(--border);\">\n    <div class=\"p-4 border-b\" style=\"border-color: var(--border);\">\n      <h3 class=\"text-lg font-medium\" style=\"color: var(--text);\">保存済み分析履歴</h3>\n    </div>\n    \n    <div class=\"table-wrap\">\n      <table data-testid=\"analysis-history-table\">\n        <thead>\n          <tr>\n            <th style=\"color: var(--text);\">作成日時</th>\n            <th style=\"color: var(--text);\">分析種別</th>\n            <th style=\"color: var(--text);\">対象期間</th>\n            <th style=\"color: var(--text);\">対象仕入先</th>\n            <th style=\"color: var(--text);\">総合評価</th>\n            <th style=\"color: var(--text);\">操作</th>\n          </tr>\n        </thead>\n        <tbody id=\"history-tbody\">\n          <!-- 履歴がここに表示される -->\n        </tbody>\n      </table>\n    </div>\n  </div>\n</div>",
+      "initJs": "function(container, apiUrl, tables) {\n  // 分析結果テーブルの再描画\n  function renderResults(results) {\n    const tbody = container.querySelector('#results-tbody');\n    tbody.innerHTML = results.map(r => `\n      <tr data-id=\"${r.統計分析結果ID || r.id}\">\n        <td style=\"color: var(--text);\">${r.仕入先名 || '田中商事株式会社'}</td>\n        <td style=\"color: var(--text);\">${r.分析期間開始日?.slice(0,10) || '2024-01-01'} ～ ${r.分析期間終了日?.slice(0,10) || '2024-03-31'}</td>\n        <td style=\"color: var(--text);\">${r.総発注件数 || 156}件</td>\n        <td style=\"color: var(--text);\">${r.納期遵守率 || 92}%</td>\n        <td style=\"color: var(--text);\">${r.平均納期遅延日数 || 2.3}日</td>\n        <td style=\"color: var(--text);\">${r.品質スコア || 88}点</td>\n        <td style=\"color: var(--text);\">${r.総合評価スコア || 85}点</td>\n        <td style=\"color: var(--text);\">${r.推奨アクション || '継続取引推奨'}</td>\n      </tr>\n    `).join('');\n  }\n\n  // 履歴テーブルの再描画\n  function renderHistory(history) {\n    const tbody = container.querySelector('#history-tbody');\n    tbody.innerHTML = history.map(h => `\n      <tr data-id=\"${h.統計分析結果ID || h.id}\">\n        <td style=\"color: var(--text);\">${h.作成日時?.slice(0,16).replace('T', ' ') || '2024-03-15 14:30'}</td>\n        <td style=\"color: var(--text);\">${h.分析種別 || '総合評価分析'}</td>\n        <td style=\"color: var(--text);\">${h.分析期間開始日?.slice(0,10) || '2024-01-01'} ～ ${h.分析期間終了日?.slice(0,10) || '2024-03-31'}</td>\n        <td style=\"color: var(--text);\">${h.仕入先名 || '全仕入先'}</td>\n        <td style=\"color: var(--text);\">${h.総合評価スコア || 85}点</td>\n        <td>\n          <button class=\"action-btn secondary view-btn text-xs px-2 py-1\" data-id=\"${h.統計分析結果ID || h.id}\" \n                  style=\"background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.18);\">\n            詳細\n          </button>\n          <button class=\"action-btn secondary delete-btn text-xs px-2 py-1 ml-1\" data-id=\"${h.統計分析結果ID || h.id}\" \n                  style=\"background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.18);\">\n            削除\n          </button>\n        </td>\n      </tr>\n    `).join('');\n  }\n\n  // 初期データ表示\n  const analysisData = tables.find(t => t.tableName === '統計分析結果')?.records || [];\n  renderResults(analysisData.slice(0, 5)); // 最新5件を表示\n  renderHistory(analysisData);\n\n  // Chart.js初期化\n  function initCharts() {\n    // 月別納期遵守率推移チャート\n    const deliveryCtx = container.querySelector('#delivery-chart').getContext('2d');\n    new Chart(deliveryCtx, {\n      type: 'line',\n      data: {\n        labels: ['1月', '2月', '3月', '4月', '5月', '6月'],\n        datasets: [{\n          label: '納期遵守率',\n          data: [88, 91, 89, 93, 92, 95],\n          borderColor: '#3b82f6',\n          backgroundColor: 'rgba(59, 130, 246, 0.1)',\n          tension: 0.4\n        }]\n      },\n      options: {\n        responsive: true,\n        maintainAspectRatio: false,\n        scales: {\n          y: {\n            beginAtZero: true,\n            max: 100,\n            ticks: { callback: value => value + '%' }\n          }\n        }\n      }\n    });\n\n    // 仕入先別評価分布チャート\n    const supplierCtx = container.querySelector('#supplier-chart').getContext('2d');\n    new Chart(supplierCtx, {\n      type: 'doughnut',\n      data: {\n        labels: ['優良(90点以上)', '良好(70-89点)', '要改善(70点未満)'],\n        datasets: [{\n          data: [45, 38, 17],\n          backgroundColor: ['#10b981', '#f59e0b', '#ef4444']\n        }]\n      },\n      options: {\n        responsive: true,\n        maintainAspectRatio: false,\n        plugins: {\n          legend: { position: 'bottom' }\n        }\n      }\n    });\n  }\n\n  // 分析実行ボタン\n  container.querySelector('#btn-execute').addEventListener('click', async () => {\n    const startDate = container.querySelector('#start-date').value;\n    const endDate = container.querySelector('#end-date').value;\n    const analysisType = container.querySelector('#analysis-type').value;\n    \n    if (!startDate || !endDate || !analysisType) {\n      alert('分析条件を入力してください');\n      return;\n    }\n\n    // 進捗表示\n    const progressArea = container.querySelector('#progress-area');\n    const progressBar = container.querySelector('#progress-bar');\n    const progressText = container.querySelector('#progress-text');\n    \n    progressArea.classList.remove('hidden');\n    \n    // 進捗アニメーション\n    let progress = 0;\n    const interval = setInterval(() => {\n      progress += 10;\n      progressBar.style.width = progress + '%';\n      progressText.textContent = progress + '%';\n      \n      if (progress >= 100) {\n        clearInterval(interval);\n        setTimeout(() => {\n          progressArea.classList.add('hidden');\n          // 分析結果を更新表示\n          window.aivicApi.list(6).then(renderResults);\n        }, 500);\n      }\n    }, 200);\n  });\n\n  // 条件リセットボタン\n  container.querySelector('#btn-reset').addEventListener('click', () => {\n    container.querySelector('#start-date').value = '';\n    container.querySelector('#end-date').value = '';\n    container.querySelector('#supplier-select').value = '';\n    container.querySelector('#analysis-type').value = '';\n    container.querySelector('#group-by').value = '';\n  });\n\n  // 分析結果保存ボタン\n  container.querySelector('#btn-save-analysis').addEventListener('click', async () => {\n    const startDate = container.querySelector('#start-date').value;\n    const endDate = container.querySelector('#end-date').value;\n    const analysisType = container.querySelector('#analysis-type').value;\n    \n    if (!startDate || !endDate || !analysisType) {\n      alert('分析条件を設定してから保存してください');\n      return;\n    }\n\n    const saved = await window.aivicApi.save(6, {\n      分析期間開始日: startDate,\n      分析期間終了日: endDate,\n      分析種別: analysisType,\n      総発注件数: 156,\n      納期遵守率: 92,\n      平均納期遅延日数: 2.3,\n      品質スコア: 88,\n      総合評価スコア: 85,\n      推奨アクション: '継続取引推奨',\n      分析コメント: '全体的に良好な実績を維持している',\n      作成日時: new Date().toISOString()\n    });\n\n    if (saved) {\n      alert('分析結果を保存しました');\n      window.aivicApi.list(6).then(renderHistory);\n    }\n  });\n\n  // CSVエクスポート\n  container.querySelector('#btn-export-csv').addEventListener('click', async () => {\n    const data = await window.aivicApi.list(6);\n    if (!data) return;\n\n    const headers = ['仕入先名', '分析期間開始日', '分析期間終了日', '総発注件数', '納期遵守率', '平均納期遅延日数', '品質スコア', '総合評価スコア', '推奨アクション'];\n    const csvContent = '\\uFEFF' + [\n      headers.join(','),\n      ...data.map(row => [\n        row.仕入先名 || '',\n        row.分析期間開始日 || '',\n        row.分析期間終了日 || '',\n        row.総発注件数 || '',\n        row.納期遵守率 || '',\n        row.平均納期遅延日数 || '',\n        row.品質スコア || '',\n        row.総合評価スコア || '',\n        row.推奨アクション || ''\n      ].join(','))\n    ].join('\\n');\n\n    const blob = new Blob([csvContent], { type: 'text/csv' });\n    const url = URL.createObjectURL(blob);\n    const a = document.createElement('a');\n    a.href = url;\n    a.download = 'analysis_results.csv';\n    a.click();\n    URL.revokeObjectURL(url);\n  });\n\n  // 履歴の削除\n  container.addEventListener('click', async (e) => {\n    const deleteBtn = e.target.closest('.delete-btn');\n    if (deleteBtn) {\n      if (!confirm('この分析結果を削除しますか？')) return;\n      \n      await window.aivicApi.delete(6, deleteBtn.dataset.id);\n      window.aivicApi.list(6).then(renderHistory);\n    }\n\n    const viewBtn = e.target.closest('.view-btn');\n    if (viewBtn) {\n      window.showScreen('scr-1780996965402');\n    }\n  });\n\n  // Chart.js初期化（DOM準備後）\n  setTimeout(initCharts, 100);\n}",
+      "method": "ai"
+    },
+    {
+      "screenId": "scr-1780996965402",
+      "panelHtml": "<div class=\"p-4\">\n  <!-- 分析条件フィルター -->\n  <div class=\"card p-3 mb-3\">\n    <h2 class=\"text-lg font-semibold mb-3\" style=\"color: var(--text);\">仕入先納期パターン分析結果</h2>\n    <div class=\"grid grid-cols-4 gap-3\">\n      <div>\n        <label class=\"block text-sm mb-1\" style=\"color: var(--text-muted);\">分析期間（開始）</label>\n        <input type=\"date\" id=\"period-start\" data-testid=\"period-start\" class=\"input w-full\" style=\"background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.18); color: var(--text); padding: 8px; border-radius: 4px;\">\n      </div>\n      <div>\n        <label class=\"block text-sm mb-1\" style=\"color: var(--text-muted);\">分析期間（終了）</label>\n        <input type=\"date\" id=\"period-end\" data-testid=\"period-end\" class=\"input w-full\" style=\"background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.18); color: var(--text); padding: 8px; border-radius: 4px;\">\n      </div>\n      <div>\n        <label class=\"block text-sm mb-1\" style=\"color: var(--text-muted);\">仕入先</label>\n        <select id=\"supplier-filter\" data-testid=\"supplier-filter\" class=\"input w-full\" style=\"background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.18); color: var(--text); padding: 8px; border-radius: 4px;\">\n          <option value=\"\">全仕入先</option>\n          <option value=\"supplier1\">株式会社山田商事</option>\n          <option value=\"supplier2\">田中工業株式会社</option>\n          <option value=\"supplier3\">佐藤物産</option>\n          <option value=\"supplier4\">鈴木製作所</option>\n        </select>\n      </div>\n      <div class=\"flex items-end\">\n        <button id=\"btn-analyze\" data-testid=\"analyze-button\" class=\"action-btn\" style=\"background: var(--primary); color: #fff; border: none; padding: 8px 16px; border-radius: 4px;\">分析実行</button>\n      </div>\n    </div>\n  </div>\n\n  <!-- KPIカード群 -->\n  <div class=\"grid grid-cols-4 gap-3 mb-4\">\n    <div class=\"card p-3\" data-testid=\"kpi-compliance\">\n      <div class=\"text-sm mb-1\" style=\"color: var(--text-muted);\">納期遵守率</div>\n      <div class=\"text-2xl font-bold\" style=\"color: var(--text);\" id=\"compliance-rate\">87.3%</div>\n      <div class=\"text-xs\" style=\"color: #22c55e;\">前月比 +2.1%</div>\n    </div>\n    <div class=\"card p-3\" data-testid=\"kpi-avg-days\">\n      <div class=\"text-sm mb-1\" style=\"color: var(--text-muted);\">平均納期日数</div>\n      <div class=\"text-2xl font-bold\" style=\"color: var(--text);\" id=\"avg-delivery-days\">12.4日</div>\n      <div class=\"text-xs\" style=\"color: #ef4444;\">前月比 +0.8日</div>\n    </div>\n    <div class=\"card p-3\" data-testid=\"kpi-delay-days\">\n      <div class=\"text-sm mb-1\" style=\"color: var(--text-muted);\">平均遅延日数</div>\n      <div class=\"text-2xl font-bold\" style=\"color: var(--text);\" id=\"avg-delay-days\">2.1日</div>\n      <div class=\"text-xs\" style=\"color: #ef4444;\">前月比 +0.3日</div>\n    </div>\n    <div class=\"card p-3\" data-testid=\"kpi-total-orders\">\n      <div class=\"text-sm mb-1\" style=\"color: var(--text-muted);\">総発注件数</div>\n      <div class=\"text-2xl font-bold\" style=\"color: var(--text);\" id=\"total-orders\">1,247件</div>\n      <div class=\"text-xs\" style=\"color: var(--text-muted);\">分析対象期間</div>\n    </div>\n  </div>\n\n  <!-- チャート・グラフエリア -->\n  <div class=\"grid grid-cols-2 gap-4 mb-4\">\n    <div class=\"card p-3\">\n      <h3 class=\"text-base font-medium mb-3\" style=\"color: var(--text);\">月別納期トレンド</h3>\n      <canvas id=\"trend-chart\" width=\"400\" height=\"200\" style=\"width: 100%; height: 200px;\"></canvas>\n    </div>\n    <div class=\"card p-3\">\n      <h3 class=\"text-base font-medium mb-3\" style=\"color: var(--text);\">リードタイム分布</h3>\n      <canvas id=\"distribution-chart\" width=\"400\" height=\"200\" style=\"width: 100%; height: 200px;\"></canvas>\n    </div>\n  </div>\n\n  <!-- 仕入先別比較テーブル -->\n  <div class=\"card p-3 mb-4\">\n    <div class=\"flex justify-between items-center mb-3\">\n      <h3 class=\"text-base font-medium\" style=\"color: var(--text);\">仕入先別納期パフォーマンス比較</h3>\n      <button id=\"btn-export-csv\" data-testid=\"export-csv-button\" class=\"action-btn secondary\" style=\"background: transparent; border: 1px solid rgba(255,255,255,0.18); color: var(--text); padding: 6px 12px; border-radius: 4px;\">CSV出力</button>\n    </div>\n    <div class=\"table-wrap\">\n      <table data-testid=\"supplier-comparison-table\">\n        <thead>\n          <tr>\n            <th style=\"color: var(--text);\">仕入先名</th>\n            <th style=\"color: var(--text);\">発注件数</th>\n            <th style=\"color: var(--text);\">納期遵守率</th>\n            <th style=\"color: var(--text);\">平均納期日数</th>\n            <th style=\"color: var(--text);\">平均遅延日数</th>\n            <th style=\"color: var(--text);\">総合評価</th>\n            <th style=\"color: var(--text);\">操作</th>\n          </tr>\n        </thead>\n        <tbody id=\"supplier-tbody\">\n        </tbody>\n      </table>\n    </div>\n  </div>\n\n  <!-- 遅延パターン分析 -->\n  <div class=\"grid grid-cols-2 gap-4 mb-4\">\n    <div class=\"card p-3\">\n      <h3 class=\"text-base font-medium mb-3\" style=\"color: var(--text);\">遅延パターン分析</h3>\n      <div class=\"space-y-2\">\n        <div class=\"flex justify-between items-center p-2\" style=\"background: rgba(239,68,68,0.1); border-left: 3px solid #ef4444;\">\n          <span style=\"color: var(--text);\">月末集中による遅延</span>\n          <span class=\"text-sm\" style=\"color: var(--text-muted);\">32件</span>\n        </div>\n        <div class=\"flex justify-between items-center p-2\" style=\"background: rgba(245,158,11,0.1); border-left: 3px solid #f59e0b;\">\n          <span style=\"color: var(--text);\">原材料不足による遅延</span>\n          <span class=\"text-sm\" style=\"color: var(--text-muted);\">18件</span>\n        </div>\n        <div class=\"flex justify-between items-center p-2\" style=\"background: rgba(34,197,94,0.1); border-left: 3px solid #22c55e;\">\n          <span style=\"color: var(--text);\">輸送トラブル</span>\n          <span class=\"text-sm\" style=\"color: var(--text-muted);\">12件</span>\n        </div>\n      </div>\n    </div>\n    <div class=\"card p-3\">\n      <h3 class=\"text-base font-medium mb-3\" style=\"color: var(--text);\">季節性分析</h3>\n      <canvas id=\"seasonal-chart\" width=\"400\" height=\"150\" style=\"width: 100%; height: 150px;\"></canvas>\n    </div>\n  </div>\n\n  <!-- 異常値アラート -->\n  <div class=\"card p-3\" id=\"alert-section\">\n    <h3 class=\"text-base font-medium mb-3\" style=\"color: var(--text);\">異常値検出アラート</h3>\n    <div class=\"space-y-2\" id=\"alert-list\">\n      <div class=\"flex items-center p-2\" style=\"background: rgba(239,68,68,0.1); border-left: 3px solid #ef4444;\">\n        <div class=\"w-2 h-2 rounded-full mr-2\" style=\"background: #ef4444;\"></div>\n        <div class=\"flex-1\">\n          <div style=\"color: var(--text);\">田中工業株式会社の納期遅延が平均の3倍を超過</div>\n          <div class=\"text-sm\" style=\"color: var(--text-muted);\">平均遅延: 6.8日 (通常: 2.1日)</div>\n        </div>\n        <button class=\"action-btn secondary text-sm\" style=\"background: transparent; border: 1px solid rgba(255,255,255,0.18); color: var(--text); padding: 4px 8px; border-radius: 4px;\" onclick=\"window.showScreen('scr-1780996954228')\">詳細分析</button>\n      </div>\n    </div>\n  </div>\n</div>",
+      "initJs": "function(container, apiUrl, tables) {\n  // 統計分析結果テーブルのインデックス\n  const statsTableIndex = tables.findIndex(t => t.tableName === '統計分析結果') || 6;\n  const supplierTableIndex = tables.findIndex(t => t.tableName === '仕入先') || 3;\n  \n  // 仕入先別比較テーブル再描画関数\n  function renderSupplierComparison(stats) {\n    const tbody = container.querySelector('#supplier-tbody');\n    if (!tbody) return;\n    \n    tbody.innerHTML = stats.map(stat => {\n      const supplier = tables[supplierTableIndex]?.records?.find(s => s.id === stat.仕入先ID) || {};\n      const complianceRate = stat.納期遵守率 || 0;\n      const avgDays = Math.round(Math.random() * 15 + 8); // サンプル値\n      const avgDelay = Math.round(Math.random() * 5 + 1); // サンプル値\n      const score = stat.総合評価スコア || 0;\n      \n      let scoreColor = '#22c55e';\n      if (score < 60) scoreColor = '#ef4444';\n      else if (score < 80) scoreColor = '#f59e0b';\n      \n      return `\n        <tr data-id=\"${stat.id}\">\n          <td style=\"color: var(--text);\">${supplier.仕入先名 || '不明'}</td>\n          <td style=\"color: var(--text);\">${stat.総発注件数 || 0}件</td>\n          <td style=\"color: ${complianceRate >= 90 ? '#22c55e' : complianceRate >= 80 ? '#f59e0b' : '#ef4444'};\">${complianceRate}%</td>\n          <td style=\"color: var(--text);\">${avgDays}日</td>\n          <td style=\"color: var(--text);\">${avgDelay}日</td>\n          <td style=\"color: ${scoreColor};\">${score}点</td>\n          <td>\n            <button class=\"action-btn secondary detail-btn\" data-id=\"${stat.id}\" style=\"background: transparent; border: 1px solid rgba(255,255,255,0.18); color: var(--text); padding: 4px 8px; border-radius: 4px; font-size: 12px;\">詳細</button>\n          </td>\n        </tr>\n      `;\n    }).join('');\n  }\n  \n  // チャート描画関数\n  function drawTrendChart() {\n    const canvas = container.querySelector('#trend-chart');\n    if (!canvas) return;\n    \n    const ctx = canvas.getContext('2d');\n    const width = canvas.width;\n    const height = canvas.height;\n    \n    ctx.clearRect(0, 0, width, height);\n    \n    // 背景\n    ctx.fillStyle = 'rgba(0,0,0,0.02)';\n    ctx.fillRect(0, 0, width, height);\n    \n    // グリッド線\n    ctx.strokeStyle = 'rgba(255,255,255,0.1)';\n    ctx.lineWidth = 1;\n    for (let i = 1; i < 5; i++) {\n      const y = (height / 5) * i;\n      ctx.beginPath();\n      ctx.moveTo(0, y);\n      ctx.lineTo(width, y);\n      ctx.stroke();\n    }\n    \n    // データライン（納期遵守率）\n    const months = ['1月', '2月', '3月', '4月', '5月', '6月'];\n    const complianceData = [85, 82, 88, 91, 87, 89];\n    \n    ctx.strokeStyle = '#3b82f6';\n    ctx.lineWidth = 2;\n    ctx.beginPath();\n    \n    complianceData.forEach((value, index) => {\n      const x = (width / (months.length - 1)) * index;\n      const y = height - (value / 100) * height;\n      \n      if (index === 0) ctx.moveTo(x, y);\n      else ctx.lineTo(x, y);\n    });\n    ctx.stroke();\n    \n    // データポイント\n    ctx.fillStyle = '#3b82f6';\n    complianceData.forEach((value, index) => {\n      const x = (width / (months.length - 1)) * index;\n      const y = height - (value / 100) * height;\n      \n      ctx.beginPath();\n      ctx.arc(x, y, 4, 0, Math.PI * 2);\n      ctx.fill();\n    });\n  }\n  \n  function drawDistributionChart() {\n    const canvas = container.querySelector('#distribution-chart');\n    if (!canvas) return;\n    \n    const ctx = canvas.getContext('2d');\n    const width = canvas.width;\n    const height = canvas.height;\n    \n    ctx.clearRect(0, 0, width, height);\n    \n    // ヒストグラムデータ\n    const bins = ['5-7日', '8-10日', '11-13日', '14-16日', '17-19日', '20日+'];\n    const counts = [45, 120, 180, 95, 35, 15];\n    const maxCount = Math.max(...counts);\n    \n    const barWidth = width / bins.length;\n    \n    ctx.fillStyle = '#8b5cf6';\n    counts.forEach((count, index) => {\n      const barHeight = (count / maxCount) * height * 0.8;\n      const x = index * barWidth;\n      const y = height - barHeight;\n      \n      ctx.fillRect(x + 5, y, barWidth - 10, barHeight);\n    });\n    \n    // ラベル\n    ctx.fillStyle = '#9fb0d1';\n    ctx.font = '12px sans-serif';\n    ctx.textAlign = 'center';\n    bins.forEach((bin, index) => {\n      const x = index * barWidth + barWidth / 2;\n      ctx.fillText(bin, x, height - 5);\n    });\n  }\n  \n  function drawSeasonalChart() {\n    const canvas = container.querySelector('#seasonal-chart');\n    if (!canvas) return;\n    \n    const ctx = canvas.getContext('2d');\n    const width = canvas.width;\n    const height = canvas.height;\n    \n    ctx.clearRect(0, 0, width, height);\n    \n    // 季節データ（四半期別遅延率）\n    const quarters = ['Q1', 'Q2', 'Q3', 'Q4'];\n    const delayRates = [12, 8, 15, 22];\n    const maxRate = Math.max(...delayRates);\n    \n    const barWidth = width / quarters.length;\n    \n    delayRates.forEach((rate, index) => {\n      const barHeight = (rate / maxRate) * height * 0.8;\n      const x = index * barWidth;\n      const y = height - barHeight;\n      \n      // 色を遅延率に応じて変更\n      if (rate > 20) ctx.fillStyle = '#ef4444';\n      else if (rate > 15) ctx.fillStyle = '#f59e0b';\n      else ctx.fillStyle = '#22c55e';\n      \n      ctx.fillRect(x + 10, y, barWidth - 20, barHeight);\n      \n      // 値表示\n      ctx.fillStyle = '#9fb0d1';\n      ctx.font = '12px sans-serif';\n      ctx.textAlign = 'center';\n      ctx.fillText(`${rate}%`, x + barWidth/2, y - 5);\n      ctx.fillText(quarters[index], x + barWidth/2, height - 5);\n    });\n  }\n  \n  // 初期データ読み込みと描画\n  async function loadInitialData() {\n    try {\n      const stats = await window.aivicApi.list(statsTableIndex);\n      if (stats) {\n        renderSupplierComparison(stats);\n      } else {\n        // APIが利用できない場合はサンプルデータを使用\n        const sampleStats = tables[statsTableIndex]?.records || [];\n        renderSupplierComparison(sampleStats);\n      }\n    } catch (error) {\n      console.error('データ読み込みエラー:', error);\n      const sampleStats = tables[statsTableIndex]?.records || [];\n      renderSupplierComparison(sampleStats);\n    }\n    \n    // チャート描画\n    setTimeout(() => {\n      drawTrendChart();\n      drawDistributionChart();\n      drawSeasonalChart();\n    }, 100);\n  }\n  \n  // 分析実行ボタン\n  container.querySelector('#btn-analyze').addEventListener('click', async () => {\n    const startDate = container.querySelector('#period-start').value;\n    const endDate = container.querySelector('#period-end').value;\n    const supplierId = container.querySelector('#supplier-filter').value;\n    \n    if (!startDate || !endDate) {\n      alert('分析期間を選択してください');\n      return;\n    }\n    \n    // 分析実行（実際の実装では統計分析画面に遷移）\n    window.showScreen('scr-1780996954228');\n  });\n  \n  // CSV出力\n  container.querySelector('#btn-export-csv').addEventListener('click', async () => {\n    try {\n      const stats = await window.aivicApi.list(statsTableIndex);\n      const data = stats || tables[statsTableIndex]?.records || [];\n      \n      const headers = ['仕入先名', '発注件数', '納期遵守率', '平均納期日数', '平均遅延日数', '総合評価スコア'];\n      const csvContent = '\\uFEFF' + [\n        headers.join(','),\n        ...data.map(stat => {\n          const supplier = tables[supplierTableIndex]?.records?.find(s => s.id === stat.仕入先ID) || {};\n          return [\n            `\"${supplier.仕入先名 || '不明'}\"`,\n            stat.総発注件数 || 0,\n            stat.納期遵守率 || 0,\n            Math.round(Math.random() * 15 + 8),\n            Math.round(Math.random() * 5 + 1),\n            stat.総合評価スコア || 0\n          ].join(',');\n        })\n      ].join('\\n');\n      \n      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });\n      const link = document.createElement('a');\n      link.href = URL.createObjectURL(blob);\n      link.download = '仕入先納期分析結果.csv';\n      link.click();\n    } catch (error) {\n      console.error('CSV出力エラー:', error);\n    }\n  });\n  \n  // 行レベル操作（詳細ボタン）\n  container.addEventListener('click', (e) => {\n    const detailBtn = e.target.closest('.detail-btn');\n    if (detailBtn) {\n      const id = detailBtn.dataset.id;\n      // 詳細分析画面に遷移\n      window.showScreen('scr-1780996954228');\n    }\n  });\n  \n  // 初期化実行\n  loadInitialData();\n}",
+      "method": "ai"
+    }
+  ],
+  "tableDefinitions": [
+    {
+      "tableName": "ユーザー",
+      "purpose": "生産管理システムを利用するユーザーの基本情報と認証情報を管理する",
+      "columns": [
+        {
+          "name": "ユーザーID",
+          "type": "uuid",
+          "required": true,
+          "description": "ユーザーを一意に識別するID"
+        },
+        {
+          "name": "ユーザー名",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "システムログイン用のユーザー名"
+        },
+        {
+          "name": "パスワードハッシュ",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "暗号化されたパスワード"
+        },
+        {
+          "name": "氏名",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "ユーザーの実名"
+        },
+        {
+          "name": "メールアドレス",
+          "type": "varchar(100)",
+          "required": false,
+          "description": "連絡用メールアドレス"
+        },
+        {
+          "name": "部署",
+          "type": "varchar(100)",
+          "required": false,
+          "description": "所属部署名"
+        },
+        {
+          "name": "役職",
+          "type": "varchar(100)",
+          "required": false,
+          "description": "役職名"
+        },
+        {
+          "name": "権限レベル",
+          "type": "integer",
+          "required": true,
+          "description": "システム操作権限レベル（1:参照のみ、2:入力、3:管理者等）"
+        },
+        {
+          "name": "有効フラグ",
+          "type": "boolean",
+          "required": true,
+          "description": "アカウントの有効/無効状態"
+        },
+        {
+          "name": "最終ログイン日時",
+          "type": "timestamp",
+          "required": false,
+          "description": "最後にログインした日時"
+        },
+        {
+          "name": "作成日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード作成日時"
+        },
+        {
+          "name": "更新日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード最終更新日時"
+        },
+        {
+          "name": "作成者",
+          "type": "uuid",
+          "required": true,
+          "description": "レコードを作成したユーザーのID"
+        }
+      ]
+    },
+    {
+      "tableName": "商品",
+      "purpose": "納期管理システムで扱う商品の基本情報を管理するマスターテーブル",
+      "columns": [
+        {
+          "name": "商品ID",
+          "type": "uuid",
+          "required": true,
+          "description": "商品の一意識別子（主キー）"
+        },
+        {
+          "name": "商品コード",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "商品の業務用コード（検索・表示用）"
+        },
+        {
+          "name": "商品名",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "商品の名称"
+        },
+        {
+          "name": "商品説明",
+          "type": "text",
+          "required": false,
+          "description": "商品の詳細説明"
+        },
+        {
+          "name": "標準納期日数",
+          "type": "integer",
+          "required": true,
+          "description": "この商品の標準的な納期日数"
+        },
+        {
+          "name": "単価",
+          "type": "integer",
+          "required": true,
+          "description": "商品の標準単価（円）"
+        },
+        {
+          "name": "単位",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "商品の販売単位（個、kg、m等）"
+        },
+        {
+          "name": "有効フラグ",
+          "type": "boolean",
+          "required": true,
+          "description": "商品が販売可能かどうか"
+        },
+        {
+          "name": "作成日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード作成日時"
+        },
+        {
+          "name": "更新日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード最終更新日時"
+        },
+        {
+          "name": "作成者ID",
+          "type": "uuid",
+          "required": true,
+          "description": "レコード作成者のユーザーID"
+        }
+      ]
+    },
+    {
+      "tableName": "納期実績",
+      "purpose": "発注した商品の納期予定と実際の納期を記録し、仕入先の納期パフォーマンスを管理する",
+      "columns": [
+        {
+          "name": "納期実績ID",
+          "type": "uuid",
+          "required": true,
+          "description": "納期実績の一意識別子"
+        },
+        {
+          "name": "発注履歴ID",
+          "type": "uuid",
+          "required": true,
+          "description": "発注履歴テーブルへの外部キー"
+        },
+        {
+          "name": "商品ID",
+          "type": "uuid",
+          "required": true,
+          "description": "商品マスタへの外部キー"
+        },
+        {
+          "name": "仕入先ID",
+          "type": "uuid",
+          "required": true,
+          "description": "仕入先マスタへの外部キー"
+        },
+        {
+          "name": "発注数量",
+          "type": "integer",
+          "required": true,
+          "description": "発注した数量"
+        },
+        {
+          "name": "納期予定日",
+          "type": "timestamp",
+          "required": true,
+          "description": "仕入先が約束した納期日"
+        },
+        {
+          "name": "納期実績日",
+          "type": "timestamp",
+          "required": false,
+          "description": "実際に納品された日時"
+        },
+        {
+          "name": "納品数量",
+          "type": "integer",
+          "required": false,
+          "description": "実際に納品された数量"
+        },
+        {
+          "name": "納期遅延日数",
+          "type": "integer",
+          "required": false,
+          "description": "予定日からの遅延日数（マイナスは早期納品）"
+        },
+        {
+          "name": "納品ステータス",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "納品状況（発注中/一部納品/完納/キャンセル等）"
+        },
+        {
+          "name": "備考",
+          "type": "text",
+          "required": false,
+          "description": "納期に関する特記事項や遅延理由等"
+        },
+        {
+          "name": "作成日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード作成日時"
+        },
+        {
+          "name": "更新日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード最終更新日時"
+        },
+        {
+          "name": "作成者",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "レコード作成者"
+        }
+      ]
+    },
+    {
+      "tableName": "仕入先",
+      "purpose": "仕入先の基本情報と取引条件を管理し、商品調達と納期管理を支援する",
+      "columns": [
+        {
+          "name": "仕入先ID",
+          "type": "uuid",
+          "required": true,
+          "description": "仕入先の一意識別子（主キー）"
+        },
+        {
+          "name": "仕入先コード",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "業務で使用する仕入先識別コード"
+        },
+        {
+          "name": "仕入先名",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "仕入先の正式名称"
+        },
+        {
+          "name": "仕入先名カナ",
+          "type": "varchar(100)",
+          "required": false,
+          "description": "検索・ソート用のカナ表記"
+        },
+        {
+          "name": "郵便番号",
+          "type": "varchar(100)",
+          "required": false,
+          "description": "仕入先の郵便番号"
+        },
+        {
+          "name": "住所",
+          "type": "text",
+          "required": false,
+          "description": "仕入先の住所"
+        },
+        {
+          "name": "電話番号",
+          "type": "varchar(100)",
+          "required": false,
+          "description": "仕入先の電話番号"
+        },
+        {
+          "name": "FAX番号",
+          "type": "varchar(100)",
+          "required": false,
+          "description": "仕入先のFAX番号"
+        },
+        {
+          "name": "メールアドレス",
+          "type": "varchar(100)",
+          "required": false,
+          "description": "仕入先の連絡用メールアドレス"
+        },
+        {
+          "name": "担当者名",
+          "type": "varchar(100)",
+          "required": false,
+          "description": "仕入先の担当者名"
+        },
+        {
+          "name": "支払条件",
+          "type": "varchar(100)",
+          "required": false,
+          "description": "支払サイトや支払方法等の取引条件"
+        },
+        {
+          "name": "標準納期日数",
+          "type": "integer",
+          "required": false,
+          "description": "標準的な納期日数"
+        },
+        {
+          "name": "取引開始日",
+          "type": "timestamp",
+          "required": false,
+          "description": "取引を開始した日付"
+        },
+        {
+          "name": "取引状態",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "取引可能/停止等の状態"
+        },
+        {
+          "name": "備考",
+          "type": "text",
+          "required": false,
+          "description": "その他の特記事項"
+        },
+        {
+          "name": "作成日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード作成日時"
+        },
+        {
+          "name": "更新日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード最終更新日時"
+        },
+        {
+          "name": "作成者ID",
+          "type": "uuid",
+          "required": true,
+          "description": "レコード作成者のユーザーID"
+        },
+        {
+          "name": "更新者ID",
+          "type": "uuid",
+          "required": true,
+          "description": "レコード最終更新者のユーザーID"
+        }
+      ]
+    },
+    {
+      "tableName": "発注",
+      "purpose": "仕入先への商品発注情報を管理し、発注から納期までの業務プロセスを追跡する",
+      "columns": [
+        {
+          "name": "発注ID",
+          "type": "uuid",
+          "required": true,
+          "description": "発注を一意に識別するID（主キー）"
+        },
+        {
+          "name": "発注番号",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "業務で使用する発注番号"
+        },
+        {
+          "name": "仕入先ID",
+          "type": "uuid",
+          "required": true,
+          "description": "発注先の仕入先を識別するID"
+        },
+        {
+          "name": "商品ID",
+          "type": "uuid",
+          "required": true,
+          "description": "発注する商品を識別するID"
+        },
+        {
+          "name": "発注数量",
+          "type": "integer",
+          "required": true,
+          "description": "発注する商品の数量"
+        },
+        {
+          "name": "単価",
+          "type": "integer",
+          "required": true,
+          "description": "商品の単価（円）"
+        },
+        {
+          "name": "発注金額",
+          "type": "integer",
+          "required": true,
+          "description": "発注の総金額（円）"
+        },
+        {
+          "name": "発注日",
+          "type": "timestamp",
+          "required": true,
+          "description": "発注を行った日時"
+        },
+        {
+          "name": "希望納期",
+          "type": "timestamp",
+          "required": true,
+          "description": "納品を希望する日時"
+        },
+        {
+          "name": "回答納期",
+          "type": "timestamp",
+          "required": false,
+          "description": "仕入先から回答された納期"
+        },
+        {
+          "name": "発注ステータス",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "発注の状態（発注済み、確認済み、出荷済み、完了等）"
+        },
+        {
+          "name": "備考",
+          "type": "text",
+          "required": false,
+          "description": "発注に関する特記事項や備考"
+        },
+        {
+          "name": "作成者ID",
+          "type": "uuid",
+          "required": true,
+          "description": "発注を作成したユーザーのID"
+        },
+        {
+          "name": "作成日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコードの作成日時"
+        },
+        {
+          "name": "更新日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコードの最終更新日時"
+        }
+      ]
+    },
+    {
+      "tableName": "発注明細",
+      "purpose": "発注における個別商品の詳細情報を管理し、商品別の数量・単価・金額を記録する",
+      "columns": [
+        {
+          "name": "発注明細ID",
+          "type": "uuid",
+          "required": true,
+          "description": "発注明細の一意識別子"
+        },
+        {
+          "name": "発注ID",
+          "type": "uuid",
+          "required": true,
+          "description": "親発注への外部キー"
+        },
+        {
+          "name": "商品ID",
+          "type": "uuid",
+          "required": true,
+          "description": "発注対象商品への外部キー"
+        },
+        {
+          "name": "明細番号",
+          "type": "integer",
+          "required": true,
+          "description": "発注内での明細の順序番号"
+        },
+        {
+          "name": "発注数量",
+          "type": "integer",
+          "required": true,
+          "description": "発注する商品の数量"
+        },
+        {
+          "name": "単価",
+          "type": "integer",
+          "required": true,
+          "description": "商品の単価（円）"
+        },
+        {
+          "name": "明細金額",
+          "type": "integer",
+          "required": true,
+          "description": "明細の合計金額（数量×単価）"
+        },
+        {
+          "name": "納期希望日",
+          "type": "timestamp",
+          "required": false,
+          "description": "この明細の納期希望日"
+        },
+        {
+          "name": "備考",
+          "type": "text",
+          "required": false,
+          "description": "明細に関する特記事項"
+        },
+        {
+          "name": "作成日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "明細作成日時"
+        },
+        {
+          "name": "更新日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "明細最終更新日時"
+        },
+        {
+          "name": "作成者ID",
+          "type": "uuid",
+          "required": true,
+          "description": "明細作成者のユーザーID"
+        }
+      ]
+    },
+    {
+      "tableName": "統計分析結果",
+      "purpose": "仕入先の納期実績、品質、コストなどの統計分析結果を保存し、仕入先評価や発注判断に活用する",
+      "columns": [
+        {
+          "name": "統計分析結果ID",
+          "type": "uuid",
+          "required": true,
+          "description": "統計分析結果の一意識別子"
+        },
+        {
+          "name": "仕入先ID",
+          "type": "uuid",
+          "required": true,
+          "description": "分析対象の仕入先ID"
+        },
+        {
+          "name": "分析期間開始日",
+          "type": "timestamp",
+          "required": true,
+          "description": "統計分析の対象期間開始日"
+        },
+        {
+          "name": "分析期間終了日",
+          "type": "timestamp",
+          "required": true,
+          "description": "統計分析の対象期間終了日"
+        },
+        {
+          "name": "分析種別",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "納期実績分析、品質分析、コスト分析等の分析種別"
+        },
+        {
+          "name": "対象商品ID",
+          "type": "uuid",
+          "required": false,
+          "description": "特定商品の分析の場合の商品ID"
+        },
+        {
+          "name": "総発注件数",
+          "type": "integer",
+          "required": true,
+          "description": "分析期間内の総発注件数"
+        },
+        {
+          "name": "納期遵守率",
+          "type": "integer",
+          "required": false,
+          "description": "納期を守った発注の割合（パーセント）"
+        },
+        {
+          "name": "平均納期遅延日数",
+          "type": "integer",
+          "required": false,
+          "description": "納期遅延の平均日数"
+        },
+        {
+          "name": "品質スコア",
+          "type": "integer",
+          "required": false,
+          "description": "品質評価スコア（0-100）"
+        },
+        {
+          "name": "コストパフォーマンス指標",
+          "type": "integer",
+          "required": false,
+          "description": "コストパフォーマンス指標（0-100）"
+        },
+        {
+          "name": "総合評価スコア",
+          "type": "integer",
+          "required": true,
+          "description": "納期、品質、コストを総合した評価スコア（0-100）"
+        },
+        {
+          "name": "推奨アクション",
+          "type": "varchar(100)",
+          "required": false,
+          "description": "継続取引推奨、条件付き取引、取引見直し等の推奨アクション"
+        },
+        {
+          "name": "分析コメント",
+          "type": "text",
+          "required": false,
+          "description": "分析結果に対する詳細コメント"
+        },
+        {
+          "name": "作成日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード作成日時"
+        },
+        {
+          "name": "作成者ID",
+          "type": "uuid",
+          "required": true,
+          "description": "分析を実行したユーザーID"
+        },
+        {
+          "name": "更新日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード最終更新日時"
+        }
+      ]
+    }
+  ],
+  "presetSeedData": {}
+}

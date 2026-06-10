@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>在庫実績照会画面 - AAA</title>
+  <script>
+window.AIVIC_API_URL = "https://mkwmoife37uqyv4zhy4yhweozq0oddxn.lambda-url.us-east-1.on.aws/";
+window.AIVIC_APP_ID = "session-1780478987683";
+window.AIVIC_SYSTEM_NAME = "在庫管理システム";
+window.AIVIC_TABLES = [{"tableName":"ユーザー","purpose":"生産管理システムを利用するユーザーの基本情報と認証情報を管理する","columns":[{"name":"ユーザーID","type":"uuid","required":true,"description":"ユーザーを一意に識別するID"},{"name":"ユーザー名","type":"varchar(100)","required":true,"description":"システムログイン用のユーザー名"},{"name":"パスワードハッシュ","type":"varchar(100)","required":true,"description":"暗号化されたパスワード"},{"name":"氏名","type":"varchar(100)","required":true,"description":"ユーザーの実名"},{"name":"メールアドレス","type":"varchar(100)","required":false,"description":"連絡用メールアドレス"},{"name":"部署","type":"varchar(100)","required":false,"description":"所属部署名"},{"name":"役職","type":"varchar(100)","required":false,"description":"役職名"},{"name":"権限レベル","type":"integer","required":true,"description":"システム操作権限レベル（1:参照のみ、2:入力、3:管理者等）"},{"name":"有効フラグ","type":"boolean","required":true,"description":"アカウントの有効/無効状態"},{"name":"最終ログイン日時","type":"timestamp","required":false,"description":"最後にログインした日時"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"uuid","required":true,"description":"レコードを作成したユーザーのID"}]},{"tableName":"商品マスタ","purpose":"商品の基本情報を管理し、在庫管理や販売管理の基準となるマスタデータを提供する","columns":[{"name":"商品ID","type":"uuid","required":true,"description":"商品を一意に識別するID（主キー）"},{"name":"商品コード","type":"varchar(100)","required":true,"description":"商品の業務用コード（ユニーク）"},{"name":"商品名","type":"varchar(100)","required":true,"description":"商品の名称"},{"name":"商品説明","type":"text","required":false,"description":"商品の詳細説明"},{"name":"カテゴリ","type":"varchar(100)","required":false,"description":"商品のカテゴリ分類"},{"name":"単位","type":"varchar(100)","required":true,"description":"在庫管理の単位（個、箱、kg等）"},{"name":"標準価格","type":"integer","required":false,"description":"商品の標準販売価格"},{"name":"仕入価格","type":"integer","required":false,"description":"商品の仕入価格"},{"name":"安全在庫数","type":"integer","required":false,"description":"最低限保持すべき在庫数"},{"name":"発注点","type":"integer","required":false,"description":"発注をかけるべき在庫数の閾値"},{"name":"有効フラグ","type":"boolean","required":true,"description":"商品が有効かどうか（論理削除用）"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"uuid","required":true,"description":"レコード作成者のユーザーID"},{"name":"更新者","type":"uuid","required":true,"description":"レコード最終更新者のユーザーID"}]},{"tableName":"倉庫マスタ","purpose":"倉庫の基本情報を管理し、在庫管理における保管場所の識別と運用情報を提供する","columns":[{"name":"倉庫ID","type":"uuid","required":true,"description":"倉庫を一意に識別するプライマリキー"},{"name":"倉庫コード","type":"varchar(100)","required":true,"description":"業務で使用する倉庫の識別コード（ユニーク）"},{"name":"倉庫名","type":"varchar(100)","required":true,"description":"倉庫の名称"},{"name":"住所","type":"text","required":false,"description":"倉庫の所在地"},{"name":"電話番号","type":"varchar(100)","required":false,"description":"倉庫の連絡先電話番号"},{"name":"責任者名","type":"varchar(100)","required":false,"description":"倉庫の管理責任者名"},{"name":"有効フラグ","type":"boolean","required":true,"description":"倉庫が使用可能かどうかを示すフラグ"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコードを作成したユーザーのID"},{"name":"更新者ID","type":"uuid","required":true,"description":"レコードを最後に更新したユーザーのID"}]},{"tableName":"在庫","purpose":"商品の倉庫別在庫数量と在庫状態を管理する","columns":[{"name":"在庫ID","type":"uuid","required":true,"description":"在庫レコードの一意識別子"},{"name":"商品ID","type":"uuid","required":true,"description":"商品マスタへの外部キー"},{"name":"倉庫ID","type":"uuid","required":true,"description":"倉庫マスタへの外部キー"},{"name":"現在庫数","type":"integer","required":true,"description":"現在の在庫数量"},{"name":"引当済数量","type":"integer","required":true,"description":"出荷予定で引当済みの数量"},{"name":"発注点","type":"integer","required":false,"description":"自動発注を行う在庫数の閾値"},{"name":"最大在庫数","type":"integer","required":false,"description":"保管可能な最大在庫数"},{"name":"最終入庫日","type":"timestamp","required":false,"description":"最後に入庫があった日時"},{"name":"最終出庫日","type":"timestamp","required":false,"description":"最後に出庫があった日時"},{"name":"在庫状態","type":"varchar(100)","required":true,"description":"在庫の状態（正常/欠品/過剰/停止等）"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者のユーザーID"},{"name":"更新者ID","type":"uuid","required":true,"description":"レコード最終更新者のユーザーID"}]},{"tableName":"入出庫履歴","purpose":"商品の入庫・出庫の履歴を記録し、在庫変動の追跡と監査証跡を提供する","columns":[{"name":"履歴ID","type":"uuid","required":true,"description":"入出庫履歴の一意識別子"},{"name":"商品ID","type":"uuid","required":true,"description":"商品マスタへの外部キー"},{"name":"倉庫ID","type":"uuid","required":true,"description":"倉庫マスタへの外部キー"},{"name":"入出庫区分","type":"varchar(100)","required":true,"description":"入庫・出庫の区分（入庫/出庫/調整等）"},{"name":"数量","type":"integer","required":true,"description":"入出庫数量（出庫時は負の値）"},{"name":"処理前在庫数","type":"integer","required":true,"description":"入出庫処理前の在庫数量"},{"name":"処理後在庫数","type":"integer","required":true,"description":"入出庫処理後の在庫数量"},{"name":"理由コード","type":"varchar(100)","required":false,"description":"入出庫の理由（販売/仕入/返品/調整等）"},{"name":"備考","type":"text","required":false,"description":"入出庫に関する補足情報"},{"name":"処理日時","type":"timestamp","required":true,"description":"入出庫が実際に処理された日時"},{"name":"処理者ID","type":"uuid","required":true,"description":"入出庫処理を実行したユーザーID"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"}]},{"tableName":"棚卸実施","purpose":"棚卸作業の実施記録を管理し、在庫の実地調査結果を記録する","columns":[{"name":"棚卸実施ID","type":"uuid","required":true,"description":"棚卸実施の一意識別子（主キー）"},{"name":"倉庫ID","type":"uuid","required":true,"description":"棚卸を実施した倉庫の識別子"},{"name":"商品ID","type":"uuid","required":true,"description":"棚卸対象商品の識別子"},{"name":"帳簿在庫数","type":"integer","required":true,"description":"棚卸実施時点でのシステム上の在庫数量"},{"name":"実地在庫数","type":"integer","required":true,"description":"実際に数えた在庫数量"},{"name":"差異数量","type":"integer","required":true,"description":"実地在庫数 - 帳簿在庫数の差異"},{"name":"棚卸実施日","type":"timestamp","required":true,"description":"棚卸作業を実施した日時"},{"name":"実施者ID","type":"uuid","required":true,"description":"棚卸作業を実施したユーザーの識別子"},{"name":"承認者ID","type":"uuid","required":false,"description":"棚卸結果を承認したユーザーの識別子"},{"name":"承認日時","type":"timestamp","required":false,"description":"棚卸結果が承認された日時"},{"name":"ステータス","type":"varchar(100)","required":true,"description":"棚卸の状態（実施中/完了/承認済み等）"},{"name":"備考","type":"text","required":false,"description":"棚卸実施時の特記事項や差異の原因等"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者のユーザーID"}]},{"tableName":"棚卸実績","purpose":"棚卸実施時の各商品の実際の在庫数量と理論在庫との差異を記録し、在庫調整の根拠データを管理する","columns":[{"name":"棚卸実績ID","type":"uuid","required":true,"description":"棚卸実績の一意識別子（主キー）"},{"name":"棚卸実施ID","type":"uuid","required":true,"description":"棚卸実施テーブルへの外部キー"},{"name":"商品ID","type":"uuid","required":true,"description":"商品マスタへの外部キー"},{"name":"倉庫ID","type":"uuid","required":true,"description":"倉庫マスタへの外部キー"},{"name":"理論在庫数","type":"integer","required":true,"description":"システム上の理論在庫数量"},{"name":"実在庫数","type":"integer","required":true,"description":"実際にカウントした在庫数量"},{"name":"差異数","type":"integer","required":true,"description":"実在庫数 - 理論在庫数の差異"},{"name":"調整済フラグ","type":"boolean","required":true,"description":"在庫調整処理が完了しているかのフラグ"},{"name":"備考","type":"text","required":false,"description":"差異の原因や特記事項"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"棚卸実績を登録したユーザーID"}]},{"tableName":"棚卸差異","purpose":"棚卸実施時に発見された帳簿在庫と実地在庫の差異を記録し、差異原因の分析と在庫調整の根拠として管理する","columns":[{"name":"棚卸差異ID","type":"uuid","required":true,"description":"棚卸差異レコードの一意識別子"},{"name":"棚卸実施ID","type":"uuid","required":true,"description":"関連する棚卸実施への外部キー"},{"name":"棚卸実績ID","type":"uuid","required":true,"description":"関連する棚卸実績への外部キー"},{"name":"商品ID","type":"uuid","required":true,"description":"差異が発生した商品への外部キー"},{"name":"倉庫ID","type":"uuid","required":true,"description":"差異が発生した倉庫への外部キー"},{"name":"帳簿在庫数","type":"integer","required":true,"description":"システム上の理論在庫数量"},{"name":"実地在庫数","type":"integer","required":true,"description":"実際に数えた在庫数量"},{"name":"差異数量","type":"integer","required":true,"description":"実地在庫数 - 帳簿在庫数の差異"},{"name":"差異区分","type":"varchar(100)","required":true,"description":"過不足、品違い、破損等の差異種別"},{"name":"差異原因","type":"varchar(100)","required":false,"description":"入力ミス、紛失、盗難等の推定原因"},{"name":"調整済フラグ","type":"boolean","required":true,"description":"在庫調整処理が完了しているかの状態"},{"name":"備考","type":"text","required":false,"description":"差異に関する詳細情報や特記事項"},{"name":"作成日時","type":"timestamp","required":true,"description":"差異レコードの作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"差異レコードの最終更新日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"差異を登録したユーザーID"}]}];
+window.AIVIC_PRESET_SEED = {};
+window.AIVIC_PAGE_SCREEN_ID = "scr-1780995594850";
+window.AIVIC_PAGE_INIT_JS = "function(container, apiUrl, tables) {\n  // テーブルインデックス定義\n  const INVENTORY_TABLE = 3; // 在庫テーブル\n  const HISTORY_TABLE = 4;   // 入出庫履歴テーブル\n  const STOCKTAKING_DIFF_TABLE = 8; // 棚卸差異テーブル\n  \n  // 倉庫マスタから選択肢を動的生成\n  const warehouseSelect = container.querySelector('#warehouse-select');\n  if (tables[2] && tables[2].records) {\n    tables[2].records.forEach(warehouse => {\n      if (warehouse.有効フラグ) {\n        const option = document.createElement('option');\n        option.value = warehouse.倉庫コード;\n        option.textContent = warehouse.倉庫名;\n        warehouseSelect.appendChild(option);\n      }\n    });\n  }\n\n  // 在庫実績一覧の再描画関数\n  function renderInventoryRows(rows) {\n    const tbody = container.querySelector('#inventory-tbody');\n    tbody.innerHTML = rows.map(row => {\n      const productInfo = getProductInfo(row.商品ID);\n      const warehouseInfo = getWarehouseInfo(row.倉庫ID);\n      const statusColor = getStatusColor(row.在庫状態);\n      \n      return `\n        <tr data-id=\"${row.在庫ID}\" style=\"cursor: pointer;\">\n          <td>${productInfo.商品コード || ''}</td>\n          <td>${productInfo.商品名 || ''}</td>\n          <td>${warehouseInfo.倉庫名 || ''}</td>\n          <td class=\"text-right\">${row.現在庫数?.toLocaleString() || '0'}</td>\n          <td class=\"text-right\">${row.引当済数量?.toLocaleString() || '0'}</td>\n          <td><span class=\"px-2 py-1 text-xs rounded\" style=\"background: ${statusColor}; color: #fff;\">${row.在庫状態 || ''}</span></td>\n          <td>${formatDate(row.最終入庫日)}</td>\n          <td>${formatDate(row.最終出庫日)}</td>\n          <td>\n            <button class=\"action-btn secondary text-xs px-2 py-1 history-btn\" data-id=\"${row.在庫ID}\" data-product-id=\"${row.商品ID}\">履歴</button>\n            <button class=\"action-btn secondary text-xs px-2 py-1 diff-btn\" data-id=\"${row.在庫ID}\" data-product-id=\"${row.商品ID}\" data-warehouse-id=\"${row.倉庫ID}\">差異</button>\n          </td>\n        </tr>\n      `;\n    }).join('');\n    \n    updateSummaryCards(rows);\n  }\n\n  // 商品情報取得\n  function getProductInfo(productId) {\n    if (!tables[1] || !tables[1].records) return {};\n    return tables[1].records.find(p => p.商品ID === productId) || {};\n  }\n\n  // 倉庫情報取得\n  function getWarehouseInfo(warehouseId) {\n    if (!tables[2] || !tables[2].records) return {};\n    return tables[2].records.find(w => w.倉庫ID === warehouseId) || {};\n  }\n\n  // 在庫状態の色分け\n  function getStatusColor(status) {\n    switch(status) {\n      case '正常': return 'var(--primary)';\n      case '欠品': return '#e74c3c';\n      case '過剰': return '#f39c12';\n      case '停止': return '#95a5a6';\n      default: return 'var(--primary)';\n    }\n  }\n\n  // 日付フォーマット\n  function formatDate(dateStr) {\n    if (!dateStr) return '';\n    const date = new Date(dateStr);\n    return date.toLocaleDateString('ja-JP');\n  }\n\n  // サマリーカード更新\n  function updateSummaryCards(rows) {\n    const currentStock = rows.reduce((sum, row) => sum + (row.現在庫数 || 0), 0);\n    container.querySelector('#current-stock').textContent = currentStock.toLocaleString();\n    \n    // 入出庫履歴から集計\n    if (tables[HISTORY_TABLE] && tables[HISTORY_TABLE].records) {\n      const histories = tables[HISTORY_TABLE].records;\n      const totalIn = histories.filter(h => h.入出庫区分 === '入庫').reduce((sum, h) => sum + (h.数量 || 0), 0);\n      const totalOut = Math.abs(histories.filter(h => h.入出庫区分 === '出庫').reduce((sum, h) => sum + (h.数量 || 0), 0));\n      \n      container.querySelector('#total-in').textContent = totalIn.toLocaleString();\n      container.querySelector('#total-out').textContent = totalOut.toLocaleString();\n    }\n    \n    // 棚卸差異から集計\n    if (tables[STOCKTAKING_DIFF_TABLE] && tables[STOCKTAKING_DIFF_TABLE].records) {\n      const totalDiff = tables[STOCKTAKING_DIFF_TABLE].records.reduce((sum, d) => sum + Math.abs(d.差異数量 || 0), 0);\n      container.querySelector('#inventory-diff').textContent = totalDiff.toLocaleString();\n    }\n  }\n\n  // 初期データ表示\n  if (tables[INVENTORY_TABLE] && tables[INVENTORY_TABLE].records) {\n    renderInventoryRows(tables[INVENTORY_TABLE].records);\n  }\n\n  // 検索ボタン\n  container.querySelector('#btn-search').addEventListener('click', async () => {\n    const productCode = container.querySelector('#product-code').value.trim();\n    const productName = container.querySelector('#product-name').value.trim();\n    const warehouseCode = container.querySelector('#warehouse-select').value;\n    const startDate = container.querySelector('#start-date').value;\n    const endDate = container.querySelector('#end-date').value;\n\n    const rows = await window.aivicApi.list(INVENTORY_TABLE);\n    if (!rows) return;\n\n    let filteredRows = rows.filter(row => {\n      const productInfo = getProductInfo(row.商品ID);\n      const warehouseInfo = getWarehouseInfo(row.倉庫ID);\n      \n      if (productCode && !productInfo.商品コード?.includes(productCode)) return false;\n      if (productName && !productInfo.商品名?.includes(productName)) return false;\n      if (warehouseCode && warehouseInfo.倉庫コード !== warehouseCode) return false;\n      \n      if (startDate) {\n        const lastInDate = new Date(row.最終入庫日);\n        if (lastInDate < new Date(startDate)) return false;\n      }\n      if (endDate) {\n        const lastOutDate = new Date(row.最終出庫日);\n        if (lastOutDate > new Date(endDate)) return false;\n      }\n      \n      return true;\n    });\n\n    renderInventoryRows(filteredRows);\n  });\n\n  // クリアボタン\n  container.querySelector('#btn-clear').addEventListener('click', () => {\n    container.querySelector('#product-code').value = '';\n    container.querySelector('#product-name').value = '';\n    container.querySelector('#warehouse-select').value = '';\n    container.querySelector('#start-date').value = '';\n    container.querySelector('#end-date').value = '';\n    \n    if (tables[INVENTORY_TABLE] && tables[INVENTORY_TABLE].records) {\n      renderInventoryRows(tables[INVENTORY_TABLE].records);\n    }\n  });\n\n  // CSVエクスポートボタン\n  container.querySelector('#btn-export').addEventListener('click', async () => {\n    const rows = await window.aivicApi.list(INVENTORY_TABLE);\n    if (!rows) return;\n\n    const headers = ['商品コード', '商品名', '倉庫名', '現在庫数', '引当済数量', '在庫状態', '最終入庫日', '最終出庫日'];\n    const csvData = rows.map(row => {\n      const productInfo = getProductInfo(row.商品ID);\n      const warehouseInfo = getWarehouseInfo(row.倉庫ID);\n      return [\n        productInfo.商品コード || '',\n        productInfo.商品名 || '',\n        warehouseInfo.倉庫名 || '',\n        row.現在庫数 || 0,\n        row.引当済数量 || 0,\n        row.在庫状態 || '',\n        formatDate(row.最終入庫日),\n        formatDate(row.最終出庫日)\n      ];\n    });\n\n    const csvContent = '\\uFEFF' + [headers, ...csvData].map(row => \n      row.map(field => `\"${field}\"`).join(',')\n    ).join('\\n');\n\n    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });\n    const link = document.createElement('a');\n    link.href = URL.createObjectURL(blob);\n    link.download = `在庫実績_${new Date().toISOString().slice(0, 10)}.csv`;\n    link.click();\n  });\n\n  // 履歴ボタンクリック\n  container.addEventListener('click', async (e) => {\n    const historyBtn = e.target.closest('.history-btn');\n    if (historyBtn) {\n      const productId = historyBtn.dataset.productId;\n      const productInfo = getProductInfo(productId);\n      \n      container.querySelector('#modal-product-info').textContent = \n        `${productInfo.商品コード} - ${productInfo.商品名}`;\n      \n      const histories = await window.aivicApi.list(HISTORY_TABLE);\n      if (histories) {\n        const productHistories = histories.filter(h => h.商品ID === productId);\n        const historyTbody = container.querySelector('#history-tbody');\n        historyTbody.innerHTML = productHistories.map(h => `\n          <tr>\n            <td>${new Date(h.処理日時).toLocaleString('ja-JP')}</td>\n            <td><span class=\"px-2 py-1 text-xs rounded\" style=\"background: ${h.入出庫区分 === '入庫' ? 'var(--primary)' : '#ff6a00'}; color: #fff;\">${h.入出庫区分}</span></td>\n            <td class=\"text-right\">${h.数量?.toLocaleString() || '0'}</td>\n            <td class=\"text-right\">${h.処理前在庫数?.toLocaleString() || '0'}</td>\n            <td class=\"text-right\">${h.処理後在庫数?.toLocaleString() || '0'}</td>\n            <td>${h.理由コード || ''}</td>\n            <td>${h.備考 || ''}</td>\n          </tr>\n        `).join('');\n      }\n      \n      container.querySelector('#history-modal').style.display = 'flex';\n    }\n\n    // 差異ボタンクリック\n    const diffBtn = e.target.closest('.diff-btn');\n    if (diffBtn) {\n      const productId = diffBtn.dataset.productId;\n      const warehouseId = diffBtn.dataset.warehouseId;\n      const productInfo = getProductInfo(productId);\n      const warehouseInfo = getWarehouseInfo(warehouseId);\n      \n      container.querySelector('#diff-product-info').textContent = \n        `${productInfo.商品コード} - ${productInfo.商品名}`;\n      container.querySelector('#diff-warehouse-info').textContent = warehouseInfo.倉庫名;\n      \n      const diffs = await window.aivicApi.list(STOCKTAKING_DIFF_TABLE);\n      if (diffs) {\n        const productDiff = diffs.find(d => d.商品ID === productId && d.倉庫ID === warehouseId);\n        if (productDiff) {\n          container.querySelector('#diff-book-stock').textContent = productDiff.帳簿在庫数?.toLocaleString() || '0';\n          container.querySelector('#diff-actual-stock').textContent = productDiff.実地在庫数?.toLocaleString() || '0';\n          container.querySelector('#diff-quantity').textContent = productDiff.差異数量?.toLocaleString() || '0';\n          container.querySelector('#diff-reason').textContent = productDiff.差異原因 || '';\n          container.querySelector('#diff-notes').textContent = productDiff.備考 || '';\n        }\n      }\n      \n      container.querySelector('#diff-modal').style.display = 'flex';\n    }\n  });\n\n  // モーダル閉じる\n  container.querySelector('#close-history-modal').addEventListener('click', () => {\n    container.querySelector('#history-modal').style.display = 'none';\n  });\n\n  container.querySelector('#close-diff-modal').addEventListener('click', () => {\n    container.querySelector('#diff-modal').style.display = 'none';\n  });\n\n  // モーダル背景クリックで閉じる\n  container.querySelector('#history-modal').addEventListener('click', (e) => {\n    if (e.target.id === 'history-modal') {\n      container.querySelector('#history-modal').style.display = 'none';\n    }\n  });\n\n  container.querySelector('#diff-modal').addEventListener('click', (e) => {\n    if (e.target.id === 'diff-modal') {\n      container.querySelector('#diff-modal').style.display = 'none';\n    }\n  });\n}";
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+:root {
+  --primary: #8B4513;
+  --primary-hover: #A0522D;
+  --bg-main: #FAF7F2;
+  --bg-card: #F5F1E8;
+  --bg-sidebar: #F0EBE0;
+  --border: #D2B48C;
+  --text: #2F1B14;
+  --text-muted: #5D4037;
+  --top-bar-bg: #EFEBE2;
+  --top-bar-border: #C8A882;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg-main); color:var(--text); display:flex; flex-direction:column; height:100vh; overflow:hidden; }
+.top-bar { display:flex; align-items:center; gap:0; background:var(--top-bar-bg, var(--bg-sidebar)); border-bottom:1px solid var(--top-bar-border, var(--border)); padding:0 16px; height:48px; flex-shrink:0; }
+.top-bar .app-name { font-size:14px; font-weight:700; color:var(--text); margin-right:20px; white-space:nowrap; }
+.sys-tab { background:transparent; color:var(--text); opacity:0.6; border:none; border-bottom:2px solid transparent; padding:0 16px; height:48px; cursor:pointer; font-size:13px; white-space:nowrap; transition:color .15s, border-color .15s, opacity .15s; text-decoration:none; display:flex; align-items:center; }
+.sys-tab:hover { opacity:0.85; }
+.sys-tab.active, .sys-tab.aivic-active { color:var(--text); opacity:1; border-bottom-color:var(--primary); font-weight:600; }
+.app-body { display:flex; flex:1; overflow:hidden; }
+.sidebar { width:220px; background:var(--bg-sidebar); border-right:1px solid var(--border); padding:12px 8px; overflow-y:auto; flex-shrink:0; }
+.sidebar-sys-name { margin:0 0 8px; padding:4px 8px; font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.06em; }
+.nav-btn { display:block; width:100%; text-align:left; background:transparent; color:var(--text); opacity:0.65; border:none; border-radius:8px; padding:8px 12px; cursor:pointer; font-size:13px; margin-bottom:2px; transition:opacity .15s,background .15s; text-decoration:none; }
+.nav-btn:hover { background:var(--border); opacity:0.9; }
+.nav-btn.active, .nav-btn.aivic-active { background:var(--primary); color:#fff; opacity:1; }
+.main { flex:1; padding:16px; overflow-y:auto; }
+.card { border:1px solid var(--border); border-radius:12px; padding:16px; background:var(--bg-card); margin-bottom:12px; }
+.hidden { display:none !important; }
+.action-btn { background:var(--primary); color:#fff; border:0; border-radius:8px; padding:8px 14px; cursor:pointer; font-size:13px; }
+.action-btn:hover { background:var(--primary-hover, #1a55ef); }
+.action-btn.secondary { background:var(--border); color:var(--text); }
+.input { background:var(--bg-main); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:7px 10px; font-size:13px; }
+.muted { color:var(--text-muted); font-size:13px; }
+.table-wrap { overflow:auto; border:1px solid var(--border); border-radius:8px; }
+table { width:100%; border-collapse:collapse; }
+th, td { border-bottom:1px solid var(--border); padding:8px 10px; text-align:left; font-size:13px; }
+th { color:var(--text); background:var(--bg-sidebar); position:sticky; top:0; font-weight:600; }
+tr:hover { background:var(--bg-sidebar); cursor:pointer; }
+canvas { display:block; max-height:280px !important; }
+.chart-wrap, .chart-container, [class*="chart"] { position:relative; height:260px; max-height:280px; }
+@media (max-width:768px) {
+  .top-bar { overflow-x:auto; }
+  .app-body { flex-direction:column; }
+  .sidebar { width:100%; height:auto; display:flex; flex-wrap:wrap; gap:4px; padding:8px; }
+  .sidebar-sys-name { display:none; }
+  .nav-btn { width:auto; border-radius:999px; padding:5px 12px; }
+}
+  </style>
+</head>
+<body>
+<header class="top-bar">
+  <span class="app-name">AAA</span>
+    <a href="./scr-1780995483399.html" class="sys-tab active" data-aivic-nav-system="itg-2">在庫管理システム</a>
+    <a href="./scr-1780995849791.html" class="sys-tab" data-aivic-nav-system="itg-3">購買管理システム</a>
+    <a href="./scr-1780996145775.html" class="sys-tab" data-aivic-nav-system="itg-4">営業支援システム</a>
+    <a href="./scr-1780996340834.html" class="sys-tab" data-aivic-nav-system="itg-5">経営情報システム</a>
+    <a href="./scr-1780996536358.html" class="sys-tab" data-aivic-nav-system="itg-6">住宅建設会社向け納期管理ポータル</a>
+    <a href="./scr-1780996682301.html" class="sys-tab" data-aivic-nav-system="itg-7">仕入先向け情報共有システム</a>
+    <a href="./scr-1780996842878.html" class="sys-tab" data-aivic-nav-system="itg-1-br-1780551331069-2-1-1">納期管理システム</a>
+    <a href="./scr-1780996954228.html" class="sys-tab" data-aivic-nav-system="itg-2-br-1780551363302-2-1-2">仕入先情報ポータル</a>
+    <a href="./scr-1780995137049.html" class="sys-tab" data-aivic-nav-system="itg-1">生産管理システム</a>
+</header>
+<div class="app-body">
+  <aside class="sidebar">
+    <p class="sidebar-sys-name">在庫管理システム</p>
+      <a href="./scr-1780995483399.html" class="nav-btn" data-aivic-nav="scr-1780995483399">在庫入出庫登録画面</a>
+      <a href="./scr-1780995495139.html" class="nav-btn" data-aivic-nav="scr-1780995495139">棚卸実施管理画面</a>
+      <a href="./scr-1780995505965.html" class="nav-btn" data-aivic-nav="scr-1780995505965">棚卸実績入力画面</a>
+      <a href="./scr-1780995516133.html" class="nav-btn" data-aivic-nav="scr-1780995516133">棚卸差異分析画面</a>
+      <a href="./scr-1780995527376.html" class="nav-btn" data-aivic-nav="scr-1780995527376">在庫更新処理</a>
+      <a href="./scr-1780995536402.html" class="nav-btn" data-aivic-nav="scr-1780995536402">入出庫入力画面</a>
+      <a href="./scr-1780995547312.html" class="nav-btn" data-aivic-nav="scr-1780995547312">データ統合処理</a>
+      <a href="./scr-1780995557997.html" class="nav-btn" data-aivic-nav="scr-1780995557997">棚卸リスト出力画面</a>
+      <a href="./scr-1780995566409.html" class="nav-btn" data-aivic-nav="scr-1780995566409">差異分析処理</a>
+      <a href="./scr-1780995578605-wghb.html" class="nav-btn" data-aivic-nav="scr-1780995578605-wghb">製造履歴照会画面</a>
+      <a href="./scr-1780995584605.html" class="nav-btn" data-aivic-nav="scr-1780995584605">在庫確定処理</a>
+      <a href="./scr-1780995594850.html" class="nav-btn active" data-aivic-nav="scr-1780995594850">在庫実績照会画面</a>
+      <a href="./scr-1780995603768.html" class="nav-btn" data-aivic-nav="scr-1780995603768">在庫履歴照会画面</a>
+      <a href="./scr-1780995614537.html" class="nav-btn" data-aivic-nav="scr-1780995614537">在庫照会画面</a>
+      <a href="./scr-1780995624543.html" class="nav-btn" data-aivic-nav="scr-1780995624543">消費実績分析機能</a>
+      <a href="./scr-1780995634676.html" class="nav-btn" data-aivic-nav="scr-1780995634676">リアルタイム在庫照会画面</a>
+      <a href="./scr-1780995645045.html" class="nav-btn" data-aivic-nav="scr-1780995645045">棚卸結果照会画面</a>
+      <a href="./scr-1780995654167.html" class="nav-btn" data-aivic-nav="scr-1780995654167">在庫確定画面</a>
+  </aside>
+  <main class="main">
+    <section class="card" data-aivic-panel="scr-1780995594850" style="margin-top:0">
+<div class="p-4">
+  <!-- 検索条件パネル -->
+  <div class="card mb-4">
+    <div class="p-3">
+      <h2 class="text-lg font-medium mb-3" style="color: var(--text);">在庫実績照会</h2>
+      <div class="grid grid-cols-3 gap-3 mb-3">
+        <div>
+          <label class="block text-sm mb-1" style="color: var(--text-muted);">商品コード</label>
+          <input type="text" id="product-code" data-testid="product-code" class="input w-full px-2 py-1 text-sm" 
+                 style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; color: var(--text);"
+                 placeholder="商品コードを入力">
+        </div>
+        <div>
+          <label class="block text-sm mb-1" style="color: var(--text-muted);">商品名</label>
+          <input type="text" id="product-name" data-testid="product-name" class="input w-full px-2 py-1 text-sm"
+                 style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; color: var(--text);"
+                 placeholder="商品名を入力">
+        </div>
+        <div>
+          <label class="block text-sm mb-1" style="color: var(--text-muted);">倉庫</label>
+          <select id="warehouse-select" data-testid="warehouse-select" class="input w-full px-2 py-1 text-sm"
+                  style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; color: var(--text);">
+            <option value="">選択してください</option>
+            <option value="WH001">本社倉庫</option>
+            <option value="WH002">東京倉庫</option>
+            <option value="WH003">大阪倉庫</option>
+            <option value="WH004">福岡倉庫</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-3 mb-3">
+        <div>
+          <label class="block text-sm mb-1" style="color: var(--text-muted);">開始日</label>
+          <input type="date" id="start-date" data-testid="start-date" class="input w-full px-2 py-1 text-sm"
+                 style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; color: var(--text);">
+        </div>
+        <div>
+          <label class="block text-sm mb-1" style="color: var(--text-muted);">終了日</label>
+          <input type="date" id="end-date" data-testid="end-date" class="input w-full px-2 py-1 text-sm"
+                 style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; color: var(--text);">
+        </div>
+        <div class="flex items-end gap-2">
+          <button id="btn-search" data-testid="search-button" class="action-btn px-3 py-1 text-sm">検索</button>
+          <button id="btn-clear" data-testid="clear-button" class="action-btn secondary px-3 py-1 text-sm">クリア</button>
+          <button id="btn-export" data-testid="export-button" class="action-btn secondary px-3 py-1 text-sm">CSV出力</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 在庫サマリーカード -->
+  <div class="grid grid-cols-4 gap-3 mb-4">
+    <div class="card p-3">
+      <div class="text-sm" style="color: var(--text-muted);">現在庫数</div>
+      <div id="current-stock" class="text-xl font-medium" style="color: var(--text);">0</div>
+    </div>
+    <div class="card p-3">
+      <div class="text-sm" style="color: var(--text-muted);">入庫数量</div>
+      <div id="total-in" class="text-xl font-medium" style="color: var(--primary);">0</div>
+    </div>
+    <div class="card p-3">
+      <div class="text-sm" style="color: var(--text-muted);">出庫数量</div>
+      <div id="total-out" class="text-xl font-medium" style="color: #ff6a00;">0</div>
+    </div>
+    <div class="card p-3">
+      <div class="text-sm" style="color: var(--text-muted);">棚卸差異</div>
+      <div id="inventory-diff" class="text-xl font-medium" style="color: #e74c3c;">0</div>
+    </div>
+  </div>
+
+  <!-- 在庫実績一覧 -->
+  <div class="card">
+    <div class="p-3 border-b" style="border-color: var(--border);">
+      <div class="flex justify-between items-center">
+        <h3 class="text-base font-medium" style="color: var(--text);">在庫実績一覧</h3>
+        <div class="flex gap-2">
+          <button id="btn-inventory-input" data-testid="inventory-input-button" class="action-btn secondary text-sm px-3 py-1"
+                  onclick="window.showScreen('scr-1780995483399')">入出庫登録</button>
+          <button id="btn-stocktaking" data-testid="stocktaking-button" class="action-btn secondary text-sm px-3 py-1"
+                  onclick="window.showScreen('scr-1780995495139')">棚卸管理</button>
+        </div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table data-testid="inventory-list">
+        <thead>
+          <tr>
+            <th style="color: var(--text);">商品コード</th>
+            <th style="color: var(--text);">商品名</th>
+            <th style="color: var(--text);">倉庫</th>
+            <th style="color: var(--text);">現在庫数</th>
+            <th style="color: var(--text);">引当済数量</th>
+            <th style="color: var(--text);">在庫状態</th>
+            <th style="color: var(--text);">最終入庫日</th>
+            <th style="color: var(--text);">最終出庫日</th>
+            <th style="color: var(--text);">操作</th>
+          </tr>
+        </thead>
+        <tbody id="inventory-tbody">
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 入出庫履歴詳細モーダル -->
+  <div id="history-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style="display: none; z-index: 1000;">
+    <div class="card w-4/5 max-w-4xl max-h-4/5 overflow-auto">
+      <div class="p-3 border-b flex justify-between items-center" style="border-color: var(--border);">
+        <h3 class="text-base font-medium" style="color: var(--text);">入出庫履歴詳細</h3>
+        <button id="close-history-modal" class="action-btn secondary text-sm px-2 py-1">×</button>
+      </div>
+      <div class="p-3">
+        <div class="mb-3">
+          <span class="text-sm" style="color: var(--text-muted);">商品: </span>
+          <span id="modal-product-info" style="color: var(--text);"></span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="color: var(--text);">処理日時</th>
+                <th style="color: var(--text);">入出庫区分</th>
+                <th style="color: var(--text);">数量</th>
+                <th style="color: var(--text);">処理前在庫</th>
+                <th style="color: var(--text);">処理後在庫</th>
+                <th style="color: var(--text);">理由</th>
+                <th style="color: var(--text);">備考</th>
+              </tr>
+            </thead>
+            <tbody id="history-tbody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 棚卸差異詳細モーダル -->
+  <div id="diff-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style="display: none; z-index: 1000;">
+    <div class="card w-3/5 max-w-2xl">
+      <div class="p-3 border-b flex justify-between items-center" style="border-color: var(--border);">
+        <h3 class="text-base font-medium" style="color: var(--text);">棚卸差異詳細</h3>
+        <button id="close-diff-modal" class="action-btn secondary text-sm px-2 py-1">×</button>
+      </div>
+      <div class="p-3">
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div>
+            <span class="text-sm" style="color: var(--text-muted);">商品: </span>
+            <span id="diff-product-info" style="color: var(--text);"></span>
+          </div>
+          <div>
+            <span class="text-sm" style="color: var(--text-muted);">倉庫: </span>
+            <span id="diff-warehouse-info" style="color: var(--text);"></span>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-3 mb-3">
+          <div class="text-center p-2" style="background: var(--bg-main); border-radius: 4px;">
+            <div class="text-sm" style="color: var(--text-muted);">帳簿在庫</div>
+            <div id="diff-book-stock" class="text-lg font-medium" style="color: var(--text);">0</div>
+          </div>
+          <div class="text-center p-2" style="background: var(--bg-main); border-radius: 4px;">
+            <div class="text-sm" style="color: var(--text-muted);">実地在庫</div>
+            <div id="diff-actual-stock" class="text-lg font-medium" style="color: var(--text);">0</div>
+          </div>
+          <div class="text-center p-2" style="background: var(--bg-main); border-radius: 4px;">
+            <div class="text-sm" style="color: var(--text-muted);">差異数量</div>
+            <div id="diff-quantity" class="text-lg font-medium" style="color: #e74c3c;">0</div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="text-sm mb-1" style="color: var(--text-muted);">差異原因</div>
+          <div id="diff-reason" style="color: var(--text);"></div>
+        </div>
+        <div class="mb-3">
+          <div class="text-sm mb-1" style="color: var(--text-muted);">備考</div>
+          <div id="diff-notes" style="color: var(--text);"></div>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button id="btn-diff-analysis" class="action-btn text-sm px-3 py-1"
+                  onclick="window.showScreen('scr-1780995516133')">差異分析</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    </section>
+  </main>
+</div>
+<script>
+(function() {
+  var TABLE_DEFS = window.AIVIC_TABLES || [];
+  var PRESET_SEED = window.AIVIC_PRESET_SEED || {};
+  var SYSTEM_NAME = window.AIVIC_SYSTEM_NAME || "";
+  var APP_ID = window.AIVIC_APP_ID || "";
+  var API_URL = (window.AIVIC_API_URL && window.AIVIC_API_URL !== "REPLACE_WITH_API_URL")
+    ? window.AIVIC_API_URL : window.location.origin;
+
+  // 通知 helper（SPA 版と同じ）
+  window.aivicNotify = (function() {
+    function ensureContainer() {
+      var c = document.getElementById("aivic-toast-container");
+      if (c) return c;
+      c = document.createElement("div");
+      c.id = "aivic-toast-container";
+      c.style.cssText = "position:fixed;top:16px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:360px;";
+      document.body.appendChild(c);
+      return c;
+    }
+    function show(msg, type) {
+      var c = ensureContainer();
+      var el = document.createElement("div");
+      el.textContent = msg;
+      el.style.cssText = "padding:10px 16px;border-radius:8px;font-size:13px;line-height:1.4;pointer-events:auto;color:#fff;background:" + (type === "error" ? "#dc2626" : "#d97706");
+      c.appendChild(el);
+      setTimeout(function() {
+        el.style.transition = "opacity .3s";
+        el.style.opacity = "0";
+        setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 320);
+      }, type === "error" ? 6000 : 4500);
+    }
+    return {
+      error: function(msg) { show("❌ " + msg, "error"); },
+      warn:  function(msg) { show("⚠️ " + msg, "warn"); },
+    };
+  })();
+
+  // CRUD API（SPA 版と同じ）
+  window.aivicApi = (function() {
+    function dbErr(op) { window.aivicNotify.error("データベースエラー（" + op + "）: APIサーバーに接続できません。"); }
+    function newId() { return typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : "id-" + Date.now() + "-" + Math.random().toString(36).slice(2); }
+    function q(i) {
+      var t = TABLE_DEFS[i];
+      var dbP = (window.AIVIC_DB_TYPE && window.AIVIC_DB_TYPE !== "dynamodb") ? "&db=" + encodeURIComponent(window.AIVIC_DB_TYPE) : "";
+      return "?app=" + encodeURIComponent(APP_ID) + "&system=" + encodeURIComponent(SYSTEM_NAME) + "&table=" + encodeURIComponent(t ? t.tableName : "table" + i) + dbP;
+    }
+    return {
+      list: async function(tableIndex) {
+        if (!API_URL) return [];
+        try { var r = await fetch(API_URL + "/api/" + tableIndex + q(tableIndex)); var d = await r.json(); return Array.isArray(d) ? d : (d.items || []); }
+        catch(e) { dbErr("データ取得"); return []; }
+      },
+      save: async function(tableIndex, item) {
+        if (!API_URL) { dbErr("保存"); return null; }
+        var now = new Date().toISOString();
+        var rec = Object.assign({}, item, { id: item.id || newId(), createdAt: item.createdAt || now, updatedAt: now });
+        try { var r = await fetch(API_URL + "/api/" + tableIndex + q(tableIndex), { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(rec) }); return await r.json(); }
+        catch(e) { dbErr("保存"); return null; }
+      },
+      update: async function(tableIndex, id, changes) {
+        if (!API_URL) { dbErr("更新"); return null; }
+        try { var r = await fetch(API_URL + "/api/" + tableIndex + "/" + id + q(tableIndex), { method:"PUT", headers:{"Content-Type":"application/json"}, body:JSON.stringify(Object.assign({}, changes, {updatedAt: new Date().toISOString()})) }); return await r.json(); }
+        catch(e) { dbErr("更新"); return null; }
+      },
+      delete: async function(tableIndex, id) {
+        if (!API_URL) { dbErr("削除"); return {deleted:false}; }
+        try { await fetch(API_URL + "/api/" + tableIndex + "/" + id + q(tableIndex), {method:"DELETE"}); return {deleted:true}; }
+        catch(e) { dbErr("削除"); return {deleted:false}; }
+      },
+    };
+  })();
+
+  // showScreen はマルチページ構成ではページ遷移として動く。
+  // パネル切替 (旧 SPA 動作) ではなく ./<id>.html への navigate に再定義する。
+  // 既存の AI 生成 shell が onclick="showScreen('x')" の形で書いていても透過的に動く。
+  //
+  // 防御層:
+  // (a) 同じ画面 ID なら no-op（AIVIC_PAGE_SCREEN_ID 一致 / pathname 一致のどちらか）
+  // (b) 同じ navigate を 100ms 以内に繰り返したら break loop（onclick 連打ではなく自動ループ対策）
+  // (c) DOMContentLoaded 直後 1.5s 以内の「自動 navigate」は警告 + 抑制（手動 click は通す）
+  var _aivicNavLastTime = 0;
+  var _aivicNavLastTarget = "";
+  var _aivicReady = false;
+  window.showScreen = function(screenId) {
+    if (!screenId) return;
+    if (screenId === window.AIVIC_PAGE_SCREEN_ID) return; // 既に該当ページに居る
+    // pathname ベースの保険: AIVIC_PAGE_SCREEN_ID が未設定でも、現在 URL と一致したら抑制
+    var targetPath = './' + encodeURIComponent(screenId) + '.html';
+    var currentName = (window.location.pathname.split('/').pop() || '');
+    if (currentName === (encodeURIComponent(screenId) + '.html') ||
+        currentName === (screenId + '.html')) {
+      return;
+    }
+    var now = Date.now();
+    if (_aivicNavLastTarget === targetPath && (now - _aivicNavLastTime) < 100) {
+      console.warn('[aivic] showScreen 連続呼び出し検知。無限ループ防止のため抑制:', screenId);
+      return;
+    }
+    if (!_aivicReady) {
+      // ページロード直後の自動 navigate は AI shell の load-time 副作用の可能性が高い。
+      // ボタンクリック等のユーザー操作は ready 後なので影響しない。
+      console.warn('[aivic] DOMContentLoaded 前の showScreen 呼び出し。抑制:', screenId);
+      return;
+    }
+    _aivicNavLastTime = now;
+    _aivicNavLastTarget = targetPath;
+    window.location.href = targetPath;
+  };
+
+  // 初回マウント時のサンプルデータ投入
+  function seedAllIfEmpty() {
+    if (!API_URL) return Promise.resolve();
+    return Promise.all(TABLE_DEFS.map(function(t, i) {
+      var preset = PRESET_SEED[t.tableName];
+      if (!Array.isArray(preset) || preset.length === 0) return Promise.resolve();
+      return window.aivicApi.list(i).then(function(existing) {
+        if (existing && existing.length > 0) return;
+        return Promise.all(preset.map(function(row) { return window.aivicApi.save(i, row); }));
+      }).catch(function() {});
+    }));
+  }
+
+  // ── 初期表示: このページ専用の panel に initFn を実行 ──
+  // window.AIVIC_PAGE_SCREEN_ID と AIVIC_PAGE_INIT_JS は composeMultipagePages
+  // でページ単位に埋め込まれる。
+  document.addEventListener("DOMContentLoaded", function() {
+    // 1.5 秒後に必ず _aivicReady を立てる（initFn が走らないページや失敗ページでも
+    // ユーザーが操作できるようにする保険）。initFn 完了時にも立てるので早い方が勝つ。
+    setTimeout(function() { _aivicReady = true; }, 1500);
+    var pageScreenId = window.AIVIC_PAGE_SCREEN_ID;
+    if (!pageScreenId) return;
+
+    // sidebar / nav の active class を付与（現在ページのリンクを強調）
+    document.querySelectorAll('[data-aivic-nav]').forEach(function(btn) {
+      var isActive = btn.getAttribute("data-aivic-nav") === pageScreenId;
+      btn.classList.toggle("aivic-active", isActive);
+      btn.setAttribute("aria-current", isActive ? "page" : "false");
+    });
+
+    var container = document.querySelector('[data-aivic-panel="' + pageScreenId + '"]');
+    if (!container) return;
+
+    // **content 要素の hidden 強制除去（2026-05-24 Playwright 大量 fail 対応）**:
+    // AI が生成した panel HTML には class="hidden" / hidden 属性 / style="display:none"
+    // が content 要素（#xxx-tbody / #xxx-list / [data-testid="error-message"] 等）に付いて
+    // いることがある。それを Playwright が toBeVisible() で待ち続けて timeout する事故が頻発。
+    //
+    // ポリシー: panel コンテナ配下の全要素について以下を実行:
+    //   - class="hidden" / display:none / hidden 属性を **content 要素では除去**
+    //   - **modal 系**（.modal, .modal-backdrop, [role="dialog"], [data-modal] 等）は除外
+    //     （これらは仕様上初期非表示が正しい）
+    var isModalLike = function(el) {
+      if (!el || !el.classList) return false;
+      var cn = String(el.className || "");
+      if (/modal|dialog|overlay|popup|dropdown|tooltip/i.test(cn)) return true;
+      var role = el.getAttribute && el.getAttribute("role");
+      if (role === "dialog" || role === "alertdialog" || role === "tooltip" || role === "menu") return true;
+      if (el.hasAttribute && (el.hasAttribute("data-modal") || el.hasAttribute("data-dropdown") || el.hasAttribute("data-popup"))) return true;
+      return false;
+    };
+    var unhideContentElements = function(root) {
+      var all = root.querySelectorAll('.hidden, [hidden], [style*="display:none"], [style*="display: none"]');
+      for (var k = 0; k < all.length; k++) {
+        var el = all[k];
+        // modal 系は触らない
+        if (isModalLike(el)) continue;
+        // parent chain で modal 内なら触らない
+        var p = el.parentElement;
+        var insideModal = false;
+        while (p && p !== root) {
+          if (isModalLike(p)) { insideModal = true; break; }
+          p = p.parentElement;
+        }
+        if (insideModal) continue;
+        // 除去
+        el.classList.remove('hidden');
+        el.removeAttribute('hidden');
+        if (el.style && el.style.display === 'none') el.style.display = '';
+      }
+    };
+    try { unhideContentElements(container); } catch (e) { console.warn('[aivic] unhideContent failed:', e); }
+
+    var initJsSource = window.AIVIC_PAGE_INIT_JS;
+    if (!initJsSource) {
+      // initJs が無くてもサンプルデータ投入は走らせる
+      seedAllIfEmpty();
+      return;
+    }
+    var initFn = null;
+    try {
+      initFn = (new Function("return (" + initJsSource + ")"))();
+    } catch (e) {
+      console.error("[aivic] initJs compile error:", pageScreenId, e);
+      return;
+    }
+    if (typeof initFn !== "function") return;
+
+    seedAllIfEmpty().then(function() {
+      return Promise.all(TABLE_DEFS.map(function(t, i) {
+        return window.aivicApi.list(i)
+          .then(function(records) { return Object.assign({}, t, { records: records }); })
+          .catch(function() { return Object.assign({}, t, { records: [] }); });
+      }));
+    }).then(function(tables) {
+      try { initFn(container, API_URL, tables); } catch (e) { console.error("[aivic] initFn error:", pageScreenId, e); }
+      // 初期 panel init が一巡したら _aivicReady を立てる。以降のユーザー操作 (onclick) で
+      // showScreen が呼ばれた場合は通常通り navigate する。
+      _aivicReady = true;
+    });
+  });
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,834 @@
+{
+  "systemId": "itg-5",
+  "systemName": "経営情報システム",
+  "cssTheme": ":root {\n  --primary: #8B4513;\n  --primary-hover: #A0522D;\n  --bg-main: #F5F5DC;\n  --bg-card: #FAEBD7;\n  --bg-sidebar: #F0E68C;\n  --border: #D2B48C;\n  --text: #2F1B14;\n  --text-muted: #5D4037;\n  --top-bar-bg: #DEB887;\n  --top-bar-border: #CD853F;\n}",
+  "screens": [
+    {
+      "id": "scr-1780996340834",
+      "name": "生産実績データ入力・編集画面",
+      "purpose": "生産ラインでの実際の製品生産実績を入力・編集し、計画との差異を管理するための画面",
+      "items": [
+        "生産日時入力フィールド",
+        "生産ライン選択ドロップダウン",
+        "製品選択ドロップダウン",
+        "生産数量入力フィールド",
+        "良品数量入力フィールド",
+        "不良品数量入力フィールド",
+        "作業開始時刻入力フィールド",
+        "作業終了時刻入力フィールド",
+        "作業者名入力フィールド",
+        "備考・コメント入力エリア",
+        "生産計画との比較表示エリア",
+        "達成率表示ラベル"
+      ]
+    },
+    {
+      "id": "scr-1780996353810",
+      "name": "生産実績集計・分析画面",
+      "purpose": "生産実績データを集計・分析し、生産効率や品質指標をグラフやチャートで可視化して経営判断を支援する",
+      "items": [
+        "集計期間選択カレンダー",
+        "生産ライン選択ドロップダウン",
+        "製品カテゴリ選択チェックボックス",
+        "集計実行ボタン",
+        "生産量推移グラフ",
+        "品質指標チャート",
+        "稼働率表示メーター",
+        "不良率トレンドグラフ",
+        "生産実績一覧テーブル",
+        "計画対実績比較チャート",
+        "詳細分析ボタン",
+        "レポート出力ボタン"
+      ]
+    },
+    {
+      "id": "scr-1780996365387",
+      "name": "レポート設定・生成画面",
+      "purpose": "生産管理に関する各種レポートの設定と生成を行い、生産実績や計画の分析データを出力する",
+      "items": [
+        "レポート種別選択ドロップダウン",
+        "対象期間開始日付入力",
+        "対象期間終了日付入力",
+        "生産ライン選択チェックボックス",
+        "製品カテゴリ選択ドロップダウン",
+        "出力形式選択ラジオボタン",
+        "レポート名入力フィールド",
+        "詳細設定展開ボタン",
+        "グラフ表示オプションチェックボックス",
+        "データ集計単位選択",
+        "プレビュー表示エリア",
+        "レポート生成実行ボタン"
+      ]
+    },
+    {
+      "id": "scr-1780996376817",
+      "name": "データ統合・分析処理",
+      "purpose": "複数のデータソースから生産データを統合し、分析処理を実行してレポートを生成する画面",
+      "items": [
+        "データソース選択ドロップダウン",
+        "統合対象期間指定カレンダー",
+        "生産ライン絞り込みチェックボックス",
+        "製品カテゴリフィルター",
+        "データ統合実行ボタン",
+        "統合進捗表示プログレスバー",
+        "統合結果プレビューテーブル",
+        "分析種別選択ラジオボタン",
+        "分析パラメータ設定パネル",
+        "分析実行ボタン",
+        "分析結果グラフ表示エリア",
+        "レポート形式選択ドロップダウン"
+      ]
+    },
+    {
+      "id": "scr-1780996391676",
+      "name": "報告書作成画面",
+      "purpose": "生産実績や計画データを基に各種レポートを作成・生成する画面",
+      "items": [
+        "レポート種別選択ドロップダウン",
+        "対象期間開始日付入力",
+        "対象期間終了日付入力",
+        "生産ライン選択チェックボックス",
+        "製品カテゴリ選択ドロップダウン",
+        "出力形式選択ラジオボタン",
+        "レポートタイトル入力フィールド",
+        "含める項目選択チェックボックスグループ",
+        "グラフ表示設定チェックボックス",
+        "並び順設定ドロップダウン",
+        "プレビュー表示ボタン",
+        "レポート生成実行ボタン"
+      ]
+    },
+    {
+      "id": "scr-1780996401346",
+      "name": "市場情報検索画面",
+      "purpose": "市場動向、競合情報、需要予測などの外部市場データを検索・分析し、生産計画や経営判断に活用するための情報を提供する",
+      "items": [
+        "市場カテゴリ選択ドロップダウン",
+        "地域・エリア選択チェックボックス",
+        "期間指定日付ピッカー",
+        "キーワード検索テキストボックス",
+        "検索実行ボタン",
+        "検索結果一覧テーブル",
+        "市場トレンドグラフ表示エリア",
+        "競合他社情報パネル",
+        "需要予測チャート",
+        "詳細情報表示モーダル",
+        "お気に入り登録ボタン",
+        "レポート出力ボタン"
+      ]
+    }
+  ],
+  "screenPanels": [
+    {
+      "screenId": "scr-1780996340834",
+      "panelHtml": "<div class=\"production-entry-screen\" style=\"padding: 16px; max-width: 1400px;\">\n  <!-- ヘッダー -->\n  <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;\">\n    <h1 style=\"font-size: 24px; font-weight: 600; color: var(--text); margin: 0;\">生産実績データ入力・編集</h1>\n    <div style=\"display: flex; gap: 8px;\">\n      <button class=\"action-btn secondary\" data-testid=\"analysis-button\" onclick=\"window.showScreen('scr-1780996353810')\">実績分析</button>\n      <button class=\"action-btn secondary\" data-testid=\"report-button\" onclick=\"window.showScreen('scr-1780996365387')\">レポート設定</button>\n    </div>\n  </div>\n\n  <!-- メインレイアウト: 左側フォーム + 右側計画比較 -->\n  <div style=\"display: grid; grid-template-columns: 1fr 400px; gap: 20px; margin-bottom: 24px;\">\n    \n    <!-- 左側: 実績入力フォーム -->\n    <div class=\"card\" style=\"padding: 20px;\">\n      <h2 style=\"font-size: 18px; font-weight: 600; color: var(--text); margin: 0 0 16px 0;\">実績データ入力</h2>\n      \n      <form id=\"production-form\" style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 16px;\">\n        <div>\n          <label style=\"display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px;\">生産ライン</label>\n          <select name=\"productionLineId\" data-testid=\"production-line-select\" style=\"width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n            <option value=\"\">選択してください</option>\n            <option value=\"line-001\">第1生産ライン</option>\n            <option value=\"line-002\">第2生産ライン</option>\n            <option value=\"line-003\">第3生産ライン</option>\n            <option value=\"line-004\">第4生産ライン</option>\n          </select>\n        </div>\n\n        <div>\n          <label style=\"display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px;\">製品</label>\n          <select name=\"productId\" data-testid=\"product-select\" style=\"width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n            <option value=\"\">選択してください</option>\n            <option value=\"prod-001\">製品A</option>\n            <option value=\"prod-002\">製品B</option>\n            <option value=\"prod-003\">製品C</option>\n            <option value=\"prod-004\">製品D</option>\n          </select>\n        </div>\n\n        <div>\n          <label style=\"display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px;\">作業開始時刻</label>\n          <input type=\"datetime-local\" name=\"startTime\" data-testid=\"start-time-input\" style=\"width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n        </div>\n\n        <div>\n          <label style=\"display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px;\">作業終了時刻</label>\n          <input type=\"datetime-local\" name=\"endTime\" data-testid=\"end-time-input\" style=\"width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n        </div>\n\n        <div>\n          <label style=\"display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px;\">生産数量</label>\n          <input type=\"number\" name=\"totalQuantity\" data-testid=\"total-quantity-input\" min=\"0\" style=\"width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n        </div>\n\n        <div>\n          <label style=\"display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px;\">良品数量</label>\n          <input type=\"number\" name=\"goodQuantity\" data-testid=\"good-quantity-input\" min=\"0\" style=\"width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n        </div>\n\n        <div>\n          <label style=\"display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px;\">不良品数量</label>\n          <input type=\"number\" name=\"defectQuantity\" data-testid=\"defect-quantity-input\" min=\"0\" style=\"width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n        </div>\n\n        <div>\n          <label style=\"display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px;\">作業者名</label>\n          <input type=\"text\" name=\"workerName\" data-testid=\"worker-name-input\" style=\"width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n        </div>\n\n        <div style=\"grid-column: 1 / -1;\">\n          <label style=\"display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 4px;\">備考・コメント</label>\n          <textarea name=\"remarks\" data-testid=\"remarks-input\" rows=\"3\" style=\"width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); resize: vertical;\"></textarea>\n        </div>\n\n        <div style=\"grid-column: 1 / -1; display: flex; gap: 12px; margin-top: 8px;\">\n          <button type=\"button\" id=\"btn-save\" class=\"action-btn\" data-testid=\"save-button\">実績登録</button>\n          <button type=\"button\" id=\"btn-update\" class=\"action-btn secondary\" data-testid=\"update-button\" style=\"display: none;\">更新</button>\n          <button type=\"button\" id=\"btn-cancel\" class=\"action-btn secondary\" data-testid=\"cancel-button\" style=\"display: none;\">キャンセル</button>\n        </div>\n      </form>\n    </div>\n\n    <!-- 右側: 計画比較パネル -->\n    <div class=\"card\" style=\"padding: 20px;\">\n      <h2 style=\"font-size: 18px; font-weight: 600; color: var(--text); margin: 0 0 16px 0;\">生産計画との比較</h2>\n      \n      <div id=\"plan-comparison\" style=\"display: none;\">\n        <div style=\"margin-bottom: 16px;\">\n          <div style=\"font-size: 13px; color: var(--text-muted); margin-bottom: 4px;\">計画数量</div>\n          <div id=\"planned-quantity\" style=\"font-size: 20px; font-weight: 600; color: var(--text);\">-</div>\n        </div>\n        \n        <div style=\"margin-bottom: 16px;\">\n          <div style=\"font-size: 13px; color: var(--text-muted); margin-bottom: 4px;\">実績数量</div>\n          <div id=\"actual-quantity\" style=\"font-size: 20px; font-weight: 600; color: var(--text);\">-</div>\n        </div>\n        \n        <div style=\"margin-bottom: 16px;\">\n          <div style=\"font-size: 13px; color: var(--text-muted); margin-bottom: 4px;\">達成率</div>\n          <div id=\"achievement-rate\" style=\"font-size: 24px; font-weight: 700; color: var(--primary);\">-</div>\n        </div>\n\n        <div style=\"background: rgba(0,0,0,0.15); padding: 12px; border-radius: 4px; border-left: 3px solid var(--primary);\">\n          <div style=\"font-size: 13px; color: var(--text-muted); margin-bottom: 4px;\">計画期間</div>\n          <div id=\"plan-period\" style=\"font-size: 14px; color: var(--text);\">-</div>\n        </div>\n      </div>\n\n      <div id=\"no-plan-message\" style=\"text-align: center; color: var(--text-muted); font-size: 14px; padding: 40px 0;\">\n        製品を選択すると計画情報が表示されます\n      </div>\n    </div>\n  </div>\n\n  <!-- 実績一覧テーブル -->\n  <div class=\"card\" style=\"padding: 20px;\">\n    <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;\">\n      <h2 style=\"font-size: 18px; font-weight: 600; color: var(--text); margin: 0;\">登録済み実績一覧</h2>\n      <div style=\"display: flex; gap: 8px;\">\n        <input type=\"text\" id=\"search-input\" data-testid=\"search-input\" placeholder=\"検索...\" style=\"padding: 6px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text); width: 200px;\">\n        <button id=\"btn-search\" class=\"action-btn secondary\" data-testid=\"search-button\">検索</button>\n        <button id=\"btn-export\" class=\"action-btn secondary\" data-testid=\"export-button\">CSV出力</button>\n      </div>\n    </div>\n\n    <div class=\"table-wrap\">\n      <table data-testid=\"production-records-table\">\n        <thead>\n          <tr>\n            <th>生産日時</th>\n            <th>ライン</th>\n            <th>製品</th>\n            <th>生産数量</th>\n            <th>良品数量</th>\n            <th>不良品数量</th>\n            <th>作業者</th>\n            <th>稼働率</th>\n            <th>操作</th>\n          </tr>\n        </thead>\n        <tbody id=\"records-tbody\">\n        </tbody>\n      </table>\n    </div>\n  </div>\n</div>",
+      "initJs": "function(container, apiUrl, tables) {\n  let editingId = null;\n  \n  // テーブル再描画関数\n  function renderRows(rows) {\n    const tbody = container.querySelector('#records-tbody');\n    tbody.innerHTML = rows.map(r => `\n      <tr data-id=\"${r.id}\" style=\"cursor: pointer;\">\n        <td>${new Date(r.生産開始日時).toLocaleString('ja-JP', {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'})}</td>\n        <td>${r.生産ライン名 || '-'}</td>\n        <td>${r.製品名 || '-'}</td>\n        <td style=\"text-align: right;\">${r.生産数量?.toLocaleString() || 0}</td>\n        <td style=\"text-align: right;\">${r.良品数量?.toLocaleString() || 0}</td>\n        <td style=\"text-align: right;\">${r.不良品数量?.toLocaleString() || 0}</td>\n        <td>${r.作業者名 || '-'}</td>\n        <td style=\"text-align: right;\">${r.稼働率 || 0}%</td>\n        <td>\n          <button class=\"action-btn secondary edit-btn\" data-id=\"${r.id}\" style=\"font-size: 12px; padding: 4px 8px;\">編集</button>\n          <button class=\"action-btn secondary delete-btn\" data-id=\"${r.id}\" style=\"font-size: 12px; padding: 4px 8px; margin-left: 4px;\">削除</button>\n        </td>\n      </tr>\n    `).join('');\n  }\n\n  // 初期データ描画\n  renderRows(tables[4]?.records || []);\n\n  // 計画比較の更新\n  function updatePlanComparison(productId, actualQuantity) {\n    const planTable = tables[3]; // 生産計画テーブル\n    const productTable = tables[2]; // 製品テーブル\n    \n    if (!productId) {\n      container.querySelector('#plan-comparison').style.display = 'none';\n      container.querySelector('#no-plan-message').style.display = 'block';\n      return;\n    }\n\n    const plan = planTable?.records?.find(p => p.製品ID === productId);\n    const product = productTable?.records?.find(p => p.製品ID === productId);\n    \n    if (plan && product) {\n      container.querySelector('#planned-quantity').textContent = plan.計画数量?.toLocaleString() || '0';\n      container.querySelector('#actual-quantity').textContent = actualQuantity?.toLocaleString() || '0';\n      \n      const achievementRate = plan.計画数量 > 0 ? Math.round((actualQuantity / plan.計画数量) * 100) : 0;\n      const rateEl = container.querySelector('#achievement-rate');\n      rateEl.textContent = achievementRate + '%';\n      rateEl.style.color = achievementRate >= 100 ? '#22c55e' : achievementRate >= 80 ? '#f59e0b' : '#ef4444';\n      \n      container.querySelector('#plan-period').textContent = \n        `${new Date(plan.生産開始予定日).toLocaleDateString('ja-JP')} ～ ${new Date(plan.生産完了予定日).toLocaleDateString('ja-JP')}`;\n      \n      container.querySelector('#plan-comparison').style.display = 'block';\n      container.querySelector('#no-plan-message').style.display = 'none';\n    } else {\n      container.querySelector('#plan-comparison').style.display = 'none';\n      container.querySelector('#no-plan-message').style.display = 'block';\n    }\n  }\n\n  // 製品選択時の計画比較更新\n  container.querySelector('select[name=\"productId\"]').addEventListener('change', (e) => {\n    const actualQuantity = parseInt(container.querySelector('input[name=\"totalQuantity\"]').value) || 0;\n    updatePlanComparison(e.target.value, actualQuantity);\n  });\n\n  // 生産数量入力時の計画比較更新\n  container.querySelector('input[name=\"totalQuantity\"]').addEventListener('input', (e) => {\n    const productId = container.querySelector('select[name=\"productId\"]').value;\n    const actualQuantity = parseInt(e.target.value) || 0;\n    updatePlanComparison(productId, actualQuantity);\n  });\n\n  // 検索機能\n  container.querySelector('#btn-search').addEventListener('click', async () => {\n    const keyword = container.querySelector('#search-input').value.toLowerCase();\n    const rows = await window.aivicApi.list(4);\n    if (rows) {\n      const filtered = rows.filter(r => \n        JSON.stringify(r).toLowerCase().includes(keyword)\n      );\n      renderRows(filtered);\n    }\n  });\n\n  // 実績登録\n  container.querySelector('#btn-save').addEventListener('click', async () => {\n    const form = container.querySelector('#production-form');\n    const formData = new FormData(form);\n    \n    const totalQuantity = parseInt(formData.get('totalQuantity')) || 0;\n    const goodQuantity = parseInt(formData.get('goodQuantity')) || 0;\n    const defectQuantity = parseInt(formData.get('defectQuantity')) || 0;\n    \n    const data = {\n      生産ラインID: formData.get('productionLineId'),\n      製品ID: formData.get('productId'),\n      生産開始日時: formData.get('startTime'),\n      生産終了日時: formData.get('endTime'),\n      生産数量: totalQuantity,\n      良品数量: goodQuantity,\n      不良品数量: defectQuantity,\n      作業時間: formData.get('startTime') && formData.get('endTime') ? \n        Math.round((new Date(formData.get('endTime')) - new Date(formData.get('startTime'))) / (1000 * 60)) : null,\n      稼働率: totalQuantity > 0 ? Math.round((goodQuantity / totalQuantity) * 100) : 0,\n      備考: formData.get('remarks'),\n      作成者ID: 'current-user-id'\n    };\n\n    const saved = await window.aivicApi.save(4, data);\n    if (saved) {\n      form.reset();\n      updatePlanComparison('', 0);\n      const rows = await window.aivicApi.list(4);\n      if (rows) renderRows(rows);\n    }\n  });\n\n  // 更新処理\n  container.querySelector('#btn-update').addEventListener('click', async () => {\n    if (!editingId) return;\n    \n    const form = container.querySelector('#production-form');\n    const formData = new FormData(form);\n    \n    const totalQuantity = parseInt(formData.get('totalQuantity')) || 0;\n    const goodQuantity = parseInt(formData.get('goodQuantity')) || 0;\n    const defectQuantity = parseInt(formData.get('defectQuantity')) || 0;\n    \n    const data = {\n      生産ラインID: formData.get('productionLineId'),\n      製品ID: formData.get('productId'),\n      生産開始日時: formData.get('startTime'),\n      生産終了日時: formData.get('endTime'),\n      生産数量: totalQuantity,\n      良品数量: goodQuantity,\n      不良品数量: defectQuantity,\n      作業時間: formData.get('startTime') && formData.get('endTime') ? \n        Math.round((new Date(formData.get('endTime')) - new Date(formData.get('startTime'))) / (1000 * 60)) : null,\n      稼働率: totalQuantity > 0 ? Math.round((goodQuantity / totalQuantity) * 100) : 0,\n      備考: formData.get('remarks')\n    };\n\n    const updated = await window.aivicApi.update(4, editingId, data);\n    if (updated) {\n      form.reset();\n      editingId = null;\n      updatePlanComparison('', 0);\n      container.querySelector('#btn-save').style.display = 'inline-block';\n      container.querySelector('#btn-update').style.display = 'none';\n      container.querySelector('#btn-cancel').style.display = 'none';\n      const rows = await window.aivicApi.list(4);\n      if (rows) renderRows(rows);\n    }\n  });\n\n  // キャンセル処理\n  container.querySelector('#btn-cancel').addEventListener('click', () => {\n    const form = container.querySelector('#production-form');\n    form.reset();\n    editingId = null;\n    updatePlanComparison('', 0);\n    container.querySelector('#btn-save').style.display = 'inline-block';\n    container.querySelector('#btn-update').style.display = 'none';\n    container.querySelector('#btn-cancel').style.display = 'none';\n  });\n\n  // CSVエクスポート\n  container.querySelector('#btn-export').addEventListener('click', async () => {\n    const rows = await window.aivicApi.list(4);\n    if (!rows) return;\n    \n    const headers = ['生産日時', 'ライン', '製品', '生産数量', '良品数量', '不良品数量', '作業者', '稼働率', '備考'];\n    const csvData = [\n      headers.join(','),\n      ...rows.map(r => [\n        new Date(r.生産開始日時).toLocaleString('ja-JP'),\n        r.生産ライン名 || '',\n        r.製品名 || '',\n        r.生産数量 || 0,\n        r.良品数量 || 0,\n        r.不良品数量 || 0,\n        r.作業者名 || '',\n        (r.稼働率 || 0) + '%',\n        (r.備考 || '').replace(/,/g, '，')\n      ].map(cell => `\"${cell}\"`).join(','))\n    ].join('\\n');\n    \n    const blob = new Blob(['\\uFEFF' + csvData], { type: 'text/csv;charset=utf-8;' });\n    const link = document.createElement('a');\n    link.href = URL.createObjectURL(blob);\n    link.download = `生産実績_${new Date().toISOString().slice(0, 10)}.csv`;\n    link.click();\n  });\n\n  // 行レベル操作（編集・削除）\n  container.addEventListener('click', async (e) => {\n    const editBtn = e.target.closest('.edit-btn');\n    const deleteBtn = e.target.closest('.delete-btn');\n    \n    if (editBtn) {\n      const id = editBtn.dataset.id;\n      const rows = await window.aivicApi.list(4);\n      const record = rows?.find(r => r.id === id);\n      \n      if (record) {\n        editingId = id;\n        const form = container.querySelector('#production-form');\n        \n        // フォームに値を設定\n        form.querySelector('select[name=\"productionLineId\"]').value = record.生産ラインID || '';\n        form.querySelector('select[name=\"productId\"]').value = record.製品ID || '';\n        form.querySelector('input[name=\"startTime\"]').value = record.生産開始日時 ? \n          new Date(record.生産開始日時).toISOString().slice(0, 16) : '';\n        form.querySelector('input[name=\"endTime\"]').value = record.生産終了日時 ? \n          new Date(record.生産終了日時).toISOString().slice(0, 16) : '';\n        form.querySelector('input[name=\"totalQuantity\"]').value = record.生産数量 || '';\n        form.querySelector('input[name=\"goodQuantity\"]').value = record.良品数量 || '';\n        form.querySelector('input[name=\"defectQuantity\"]').value = record.不良品数量 || '';\n        form.querySelector('input[name=\"workerName\"]').value = record.作業者名 || '';\n        form.querySelector('textarea[name=\"remarks\"]').value = record.備考 || '';\n        \n        // ボタン表示切り替え\n        container.querySelector('#btn-save').style.display = 'none';\n        container.querySelector('#btn-update').style.display = 'inline-block';\n        container.querySelector('#btn-cancel').style.display = 'inline-block';\n        \n        // 計画比較更新\n        updatePlanComparison(record.製品ID, record.生産数量);\n      }\n    }\n    \n    if (deleteBtn) {\n      if (!confirm('この実績データを削除しますか？')) return;\n      \n      const id = deleteBtn.dataset.id;\n      await window.aivicApi.delete(4, id);\n      const rows = await window.aivicApi.list(4);\n      if (rows) renderRows(rows);\n    }\n  });\n}",
+      "method": "ai"
+    },
+    {
+      "screenId": "scr-1780996353810",
+      "panelHtml": "<div class=\"production-analysis-container\" style=\"padding: 16px; min-height: 100vh; background: var(--bg-main);\">\n  <!-- フィルター・集計条件セクション -->\n  <div class=\"card\" style=\"margin-bottom: 16px; padding: 16px; background: var(--bg-card); border-radius: 6px;\">\n    <h2 style=\"margin: 0 0 16px 0; font-size: 18px; font-weight: 600; color: var(--text);\">生産実績集計・分析</h2>\n    \n    <div style=\"display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;\">\n      <div>\n        <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">集計期間（開始）</label>\n        <input type=\"date\" id=\"date-start\" data-testid=\"date-start\" class=\"input\" style=\"width: 100%; padding: 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n      </div>\n      <div>\n        <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">集計期間（終了）</label>\n        <input type=\"date\" id=\"date-end\" data-testid=\"date-end\" class=\"input\" style=\"width: 100%; padding: 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n      </div>\n      <div>\n        <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">生産ライン</label>\n        <select id=\"line-filter\" data-testid=\"line-filter\" style=\"width: 100%; padding: 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n          <option value=\"\">全ライン</option>\n          <option value=\"ライン1\">ライン1</option>\n          <option value=\"ライン2\">ライン2</option>\n          <option value=\"ライン3\">ライン3</option>\n          <option value=\"組立ライン\">組立ライン</option>\n          <option value=\"検査ライン\">検査ライン</option>\n        </select>\n      </div>\n      <div>\n        <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">製品カテゴリ</label>\n        <select id=\"category-filter\" data-testid=\"category-filter\" style=\"width: 100%; padding: 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n          <option value=\"\">全カテゴリ</option>\n          <option value=\"電子部品\">電子部品</option>\n          <option value=\"機械部品\">機械部品</option>\n          <option value=\"完成品\">完成品</option>\n          <option value=\"素材\">素材</option>\n        </select>\n      </div>\n    </div>\n    \n    <div style=\"display: flex; gap: 8px;\">\n      <button id=\"btn-analyze\" data-testid=\"analyze-button\" class=\"action-btn\" style=\"background: var(--primary); color: #fff; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;\">集計実行</button>\n      <button id=\"btn-export-csv\" data-testid=\"export-csv-button\" class=\"action-btn secondary\" style=\"background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.18); padding: 8px 16px; border-radius: 4px; cursor: pointer;\">CSVエクスポート</button>\n      <button id=\"btn-report\" data-testid=\"report-button\" class=\"action-btn secondary\" style=\"background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.18); padding: 8px 16px; border-radius: 4px; cursor: pointer;\" onclick=\"window.showScreen('scr-1780996365387')\">レポート設定</button>\n    </div>\n  </div>\n\n  <!-- KPIカード群 -->\n  <div style=\"display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;\">\n    <div class=\"card\" data-testid=\"kpi-production\" style=\"padding: 16px; background: var(--bg-card); border-radius: 6px; border-left: 3px solid #4ade80;\">\n      <div style=\"font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">総生産量</div>\n      <div id=\"kpi-total-production\" style=\"font-size: 24px; font-weight: 700; color: var(--text);\">0</div>\n      <div style=\"font-size: 11px; color: var(--text-muted);\">個</div>\n    </div>\n    <div class=\"card\" data-testid=\"kpi-efficiency\" style=\"padding: 16px; background: var(--bg-card); border-radius: 6px; border-left: 3px solid #3b82f6;\">\n      <div style=\"font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">平均稼働率</div>\n      <div id=\"kpi-avg-efficiency\" style=\"font-size: 24px; font-weight: 700; color: var(--text);\">0</div>\n      <div style=\"font-size: 11px; color: var(--text-muted);\">%</div>\n    </div>\n    <div class=\"card\" data-testid=\"kpi-quality\" style=\"padding: 16px; background: var(--bg-card); border-radius: 6px; border-left: 3px solid #f59e0b;\">\n      <div style=\"font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">品質率</div>\n      <div id=\"kpi-quality-rate\" style=\"font-size: 24px; font-weight: 700; color: var(--text);\">0</div>\n      <div style=\"font-size: 11px; color: var(--text-muted);\">%</div>\n    </div>\n    <div class=\"card\" data-testid=\"kpi-defect\" style=\"padding: 16px; background: var(--bg-card); border-radius: 6px; border-left: 3px solid #ef4444;\">\n      <div style=\"font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">不良率</div>\n      <div id=\"kpi-defect-rate\" style=\"font-size: 24px; font-weight: 700; color: var(--text);\">0</div>\n      <div style=\"font-size: 11px; color: var(--text-muted);\">%</div>\n    </div>\n  </div>\n\n  <!-- チャート・グラフエリア -->\n  <div style=\"display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 16px;\">\n    <!-- 生産量推移グラフ -->\n    <div class=\"card\" style=\"padding: 16px; background: var(--bg-card); border-radius: 6px;\">\n      <h3 style=\"margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: var(--text);\">生産量推移</h3>\n      <canvas id=\"production-chart\" width=\"600\" height=\"300\" style=\"width: 100%; max-height: 300px;\"></canvas>\n    </div>\n    \n    <!-- 稼働率メーター -->\n    <div class=\"card\" style=\"padding: 16px; background: var(--bg-card); border-radius: 6px;\">\n      <h3 style=\"margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: var(--text);\">稼働率</h3>\n      <canvas id=\"efficiency-meter\" width=\"200\" height=\"200\" style=\"width: 100%; max-height: 200px;\"></canvas>\n    </div>\n  </div>\n\n  <div style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;\">\n    <!-- 品質指標チャート -->\n    <div class=\"card\" style=\"padding: 16px; background: var(--bg-card); border-radius: 6px;\">\n      <h3 style=\"margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: var(--text);\">品質指標</h3>\n      <canvas id=\"quality-chart\" width=\"300\" height=\"200\" style=\"width: 100%; max-height: 200px;\"></canvas>\n    </div>\n    \n    <!-- 計画対実績比較 -->\n    <div class=\"card\" style=\"padding: 16px; background: var(--bg-card); border-radius: 6px;\">\n      <h3 style=\"margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: var(--text);\">計画対実績比較</h3>\n      <canvas id=\"plan-actual-chart\" width=\"300\" height=\"200\" style=\"width: 100%; max-height: 200px;\"></canvas>\n    </div>\n  </div>\n\n  <!-- 生産実績一覧テーブル -->\n  <div class=\"card\" style=\"padding: 16px; background: var(--bg-card); border-radius: 6px;\">\n    <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;\">\n      <h3 style=\"margin: 0; font-size: 14px; font-weight: 600; color: var(--text);\">生産実績一覧</h3>\n      <div style=\"display: flex; gap: 8px;\">\n        <button id=\"btn-detail-analysis\" data-testid=\"detail-analysis-button\" class=\"action-btn secondary\" style=\"background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.18); padding: 6px 12px; border-radius: 4px; cursor: pointer;\" onclick=\"window.showScreen('scr-1780996376817')\">詳細分析</button>\n        <button id=\"btn-edit-data\" data-testid=\"edit-data-button\" class=\"action-btn secondary\" style=\"background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.18); padding: 6px 12px; border-radius: 4px; cursor: pointer;\" onclick=\"window.showScreen('scr-1780996340834')\">データ編集</button>\n      </div>\n    </div>\n    \n    <div class=\"table-wrap\" style=\"overflow-x: auto;\">\n      <table data-testid=\"production-results-table\" style=\"width: 100%; border-collapse: collapse;\">\n        <thead>\n          <tr style=\"background: rgba(255,255,255,0.05);\">\n            <th style=\"padding: 8px 12px; text-align: left; font-size: 12px; font-weight: 600; color: var(--text); border-bottom: 1px solid var(--border);\">生産日</th>\n            <th style=\"padding: 8px 12px; text-align: left; font-size: 12px; font-weight: 600; color: var(--text); border-bottom: 1px solid var(--border);\">ライン</th>\n            <th style=\"padding: 8px 12px; text-align: left; font-size: 12px; font-weight: 600; color: var(--text); border-bottom: 1px solid var(--border);\">製品名</th>\n            <th style=\"padding: 8px 12px; text-align: right; font-size: 12px; font-weight: 600; color: var(--text); border-bottom: 1px solid var(--border);\">生産数量</th>\n            <th style=\"padding: 8px 12px; text-align: right; font-size: 12px; font-weight: 600; color: var(--text); border-bottom: 1px solid var(--border);\">良品数</th>\n            <th style=\"padding: 8px 12px; text-align: right; font-size: 12px; font-weight: 600; color: var(--text); border-bottom: 1px solid var(--border);\">不良品数</th>\n            <th style=\"padding: 8px 12px; text-align: right; font-size: 12px; font-weight: 600; color: var(--text); border-bottom: 1px solid var(--border);\">稼働率</th>\n            <th style=\"padding: 8px 12px; text-align: right; font-size: 12px; font-weight: 600; color: var(--text); border-bottom: 1px solid var(--border);\">品質率</th>\n          </tr>\n        </thead>\n        <tbody id=\"results-tbody\">\n        </tbody>\n      </table>\n    </div>\n  </div>\n</div>",
+      "initJs": "function(container, apiUrl, tables) {\n  // 1. テーブル再描画関数を定義\n  function renderRows(rows) {\n    const tbody = container.querySelector(\"#results-tbody\");\n    tbody.innerHTML = rows.map(r => {\n      const productionDate = r.生産開始日時 ? new Date(r.生産開始日時).toLocaleDateString('ja-JP') : '';\n      const qualityRate = r.生産数量 > 0 ? Math.round((r.良品数量 / r.生産数量) * 100) : 0;\n      \n      return `<tr data-id=\"${r.id}\" style=\"border-bottom: 1px solid rgba(255,255,255,0.05);\">\n        <td style=\"padding: 8px 12px; font-size: 13px; color: var(--text);\">${productionDate}</td>\n        <td style=\"padding: 8px 12px; font-size: 13px; color: var(--text);\">${r.生産ライン名 || ''}</td>\n        <td style=\"padding: 8px 12px; font-size: 13px; color: var(--text);\">${r.製品名 || ''}</td>\n        <td style=\"padding: 8px 12px; font-size: 13px; color: var(--text); text-align: right;\">${r.生産数量 || 0}</td>\n        <td style=\"padding: 8px 12px; font-size: 13px; color: var(--text); text-align: right;\">${r.良品数量 || 0}</td>\n        <td style=\"padding: 8px 12px; font-size: 13px; color: var(--text); text-align: right;\">${r.不良品数量 || 0}</td>\n        <td style=\"padding: 8px 12px; font-size: 13px; color: var(--text); text-align: right;\">${r.稼働率 || 0}%</td>\n        <td style=\"padding: 8px 12px; font-size: 13px; color: var(--text); text-align: right;\">${qualityRate}%</td>\n      </tr>`;\n    }).join(\"\");\n  }\n\n  // 2. KPI更新関数\n  function updateKPIs(rows) {\n    const totalProduction = rows.reduce((sum, r) => sum + (r.生産数量 || 0), 0);\n    const avgEfficiency = rows.length > 0 ? Math.round(rows.reduce((sum, r) => sum + (r.稼働率 || 0), 0) / rows.length) : 0;\n    const totalGood = rows.reduce((sum, r) => sum + (r.良品数量 || 0), 0);\n    const qualityRate = totalProduction > 0 ? Math.round((totalGood / totalProduction) * 100) : 0;\n    const defectRate = 100 - qualityRate;\n\n    container.querySelector(\"#kpi-total-production\").textContent = totalProduction.toLocaleString();\n    container.querySelector(\"#kpi-avg-efficiency\").textContent = avgEfficiency;\n    container.querySelector(\"#kpi-quality-rate\").textContent = qualityRate;\n    container.querySelector(\"#kpi-defect-rate\").textContent = defectRate;\n  }\n\n  // 3. チャート描画関数\n  function drawProductionChart(rows) {\n    const canvas = container.querySelector(\"#production-chart\");\n    const ctx = canvas.getContext(\"2d\");\n    ctx.clearRect(0, 0, canvas.width, canvas.height);\n    \n    // 日別集計\n    const dailyData = {};\n    rows.forEach(r => {\n      if (r.生産開始日時) {\n        const date = new Date(r.生産開始日時).toLocaleDateString('ja-JP');\n        dailyData[date] = (dailyData[date] || 0) + (r.生産数量 || 0);\n      }\n    });\n    \n    const dates = Object.keys(dailyData).sort();\n    const values = dates.map(d => dailyData[d]);\n    const maxValue = Math.max(...values, 1);\n    \n    // グラフ描画\n    ctx.strokeStyle = '#3b82f6';\n    ctx.lineWidth = 2;\n    ctx.beginPath();\n    \n    dates.forEach((date, i) => {\n      const x = 50 + (i * (canvas.width - 100)) / Math.max(dates.length - 1, 1);\n      const y = canvas.height - 50 - (values[i] * (canvas.height - 100)) / maxValue;\n      \n      if (i === 0) ctx.moveTo(x, y);\n      else ctx.lineTo(x, y);\n      \n      // データポイント\n      ctx.fillStyle = '#3b82f6';\n      ctx.beginPath();\n      ctx.arc(x, y, 3, 0, 2 * Math.PI);\n      ctx.fill();\n    });\n    \n    ctx.stroke();\n    \n    // 軸ラベル\n    ctx.fillStyle = '#9fb0d1';\n    ctx.font = '10px sans-serif';\n    ctx.fillText('生産量推移', 10, 20);\n  }\n\n  function drawEfficiencyMeter(efficiency) {\n    const canvas = container.querySelector(\"#efficiency-meter\");\n    const ctx = canvas.getContext(\"2d\");\n    ctx.clearRect(0, 0, canvas.width, canvas.height);\n    \n    const centerX = canvas.width / 2;\n    const centerY = canvas.height / 2;\n    const radius = 70;\n    \n    // 背景円\n    ctx.beginPath();\n    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);\n    ctx.strokeStyle = 'rgba(255,255,255,0.1)';\n    ctx.lineWidth = 10;\n    ctx.stroke();\n    \n    // 進捗円\n    const angle = (efficiency / 100) * 2 * Math.PI - Math.PI / 2;\n    ctx.beginPath();\n    ctx.arc(centerX, centerY, radius, -Math.PI / 2, angle);\n    ctx.strokeStyle = efficiency >= 80 ? '#4ade80' : efficiency >= 60 ? '#f59e0b' : '#ef4444';\n    ctx.lineWidth = 10;\n    ctx.stroke();\n    \n    // 中央テキスト\n    ctx.fillStyle = '#d0e4ff';\n    ctx.font = 'bold 24px sans-serif';\n    ctx.textAlign = 'center';\n    ctx.fillText(`${efficiency}%`, centerX, centerY + 8);\n  }\n\n  function drawQualityChart(rows) {\n    const canvas = container.querySelector(\"#quality-chart\");\n    const ctx = canvas.getContext(\"2d\");\n    ctx.clearRect(0, 0, canvas.width, canvas.height);\n    \n    const totalGood = rows.reduce((sum, r) => sum + (r.良品数量 || 0), 0);\n    const totalDefect = rows.reduce((sum, r) => sum + (r.不良品数量 || 0), 0);\n    const total = totalGood + totalDefect;\n    \n    if (total === 0) return;\n    \n    const centerX = canvas.width / 2;\n    const centerY = canvas.height / 2;\n    const radius = 60;\n    \n    // 良品（緑）\n    const goodAngle = (totalGood / total) * 2 * Math.PI;\n    ctx.beginPath();\n    ctx.moveTo(centerX, centerY);\n    ctx.arc(centerX, centerY, radius, 0, goodAngle);\n    ctx.fillStyle = '#4ade80';\n    ctx.fill();\n    \n    // 不良品（赤）\n    ctx.beginPath();\n    ctx.moveTo(centerX, centerY);\n    ctx.arc(centerX, centerY, radius, goodAngle, 2 * Math.PI);\n    ctx.fillStyle = '#ef4444';\n    ctx.fill();\n    \n    // ラベル\n    ctx.fillStyle = '#d0e4ff';\n    ctx.font = '12px sans-serif';\n    ctx.textAlign = 'left';\n    ctx.fillText(`良品: ${Math.round((totalGood/total)*100)}%`, 10, canvas.height - 30);\n    ctx.fillText(`不良: ${Math.round((totalDefect/total)*100)}%`, 10, canvas.height - 15);\n  }\n\n  function drawPlanActualChart(rows) {\n    const canvas = container.querySelector(\"#plan-actual-chart\");\n    const ctx = canvas.getContext(\"2d\");\n    ctx.clearRect(0, 0, canvas.width, canvas.height);\n    \n    // サンプルデータ（実際は生産計画テーブルと照合）\n    const planData = [1000, 1200, 800, 1500, 900];\n    const actualData = rows.slice(0, 5).map(r => r.生産数量 || 0);\n    \n    const maxValue = Math.max(...planData, ...actualData, 1);\n    const barWidth = 30;\n    const spacing = 50;\n    \n    planData.forEach((plan, i) => {\n      const x = 50 + i * spacing;\n      const actual = actualData[i] || 0;\n      \n      // 計画（青）\n      const planHeight = (plan / maxValue) * (canvas.height - 80);\n      ctx.fillStyle = '#3b82f6';\n      ctx.fillRect(x, canvas.height - 40 - planHeight, barWidth, planHeight);\n      \n      // 実績（緑）\n      const actualHeight = (actual / maxValue) * (canvas.height - 80);\n      ctx.fillStyle = '#4ade80';\n      ctx.fillRect(x + barWidth + 5, canvas.height - 40 - actualHeight, barWidth, actualHeight);\n    });\n    \n    // 凡例\n    ctx.fillStyle = '#d0e4ff';\n    ctx.font = '10px sans-serif';\n    ctx.fillText('計画', 10, 20);\n    ctx.fillText('実績', 50, 20);\n  }\n\n  // 4. 初期データ読み込みと描画\n  window.aivicApi.list(4).then(rows => {\n    if (rows) {\n      renderRows(rows);\n      updateKPIs(rows);\n      drawProductionChart(rows);\n      drawEfficiencyMeter(rows.length > 0 ? Math.round(rows.reduce((sum, r) => sum + (r.稼働率 || 0), 0) / rows.length) : 0);\n      drawQualityChart(rows);\n      drawPlanActualChart(rows);\n    }\n  });\n\n  // 5. 集計実行ボタン\n  container.querySelector(\"#btn-analyze\").addEventListener(\"click\", async () => {\n    const startDate = container.querySelector(\"#date-start\").value;\n    const endDate = container.querySelector(\"#date-end\").value;\n    const lineFilter = container.querySelector(\"#line-filter\").value;\n    const categoryFilter = container.querySelector(\"#category-filter\").value;\n    \n    const rows = await window.aivicApi.list(4);\n    if (!rows) return;\n    \n    let filteredRows = rows;\n    \n    // フィルタリング\n    if (startDate) {\n      filteredRows = filteredRows.filter(r => r.生産開始日時 && new Date(r.生産開始日時) >= new Date(startDate));\n    }\n    if (endDate) {\n      filteredRows = filteredRows.filter(r => r.生産開始日時 && new Date(r.生産開始日時) <= new Date(endDate));\n    }\n    if (lineFilter) {\n      filteredRows = filteredRows.filter(r => r.生産ライン名 && r.生産ライン名.includes(lineFilter));\n    }\n    \n    renderRows(filteredRows);\n    updateKPIs(filteredRows);\n    drawProductionChart(filteredRows);\n    drawEfficiencyMeter(filteredRows.length > 0 ? Math.round(filteredRows.reduce((sum, r) => sum + (r.稼働率 || 0), 0) / filteredRows.length) : 0);\n    drawQualityChart(filteredRows);\n    drawPlanActualChart(filteredRows);\n  });\n\n  // 6. CSVエクスポート\n  container.querySelector(\"#btn-export-csv\").addEventListener(\"click\", async () => {\n    const rows = await window.aivicApi.list(4);\n    if (!rows) return;\n    \n    const headers = [\"生産日\", \"ライン\", \"製品名\", \"生産数量\", \"良品数量\", \"不良品数量\", \"稼働率\", \"品質率\"];\n    const csvData = [headers.join(\",\")];\n    \n    rows.forEach(r => {\n      const productionDate = r.生産開始日時 ? new Date(r.生産開始日時).toLocaleDateString('ja-JP') : '';\n      const qualityRate = r.生産数量 > 0 ? Math.round((r.良品数量 / r.生産数量) * 100) : 0;\n      \n      const row = [\n        productionDate,\n        r.生産ライン名 || '',\n        r.製品名 || '',\n        r.生産数量 || 0,\n        r.良品数量 || 0,\n        r.不良品数量 || 0,\n        (r.稼働率 || 0) + '%',\n        qualityRate + '%'\n      ];\n      csvData.push(row.join(\",\"));\n    });\n    \n    const csvContent = \"\\uFEFF\" + csvData.join(\"\\n\");\n    const blob = new Blob([csvContent], { type: \"text/csv;charset=utf-8;\" });\n    const link = document.createElement(\"a\");\n    link.href = URL.createObjectURL(blob);\n    link.download = \"production_analysis_\" + new Date().toISOString().slice(0, 10) + \".csv\";\n    link.click();\n  });\n\n  // 7. 初期日付設定\n  const today = new Date();\n  const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);\n  container.querySelector(\"#date-start\").value = lastMonth.toISOString().slice(0, 10);\n  container.querySelector(\"#date-end\").value = today.toISOString().slice(0, 10);\n}",
+      "method": "ai"
+    },
+    {
+      "screenId": "scr-1780996365387",
+      "panelHtml": "<div class=\"report-generation-panel\" style=\"padding: 16px; max-width: 1200px;\">\n  <!-- ヘッダー -->\n  <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;\">\n    <h1 style=\"font-size: 24px; font-weight: 600; color: var(--text); margin: 0;\">レポート設定・生成</h1>\n    <div style=\"display: flex; gap: 8px;\">\n      <button class=\"action-btn secondary\" data-testid=\"template-list-btn\" onclick=\"window.showScreen('scr-1780996401346')\">\n        テンプレート管理\n      </button>\n      <button class=\"action-btn secondary\" data-testid=\"report-history-btn\" onclick=\"window.showScreen('scr-1780996391676')\">\n        生成履歴\n      </button>\n    </div>\n  </div>\n\n  <!-- メインレイアウト: 左側設定フォーム + 右側プレビュー -->\n  <div style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 20px; height: calc(100vh - 120px);\">\n    \n    <!-- 左側: レポート設定フォーム -->\n    <div class=\"card\" style=\"padding: 20px; overflow-y: auto;\">\n      <h2 style=\"font-size: 18px; font-weight: 600; color: var(--text); margin: 0 0 16px 0;\">レポート設定</h2>\n      \n      <form id=\"report-form\">\n        <!-- レポート基本情報 -->\n        <div style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;\">\n          <div>\n            <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">レポート名</label>\n            <input type=\"text\" id=\"report-name\" data-testid=\"report-name\" \n                   style=\"width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\"\n                   placeholder=\"生産実績月次レポート\">\n          </div>\n          <div>\n            <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">レポート種別</label>\n            <select id=\"report-type\" data-testid=\"report-type-select\" \n                    style=\"width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n              <option value=\"\">選択してください</option>\n              <option value=\"production-performance\">生産実績レポート</option>\n              <option value=\"plan-vs-actual\">計画対実績レポート</option>\n              <option value=\"quality-analysis\">品質分析レポート</option>\n              <option value=\"line-efficiency\">ライン効率レポート</option>\n              <option value=\"defect-analysis\">不良品分析レポート</option>\n            </select>\n          </div>\n        </div>\n\n        <!-- 対象期間 -->\n        <div style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;\">\n          <div>\n            <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">開始日</label>\n            <input type=\"date\" id=\"start-date\" data-testid=\"start-date\" \n                   style=\"width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n          </div>\n          <div>\n            <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">終了日</label>\n            <input type=\"date\" id=\"end-date\" data-testid=\"end-date\" \n                   style=\"width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n          </div>\n        </div>\n\n        <!-- 生産ライン選択 -->\n        <div style=\"margin-bottom: 20px;\">\n          <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 8px;\">対象生産ライン</label>\n          <div id=\"production-lines\" style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.15);\">\n            <label style=\"display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);\">\n              <input type=\"checkbox\" value=\"line-001\" style=\"accent-color: var(--primary);\">\n              ライン001 (組立)\n            </label>\n            <label style=\"display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);\">\n              <input type=\"checkbox\" value=\"line-002\" style=\"accent-color: var(--primary);\">\n              ライン002 (塗装)\n            </label>\n            <label style=\"display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);\">\n              <input type=\"checkbox\" value=\"line-003\" style=\"accent-color: var(--primary);\">\n              ライン003 (検査)\n            </label>\n            <label style=\"display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);\">\n              <input type=\"checkbox\" value=\"line-004\" style=\"accent-color: var(--primary);\">\n              ライン004 (梱包)\n            </label>\n          </div>\n        </div>\n\n        <!-- 製品カテゴリ・出力形式 -->\n        <div style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;\">\n          <div>\n            <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">製品カテゴリ</label>\n            <select id=\"product-category\" data-testid=\"product-category-select\" \n                    style=\"width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n              <option value=\"\">全カテゴリ</option>\n              <option value=\"electronics\">電子部品</option>\n              <option value=\"machinery\">機械部品</option>\n              <option value=\"automotive\">自動車部品</option>\n              <option value=\"medical\">医療機器</option>\n            </select>\n          </div>\n          <div>\n            <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">データ集計単位</label>\n            <select id=\"aggregation-unit\" data-testid=\"aggregation-unit-select\" \n                    style=\"width: 100%; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n              <option value=\"daily\">日次</option>\n              <option value=\"weekly\">週次</option>\n              <option value=\"monthly\">月次</option>\n              <option value=\"quarterly\">四半期</option>\n            </select>\n          </div>\n        </div>\n\n        <!-- 出力形式 -->\n        <div style=\"margin-bottom: 20px;\">\n          <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 8px;\">出力形式</label>\n          <div style=\"display: flex; gap: 16px;\">\n            <label style=\"display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);\">\n              <input type=\"radio\" name=\"output-format\" value=\"pdf\" checked style=\"accent-color: var(--primary);\">\n              PDF\n            </label>\n            <label style=\"display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);\">\n              <input type=\"radio\" name=\"output-format\" value=\"excel\" style=\"accent-color: var(--primary);\">\n              Excel\n            </label>\n            <label style=\"display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);\">\n              <input type=\"radio\" name=\"output-format\" value=\"csv\" style=\"accent-color: var(--primary);\">\n              CSV\n            </label>\n          </div>\n        </div>\n\n        <!-- 詳細オプション -->\n        <div style=\"margin-bottom: 20px;\">\n          <button type=\"button\" id=\"toggle-advanced\" class=\"action-btn secondary\" style=\"margin-bottom: 12px;\">\n            詳細設定を表示\n          </button>\n          <div id=\"advanced-options\" style=\"display: none;\">\n            <div style=\"display: grid; gap: 12px;\">\n              <label style=\"display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);\">\n                <input type=\"checkbox\" id=\"include-graphs\" style=\"accent-color: var(--primary);\" checked>\n                グラフを含める\n              </label>\n              <label style=\"display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);\">\n                <input type=\"checkbox\" id=\"include-summary\" style=\"accent-color: var(--primary);\" checked>\n                サマリーページを含める\n              </label>\n              <label style=\"display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text);\">\n                <input type=\"checkbox\" id=\"auto-schedule\" style=\"accent-color: var(--primary);\">\n                定期自動生成\n              </label>\n            </div>\n          </div>\n        </div>\n\n        <!-- アクションボタン -->\n        <div style=\"display: flex; gap: 8px; margin-top: 24px;\">\n          <button type=\"button\" id=\"btn-preview\" class=\"action-btn secondary\" data-testid=\"preview-button\">\n            プレビュー\n          </button>\n          <button type=\"button\" id=\"btn-save-template\" class=\"action-btn secondary\" data-testid=\"save-template-button\">\n            テンプレート保存\n          </button>\n          <button type=\"button\" id=\"btn-generate\" class=\"action-btn\" data-testid=\"generate-button\">\n            レポート生成\n          </button>\n        </div>\n      </form>\n    </div>\n\n    <!-- 右側: プレビューエリア -->\n    <div class=\"card\" style=\"padding: 20px; overflow-y: auto;\">\n      <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;\">\n        <h2 style=\"font-size: 18px; font-weight: 600; color: var(--text); margin: 0;\">プレビュー</h2>\n        <button class=\"action-btn secondary\" data-testid=\"fullscreen-preview\" style=\"padding: 6px 12px; font-size: 12px;\">\n          全画面表示\n        </button>\n      </div>\n      \n      <div id=\"preview-area\" style=\"min-height: 400px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.15); padding: 16px;\">\n        <div style=\"text-align: center; color: var(--text-muted); padding: 60px 20px;\">\n          <div style=\"font-size: 48px; margin-bottom: 12px;\">📊</div>\n          <p style=\"margin: 0; font-size: 14px;\">レポート設定を選択してプレビューボタンを押してください</p>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <!-- 生成履歴テーブル -->\n  <div class=\"card\" style=\"margin-top: 20px; padding: 20px;\">\n    <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;\">\n      <h2 style=\"font-size: 18px; font-weight: 600; color: var(--text); margin: 0;\">最近の生成履歴</h2>\n      <button class=\"action-btn secondary\" data-testid=\"export-csv\" style=\"padding: 6px 12px; font-size: 12px;\">\n        CSV出力\n      </button>\n    </div>\n    \n    <div class=\"table-wrap\">\n      <table data-testid=\"report-history-table\">\n        <thead>\n          <tr>\n            <th style=\"color: var(--text);\">レポート名</th>\n            <th style=\"color: var(--text);\">種別</th>\n            <th style=\"color: var(--text);\">対象期間</th>\n            <th style=\"color: var(--text);\">形式</th>\n            <th style=\"color: var(--text);\">ステータス</th>\n            <th style=\"color: var(--text);\">生成日時</th>\n            <th style=\"color: var(--text);\">操作</th>\n          </tr>\n        </thead>\n        <tbody id=\"history-tbody\">\n        </tbody>\n      </table>\n    </div>\n  </div>\n</div>",
+      "initJs": "function(container, apiUrl, tables) {\n  // 1. 履歴テーブル再描画関数\n  function renderHistory(reports) {\n    const tbody = container.querySelector('#history-tbody');\n    tbody.innerHTML = reports.map(r => `\n      <tr data-id=\"${r.id}\">\n        <td>${r.レポート名 || ''}</td>\n        <td>\n          <span style=\"padding: 2px 8px; border-radius: 12px; font-size: 12px; background: rgba(59, 130, 246, 0.15); color: #60a5fa;\">\n            ${r.レポート種別 || ''}\n          </span>\n        </td>\n        <td>${r.対象期間開始 ? new Date(r.対象期間開始).toLocaleDateString() : ''} - ${r.対象期間終了 ? new Date(r.対象期間終了).toLocaleDateString() : ''}</td>\n        <td>${r.ファイル形式 || ''}</td>\n        <td>\n          <span style=\"padding: 2px 8px; border-radius: 12px; font-size: 12px; ${r.ステータス === '完了' ? 'background: rgba(34, 197, 94, 0.15); color: #4ade80;' : r.ステータス === 'エラー' ? 'background: rgba(239, 68, 68, 0.15); color: #f87171;' : 'background: rgba(251, 191, 36, 0.15); color: #fbbf24;'}\">\n            ${r.ステータス || ''}\n          </span>\n        </td>\n        <td>${r.作成日時 ? new Date(r.作成日時).toLocaleString() : ''}</td>\n        <td>\n          <button class=\"action-btn secondary download-btn\" data-id=\"${r.id}\" style=\"padding: 4px 8px; font-size: 12px; margin-right: 4px;\">\n            ダウンロード\n          </button>\n          <button class=\"action-btn secondary delete-btn\" data-id=\"${r.id}\" style=\"padding: 4px 8px; font-size: 12px;\">\n            削除\n          </button>\n        </td>\n      </tr>\n    `).join('');\n  }\n\n  // 2. 初期データ表示（生成レポートテーブル）\n  const reportTableIndex = tables.findIndex(t => t.tableName === '生成レポート');\n  if (reportTableIndex >= 0) {\n    renderHistory(tables[reportTableIndex].records || []);\n  }\n\n  // 3. プレビュー生成関数\n  function generatePreview() {\n    const reportType = container.querySelector('#report-type').value;\n    const startDate = container.querySelector('#start-date').value;\n    const endDate = container.querySelector('#end-date').value;\n    const previewArea = container.querySelector('#preview-area');\n    \n    if (!reportType || !startDate || !endDate) {\n      previewArea.innerHTML = `\n        <div style=\"text-align: center; color: var(--text-muted); padding: 60px 20px;\">\n          <div style=\"font-size: 48px; margin-bottom: 12px;\">⚠️</div>\n          <p style=\"margin: 0; font-size: 14px;\">レポート種別と対象期間を選択してください</p>\n        </div>\n      `;\n      return;\n    }\n\n    // サンプルプレビューデータ生成\n    const sampleData = [\n      { ライン: 'ライン001', 計画: 1000, 実績: 950, 達成率: '95.0%' },\n      { ライン: 'ライン002', 計画: 800, 実績: 820, 達成率: '102.5%' },\n      { ライン: 'ライン003', 計画: 1200, 実績: 1180, 達成率: '98.3%' },\n      { ライン: 'ライン004', 計画: 600, 実績: 590, 達成率: '98.3%' }\n    ];\n\n    previewArea.innerHTML = `\n      <div style=\"margin-bottom: 16px;\">\n        <h3 style=\"font-size: 16px; color: var(--text); margin: 0 0 8px 0;\">${reportType} プレビュー</h3>\n        <p style=\"font-size: 12px; color: var(--text-muted); margin: 0;\">対象期間: ${startDate} - ${endDate}</p>\n      </div>\n      \n      <div style=\"margin-bottom: 20px;\">\n        <canvas id=\"preview-chart\" width=\"400\" height=\"200\" style=\"width: 100%; max-width: 400px; border: 1px solid rgba(255,255,255,0.1);\"></canvas>\n      </div>\n      \n      <table style=\"width: 100%; border-collapse: collapse;\">\n        <thead>\n          <tr style=\"background: rgba(255,255,255,0.05);\">\n            <th style=\"padding: 8px; text-align: left; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.1);\">生産ライン</th>\n            <th style=\"padding: 8px; text-align: right; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.1);\">計画</th>\n            <th style=\"padding: 8px; text-align: right; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.1);\">実績</th>\n            <th style=\"padding: 8px; text-align: right; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.1);\">達成率</th>\n          </tr>\n        </thead>\n        <tbody>\n          ${sampleData.map(row => `\n            <tr>\n              <td style=\"padding: 8px; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.05);\">${row.ライン}</td>\n              <td style=\"padding: 8px; text-align: right; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.05);\">${row.計画.toLocaleString()}</td>\n              <td style=\"padding: 8px; text-align: right; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.05);\">${row.実績.toLocaleString()}</td>\n              <td style=\"padding: 8px; text-align: right; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.05);\">${row.達成率}</td>\n            </tr>\n          `).join('')}\n        </tbody>\n      </table>\n    `;\n\n    // 簡単なチャート描画\n    setTimeout(() => {\n      const canvas = container.querySelector('#preview-chart');\n      if (canvas) {\n        const ctx = canvas.getContext('2d');\n        ctx.fillStyle = '#3b82f6';\n        sampleData.forEach((item, i) => {\n          const height = (item.実績 / 1200) * 150;\n          ctx.fillRect(i * 80 + 20, 180 - height, 60, height);\n          ctx.fillStyle = '#9fb0d1';\n          ctx.font = '12px sans-serif';\n          ctx.fillText(item.ライン, i * 80 + 25, 195);\n          ctx.fillStyle = '#3b82f6';\n        });\n      }\n    }, 100);\n  }\n\n  // 4. イベントリスナー設定\n  \n  // プレビューボタン\n  container.querySelector('#btn-preview').addEventListener('click', generatePreview);\n\n  // 詳細設定トグル\n  container.querySelector('#toggle-advanced').addEventListener('click', () => {\n    const options = container.querySelector('#advanced-options');\n    const button = container.querySelector('#toggle-advanced');\n    if (options.style.display === 'none') {\n      options.style.display = 'block';\n      button.textContent = '詳細設定を非表示';\n    } else {\n      options.style.display = 'none';\n      button.textContent = '詳細設定を表示';\n    }\n  });\n\n  // テンプレート保存\n  container.querySelector('#btn-save-template').addEventListener('click', async () => {\n    const reportName = container.querySelector('#report-name').value;\n    const reportType = container.querySelector('#report-type').value;\n    \n    if (!reportName || !reportType) {\n      alert('レポート名と種別を入力してください');\n      return;\n    }\n\n    const templateData = {\n      レポート名: reportName,\n      レポート種別: reportType,\n      対象テーブル: '生産実績',\n      集計期間種別: container.querySelector('#aggregation-unit').value,\n      出力形式: container.querySelector('input[name=\"output-format\"]:checked').value,\n      有効フラグ: true,\n      作成者ID: 'current-user-id',\n      作成日時: new Date().toISOString()\n    };\n\n    const settingsTableIndex = tables.findIndex(t => t.tableName === 'レポート設定');\n    if (settingsTableIndex >= 0) {\n      const saved = await window.aivicApi.save(settingsTableIndex, templateData);\n      if (saved) {\n        alert('テンプレートを保存しました');\n      }\n    }\n  });\n\n  // レポート生成\n  container.querySelector('#btn-generate').addEventListener('click', async () => {\n    const reportName = container.querySelector('#report-name').value;\n    const reportType = container.querySelector('#report-type').value;\n    const startDate = container.querySelector('#start-date').value;\n    const endDate = container.querySelector('#end-date').value;\n    \n    if (!reportName || !reportType || !startDate || !endDate) {\n      alert('必須項目を入力してください');\n      return;\n    }\n\n    const reportData = {\n      レポート名: reportName,\n      レポート種別: reportType,\n      対象期間開始: startDate,\n      対象期間終了: endDate,\n      ファイル形式: container.querySelector('input[name=\"output-format\"]:checked').value,\n      ステータス: '生成中',\n      作成者ID: 'current-user-id',\n      作成日時: new Date().toISOString()\n    };\n\n    if (reportTableIndex >= 0) {\n      const saved = await window.aivicApi.save(reportTableIndex, reportData);\n      if (saved) {\n        alert('レポート生成を開始しました');\n        // 履歴を再読み込み\n        const reports = await window.aivicApi.list(reportTableIndex);\n        if (reports) renderHistory(reports);\n      }\n    }\n  });\n\n  // CSV出力\n  container.querySelector('[data-testid=\"export-csv\"]').addEventListener('click', async () => {\n    if (reportTableIndex >= 0) {\n      const reports = await window.aivicApi.list(reportTableIndex);\n      if (reports) {\n        const headers = ['レポート名', 'レポート種別', '対象期間開始', '対象期間終了', 'ファイル形式', 'ステータス', '作成日時'];\n        const csvContent = '\\uFEFF' + [\n          headers.join(','),\n          ...reports.map(r => [\n            r.レポート名 || '',\n            r.レポート種別 || '',\n            r.対象期間開始 || '',\n            r.対象期間終了 || '',\n            r.ファイル形式 || '',\n            r.ステータス || '',\n            r.作成日時 || ''\n          ].map(field => `\"${field}\"`).join(','))\n        ].join('\\n');\n        \n        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });\n        const link = document.createElement('a');\n        link.href = URL.createObjectURL(blob);\n        link.download = 'report_history.csv';\n        link.click();\n      }\n    }\n  });\n\n  // 5. 行レベル操作（削除・ダウンロード）\n  container.addEventListener('click', async (e) => {\n    const deleteBtn = e.target.closest('.delete-btn');\n    const downloadBtn = e.target.closest('.download-btn');\n    \n    if (deleteBtn && reportTableIndex >= 0) {\n      if (!confirm('このレポートを削除しますか？')) return;\n      \n      await window.aivicApi.delete(reportTableIndex, deleteBtn.dataset.id);\n      const reports = await window.aivicApi.list(reportTableIndex);\n      if (reports) renderHistory(reports);\n    }\n    \n    if (downloadBtn) {\n      // ダウンロード処理（実際の実装では生成されたファイルをダウンロード）\n      alert('レポートファイルをダウンロードします');\n    }\n  });\n\n  // 初期日付設定\n  const today = new Date();\n  const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);\n  container.querySelector('#start-date').value = firstDay.toISOString().split('T')[0];\n  container.querySelector('#end-date').value = today.toISOString().split('T')[0];\n}",
+      "method": "ai"
+    },
+    {
+      "screenId": "scr-1780996376817",
+      "panelHtml": "<div class=\"data-integration-container\" style=\"padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; height: calc(100vh - 120px);\">\n  <!-- 左パネル: データ統合設定 -->\n  <div class=\"integration-panel card\" style=\"padding: 16px; overflow-y: auto;\">\n    <h2 style=\"margin: 0 0 16px 0; font-size: 18px; color: var(--text);\">データ統合設定</h2>\n    \n    <div class=\"form-section\" style=\"margin-bottom: 20px;\">\n      <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">データソース</label>\n      <select data-testid=\"data-source-select\" id=\"data-source-select\" style=\"width: 100%; padding: 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n        <option value=\"\">選択してください</option>\n        <option value=\"production\">生産実績データ</option>\n        <option value=\"planning\">生産計画データ</option>\n        <option value=\"quality\">品質管理データ</option>\n        <option value=\"inventory\">在庫管理データ</option>\n      </select>\n    </div>\n\n    <div class=\"form-section\" style=\"margin-bottom: 20px;\">\n      <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">統合対象期間</label>\n      <div style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 8px;\">\n        <input data-testid=\"start-date\" type=\"date\" id=\"start-date\" style=\"padding: 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n        <input data-testid=\"end-date\" type=\"date\" id=\"end-date\" style=\"padding: 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n      </div>\n    </div>\n\n    <div class=\"form-section\" style=\"margin-bottom: 20px;\">\n      <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 8px;\">生産ライン選択</label>\n      <div id=\"production-lines\" style=\"max-height: 120px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; padding: 8px; background: rgba(0,0,0,0.25);\">\n        <label style=\"display: block; margin-bottom: 4px; font-size: 13px; color: var(--text);\"><input type=\"checkbox\" value=\"line-1\" style=\"margin-right: 6px; accent-color: var(--primary);\"> ライン1 - 組立工程</label>\n        <label style=\"display: block; margin-bottom: 4px; font-size: 13px; color: var(--text);\"><input type=\"checkbox\" value=\"line-2\" style=\"margin-right: 6px; accent-color: var(--primary);\"> ライン2 - 塗装工程</label>\n        <label style=\"display: block; margin-bottom: 4px; font-size: 13px; color: var(--text);\"><input type=\"checkbox\" value=\"line-3\" style=\"margin-right: 6px; accent-color: var(--primary);\"> ライン3 - 検査工程</label>\n        <label style=\"display: block; margin-bottom: 4px; font-size: 13px; color: var(--text);\"><input type=\"checkbox\" value=\"line-4\" style=\"margin-right: 6px; accent-color: var(--primary);\"> ライン4 - 梱包工程</label>\n      </div>\n    </div>\n\n    <div class=\"form-section\" style=\"margin-bottom: 20px;\">\n      <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">製品カテゴリ</label>\n      <select data-testid=\"product-category-select\" id=\"product-category-select\" style=\"width: 100%; padding: 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n        <option value=\"\">全カテゴリ</option>\n        <option value=\"electronics\">電子機器</option>\n        <option value=\"machinery\">機械部品</option>\n        <option value=\"automotive\">自動車部品</option>\n        <option value=\"materials\">原材料</option>\n      </select>\n    </div>\n\n    <button data-testid=\"integration-execute-btn\" id=\"integration-execute-btn\" class=\"action-btn\" style=\"width: 100%; margin-bottom: 16px; background: var(--primary); color: #fff; border: none; padding: 10px; border-radius: 4px;\">データ統合実行</button>\n\n    <div id=\"integration-progress\" style=\"display: none; margin-bottom: 16px;\">\n      <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;\">\n        <span style=\"font-size: 12px; color: var(--text-muted);\">統合進捗</span>\n        <span id=\"progress-text\" style=\"font-size: 12px; color: var(--text);\">0%</span>\n      </div>\n      <div style=\"width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;\">\n        <div id=\"progress-bar\" style=\"height: 100%; background: var(--primary); width: 0%; transition: width 0.3s;\"></div>\n      </div>\n    </div>\n\n    <div class=\"preview-section\">\n      <h3 style=\"margin: 0 0 12px 0; font-size: 14px; color: var(--text);\">統合結果プレビュー</h3>\n      <div class=\"table-wrap\" style=\"max-height: 200px; overflow-y: auto;\">\n        <table data-testid=\"integration-preview-table\">\n          <thead>\n            <tr>\n              <th style=\"color: var(--text);\">日時</th>\n              <th style=\"color: var(--text);\">ライン</th>\n              <th style=\"color: var(--text);\">製品</th>\n              <th style=\"color: var(--text);\">数量</th>\n            </tr>\n          </thead>\n          <tbody id=\"integration-preview-tbody\">\n            <tr><td colspan=\"4\" style=\"text-align: center; color: var(--text-muted); padding: 20px;\">統合実行後にプレビューが表示されます</td></tr>\n          </tbody>\n        </table>\n      </div>\n    </div>\n  </div>\n\n  <!-- 右パネル: 分析処理設定 -->\n  <div class=\"analysis-panel card\" style=\"padding: 16px; overflow-y: auto;\">\n    <h2 style=\"margin: 0 0 16px 0; font-size: 18px; color: var(--text);\">分析処理設定</h2>\n\n    <div class=\"form-section\" style=\"margin-bottom: 20px;\">\n      <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 8px;\">分析種別</label>\n      <div style=\"display: grid; gap: 6px;\">\n        <label style=\"display: flex; align-items: center; font-size: 13px; color: var(--text);\"><input type=\"radio\" name=\"analysis-type\" value=\"trend\" style=\"margin-right: 8px; accent-color: var(--primary);\"> 生産トレンド分析</label>\n        <label style=\"display: flex; align-items: center; font-size: 13px; color: var(--text);\"><input type=\"radio\" name=\"analysis-type\" value=\"efficiency\" style=\"margin-right: 8px; accent-color: var(--primary);\"> 稼働効率分析</label>\n        <label style=\"display: flex; align-items: center; font-size: 13px; color: var(--text);\"><input type=\"radio\" name=\"analysis-type\" value=\"quality\" style=\"margin-right: 8px; accent-color: var(--primary);\"> 品質分析</label>\n        <label style=\"display: flex; align-items: center; font-size: 13px; color: var(--text);\"><input type=\"radio\" name=\"analysis-type\" value=\"comparison\" style=\"margin-right: 8px; accent-color: var(--primary);\"> 計画対実績比較</label>\n      </div>\n    </div>\n\n    <div class=\"analysis-params card\" style=\"padding: 12px; margin-bottom: 20px; background: rgba(0,0,0,0.15);\">\n      <h4 style=\"margin: 0 0 12px 0; font-size: 13px; color: var(--text);\">分析パラメータ</h4>\n      <div style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 12px;\">\n        <div>\n          <label style=\"display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 3px;\">集計単位</label>\n          <select data-testid=\"aggregation-unit-select\" style=\"width: 100%; padding: 6px; border: 1px solid rgba(255,255,255,0.18); border-radius: 3px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 12px;\">\n            <option value=\"daily\">日次</option>\n            <option value=\"weekly\">週次</option>\n            <option value=\"monthly\">月次</option>\n          </select>\n        </div>\n        <div>\n          <label style=\"display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 3px;\">閾値設定</label>\n          <input data-testid=\"threshold-input\" type=\"number\" placeholder=\"80\" style=\"width: 100%; padding: 6px; border: 1px solid rgba(255,255,255,0.18); border-radius: 3px; background: rgba(0,0,0,0.25); color: var(--text); font-size: 12px;\">\n        </div>\n      </div>\n    </div>\n\n    <button data-testid=\"analysis-execute-btn\" id=\"analysis-execute-btn\" class=\"action-btn\" style=\"width: 100%; margin-bottom: 16px; background: var(--primary); color: #fff; border: none; padding: 10px; border-radius: 4px;\">分析実行</button>\n\n    <div class=\"chart-area\" style=\"height: 250px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.15); position: relative;\">\n      <canvas id=\"analysis-chart\" width=\"400\" height=\"200\" style=\"width: 100%; height: 100%;\"></canvas>\n      <div id=\"chart-placeholder\" style=\"position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--text-muted); font-size: 13px;\">分析実行後にグラフが表示されます</div>\n    </div>\n\n    <div class=\"report-section\" style=\"margin-top: 20px;\">\n      <h3 style=\"margin: 0 0 12px 0; font-size: 14px; color: var(--text);\">レポート出力</h3>\n      <div style=\"display: flex; gap: 8px; margin-bottom: 12px;\">\n        <select data-testid=\"report-format-select\" id=\"report-format-select\" style=\"flex: 1; padding: 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n          <option value=\"\">出力形式を選択</option>\n          <option value=\"pdf\">PDF形式</option>\n          <option value=\"excel\">Excel形式</option>\n          <option value=\"csv\">CSV形式</option>\n        </select>\n        <button data-testid=\"generate-report-btn\" id=\"generate-report-btn\" class=\"action-btn secondary\" style=\"background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.18); padding: 8px 16px; border-radius: 4px;\">レポート生成</button>\n      </div>\n      \n      <div style=\"display: flex; gap: 8px;\">\n        <button data-testid=\"view-reports-btn\" onclick=\"window.showScreen('scr-1780996365387')\" class=\"action-btn secondary\" style=\"flex: 1; background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.18); padding: 8px; border-radius: 4px; font-size: 12px;\">レポート管理</button>\n        <button data-testid=\"view-analysis-btn\" onclick=\"window.showScreen('scr-1780996353810')\" class=\"action-btn secondary\" style=\"flex: 1; background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.18); padding: 8px; border-radius: 4px; font-size: 12px;\">分析結果詳細</button>\n      </div>\n    </div>\n  </div>\n</div>",
+      "initJs": "function(container, apiUrl, tables) {\n  // 統合結果プレビュー再描画関数\n  function renderIntegrationPreview(data) {\n    const tbody = container.querySelector('#integration-preview-tbody');\n    if (!data || data.length === 0) {\n      tbody.innerHTML = '<tr><td colspan=\"4\" style=\"text-align: center; color: var(--text-muted); padding: 20px;\">統合データがありません</td></tr>';\n      return;\n    }\n    \n    tbody.innerHTML = data.slice(0, 10).map(item => `\n      <tr>\n        <td>${item.生産開始日時 ? new Date(item.生産開始日時).toLocaleDateString() : '-'}</td>\n        <td>${item.ライン名 || '-'}</td>\n        <td>${item.製品名 || '-'}</td>\n        <td>${item.生産数量 || 0}</td>\n      </tr>\n    `).join('');\n  }\n\n  // 初期データ読み込み\n  Promise.all([\n    window.aivicApi.list(4), // 生産実績\n    window.aivicApi.list(1)  // 生産ライン\n  ]).then(([productionData, lineData]) => {\n    // 生産ライン選択肢を動的生成\n    const linesContainer = container.querySelector('#production-lines');\n    if (lineData && lineData.length > 0) {\n      linesContainer.innerHTML = lineData.map(line => `\n        <label style=\"display: block; margin-bottom: 4px; font-size: 13px; color: var(--text);\">\n          <input type=\"checkbox\" value=\"${line.生産ラインID}\" style=\"margin-right: 6px; accent-color: var(--primary);\">\n          ${line.ライン名} - ${line.場所 || ''}\n        </label>\n      `).join('');\n    }\n  });\n\n  // データ統合実行\n  container.querySelector('#integration-execute-btn').addEventListener('click', async () => {\n    const dataSource = container.querySelector('#data-source-select').value;\n    const startDate = container.querySelector('#start-date').value;\n    const endDate = container.querySelector('#end-date').value;\n    const selectedLines = Array.from(container.querySelectorAll('#production-lines input:checked')).map(cb => cb.value);\n    const productCategory = container.querySelector('#product-category-select').value;\n\n    if (!dataSource) {\n      alert('データソースを選択してください');\n      return;\n    }\n\n    // プログレスバー表示\n    const progressDiv = container.querySelector('#integration-progress');\n    const progressBar = container.querySelector('#progress-bar');\n    const progressText = container.querySelector('#progress-text');\n    \n    progressDiv.style.display = 'block';\n    \n    // 進捗シミュレーション\n    let progress = 0;\n    const progressInterval = setInterval(() => {\n      progress += Math.random() * 20;\n      if (progress > 100) progress = 100;\n      \n      progressBar.style.width = progress + '%';\n      progressText.textContent = Math.round(progress) + '%';\n      \n      if (progress >= 100) {\n        clearInterval(progressInterval);\n        // 統合完了後にデータ取得\n        loadIntegratedData();\n      }\n    }, 200);\n\n    async function loadIntegratedData() {\n      try {\n        const productionData = await window.aivicApi.list(4); // 生産実績\n        const productData = await window.aivicApi.list(2);    // 製品\n        const lineData = await window.aivicApi.list(1);       // 生産ライン\n\n        // データ統合処理（簡易版）\n        const integratedData = productionData.map(prod => {\n          const product = productData.find(p => p.製品ID === prod.製品ID);\n          const line = lineData.find(l => l.生産ラインID === prod.生産ラインID);\n          \n          return {\n            ...prod,\n            製品名: product?.製品名 || '不明',\n            ライン名: line?.ライン名 || '不明'\n          };\n        }).filter(item => {\n          // フィルタリング\n          if (selectedLines.length > 0 && !selectedLines.includes(item.生産ラインID)) return false;\n          if (productCategory && item.カテゴリ !== productCategory) return false;\n          if (startDate && new Date(item.生産開始日時) < new Date(startDate)) return false;\n          if (endDate && new Date(item.生産開始日時) > new Date(endDate)) return false;\n          return true;\n        });\n\n        renderIntegrationPreview(integratedData);\n      } catch (error) {\n        console.error('データ統合エラー:', error);\n        alert('データ統合中にエラーが発生しました');\n      }\n    }\n  });\n\n  // 分析実行\n  container.querySelector('#analysis-execute-btn').addEventListener('click', async () => {\n    const analysisType = container.querySelector('input[name=\"analysis-type\"]:checked')?.value;\n    \n    if (!analysisType) {\n      alert('分析種別を選択してください');\n      return;\n    }\n\n    try {\n      const productionData = await window.aivicApi.list(4);\n      \n      // チャート描画\n      const canvas = container.querySelector('#analysis-chart');\n      const ctx = canvas.getContext('2d');\n      const placeholder = container.querySelector('#chart-placeholder');\n      \n      placeholder.style.display = 'none';\n      \n      // キャンバスクリア\n      ctx.clearRect(0, 0, canvas.width, canvas.height);\n      \n      // 簡易チャート描画\n      drawAnalysisChart(ctx, productionData, analysisType);\n      \n    } catch (error) {\n      console.error('分析実行エラー:', error);\n      alert('分析実行中にエラーが発生しました');\n    }\n  });\n\n  // チャート描画関数\n  function drawAnalysisChart(ctx, data, analysisType) {\n    const width = ctx.canvas.width;\n    const height = ctx.canvas.height;\n    const padding = 40;\n    \n    // 背景\n    ctx.fillStyle = '#1a2332';\n    ctx.fillRect(0, 0, width, height);\n    \n    // グリッド線\n    ctx.strokeStyle = '#3a4a5c';\n    ctx.lineWidth = 1;\n    \n    // 縦線\n    for (let i = 1; i < 5; i++) {\n      const x = padding + (width - padding * 2) * i / 5;\n      ctx.beginPath();\n      ctx.moveTo(x, padding);\n      ctx.lineTo(x, height - padding);\n      ctx.stroke();\n    }\n    \n    // 横線\n    for (let i = 1; i < 4; i++) {\n      const y = padding + (height - padding * 2) * i / 4;\n      ctx.beginPath();\n      ctx.moveTo(padding, y);\n      ctx.lineTo(width - padding, y);\n      ctx.stroke();\n    }\n    \n    // データポイント描画\n    if (data && data.length > 0) {\n      ctx.fillStyle = '#4a9eff';\n      ctx.strokeStyle = '#4a9eff';\n      ctx.lineWidth = 2;\n      \n      const points = data.slice(0, 10).map((item, index) => ({\n        x: padding + (width - padding * 2) * index / 9,\n        y: padding + (height - padding * 2) * (1 - (item.生産数量 || 0) / 1000)\n      }));\n      \n      // 線グラフ\n      ctx.beginPath();\n      points.forEach((point, index) => {\n        if (index === 0) {\n          ctx.moveTo(point.x, point.y);\n        } else {\n          ctx.lineTo(point.x, point.y);\n        }\n      });\n      ctx.stroke();\n      \n      // ポイント\n      points.forEach(point => {\n        ctx.beginPath();\n        ctx.arc(point.x, point.y, 4, 0, Math.PI * 2);\n        ctx.fill();\n      });\n    }\n    \n    // タイトル\n    ctx.fillStyle = '#d0e4ff';\n    ctx.font = '14px sans-serif';\n    ctx.textAlign = 'center';\n    ctx.fillText(getAnalysisTitle(analysisType), width / 2, 25);\n  }\n\n  function getAnalysisTitle(type) {\n    const titles = {\n      trend: '生産トレンド分析',\n      efficiency: '稼働効率分析', \n      quality: '品質分析',\n      comparison: '計画対実績比較'\n    };\n    return titles[type] || '分析結果';\n  }\n\n  // レポート生成\n  container.querySelector('#generate-report-btn').addEventListener('click', async () => {\n    const format = container.querySelector('#report-format-select').value;\n    \n    if (!format) {\n      alert('出力形式を選択してください');\n      return;\n    }\n\n    try {\n      const reportData = {\n        レポート名: `データ統合分析レポート_${new Date().toISOString().split('T')[0]}`,\n        レポート種別: 'データ統合分析',\n        対象期間開始: container.querySelector('#start-date').value || new Date().toISOString(),\n        対象期間終了: container.querySelector('#end-date').value || new Date().toISOString(),\n        ファイル形式: format.toUpperCase(),\n        ステータス: '生成完了',\n        作成者ID: 'current-user-id'\n      };\n\n      const saved = await window.aivicApi.save(6, reportData); // 生成レポートテーブル\n      \n      if (saved) {\n        alert(`${format.toUpperCase()}レポートを生成しました`);\n      } else {\n        alert('レポート生成に失敗しました');\n      }\n    } catch (error) {\n      console.error('レポート生成エラー:', error);\n      alert('レポート生成中にエラーが発生しました');\n    }\n  });\n\n  // 初期日付設定\n  const today = new Date();\n  const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());\n  \n  container.querySelector('#start-date').value = lastMonth.toISOString().split('T')[0];\n  container.querySelector('#end-date').value = today.toISOString().split('T')[0];\n}",
+      "method": "ai"
+    },
+    {
+      "screenId": "scr-1780996391676",
+      "panelHtml": "<div class=\"report-creation-layout\" style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 16px; height: 100vh; padding: 12px;\">\n  <!-- 左側: レポート設定フォーム -->\n  <div class=\"card\" style=\"padding: 16px; overflow-y: auto;\">\n    <h2 style=\"margin: 0 0 16px 0; font-size: 18px; color: var(--text);\">レポート設定</h2>\n    \n    <div style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;\">\n      <div>\n        <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">レポート種別</label>\n        <select data-testid=\"report-type-select\" id=\"report-type\" class=\"input\" style=\"width: 100%; padding: 6px 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n          <option value=\"\">選択してください</option>\n          <option value=\"production-performance\">生産実績レポート</option>\n          <option value=\"plan-vs-actual\">計画対実績レポート</option>\n          <option value=\"quality-analysis\">品質分析レポート</option>\n          <option value=\"efficiency-report\">効率性レポート</option>\n          <option value=\"line-utilization\">ライン稼働率レポート</option>\n        </select>\n      </div>\n      \n      <div>\n        <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">製品カテゴリ</label>\n        <select data-testid=\"product-category-select\" id=\"product-category\" class=\"input\" style=\"width: 100%; padding: 6px 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n          <option value=\"\">全カテゴリ</option>\n          <option value=\"electronics\">電子機器</option>\n          <option value=\"automotive\">自動車部品</option>\n          <option value=\"industrial\">産業機械</option>\n          <option value=\"consumer\">消費財</option>\n        </select>\n      </div>\n    </div>\n\n    <div style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;\">\n      <div>\n        <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">対象期間（開始）</label>\n        <input data-testid=\"start-date-input\" type=\"date\" id=\"start-date\" class=\"input\" style=\"width: 100%; padding: 6px 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n      </div>\n      \n      <div>\n        <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">対象期間（終了）</label>\n        <input data-testid=\"end-date-input\" type=\"date\" id=\"end-date\" class=\"input\" style=\"width: 100%; padding: 6px 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n      </div>\n    </div>\n\n    <div style=\"margin-bottom: 16px;\">\n      <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">レポートタイトル</label>\n      <input data-testid=\"report-title-input\" type=\"text\" id=\"report-title\" class=\"input\" placeholder=\"レポートのタイトルを入力\" style=\"width: 100%; padding: 6px 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n    </div>\n\n    <div style=\"margin-bottom: 16px;\">\n      <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 8px;\">生産ライン選択</label>\n      <div id=\"production-lines\" style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 8px;\">\n        <label style=\"display: flex; align-items: center; font-size: 13px; color: var(--text);\">\n          <input type=\"checkbox\" value=\"line-a\" style=\"margin-right: 6px; accent-color: var(--primary);\">\n          ラインA（電子機器）\n        </label>\n        <label style=\"display: flex; align-items: center; font-size: 13px; color: var(--text);\">\n          <input type=\"checkbox\" value=\"line-b\" style=\"margin-right: 6px; accent-color: var(--primary);\">\n          ラインB（自動車部品）\n        </label>\n        <label style=\"display: flex; align-items: center; font-size: 13px; color: var(--text);\">\n          <input type=\"checkbox\" value=\"line-c\" style=\"margin-right: 6px; accent-color: var(--primary);\">\n          ラインC（産業機械）\n        </label>\n        <label style=\"display: flex; align-items: center; font-size: 13px; color: var(--text);\">\n          <input type=\"checkbox\" value=\"line-d\" style=\"margin-right: 6px; accent-color: var(--primary);\">\n          ラインD（消費財）\n        </label>\n      </div>\n    </div>\n\n    <div style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;\">\n      <div>\n        <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 8px;\">出力形式</label>\n        <div style=\"display: flex; flex-direction: column; gap: 6px;\">\n          <label style=\"display: flex; align-items: center; font-size: 13px; color: var(--text);\">\n            <input type=\"radio\" name=\"output-format\" value=\"pdf\" checked style=\"margin-right: 6px; accent-color: var(--primary);\">\n            PDF\n          </label>\n          <label style=\"display: flex; align-items: center; font-size: 13px; color: var(--text);\">\n            <input type=\"radio\" name=\"output-format\" value=\"excel\" style=\"margin-right: 6px; accent-color: var(--primary);\">\n            Excel\n          </label>\n          <label style=\"display: flex; align-items: center; font-size: 13px; color: var(--text);\">\n            <input type=\"radio\" name=\"output-format\" value=\"csv\" style=\"margin-right: 6px; accent-color: var(--primary);\">\n            CSV\n          </label>\n        </div>\n      </div>\n\n      <div>\n        <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;\">並び順</label>\n        <select data-testid=\"sort-order-select\" id=\"sort-order\" class=\"input\" style=\"width: 100%; padding: 6px 8px; border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; background: rgba(0,0,0,0.25); color: var(--text);\">\n          <option value=\"date-desc\">日付（新しい順）</option>\n          <option value=\"date-asc\">日付（古い順）</option>\n          <option value=\"line-name\">ライン名順</option>\n          <option value=\"quantity-desc\">生産数量（多い順）</option>\n          <option value=\"quantity-asc\">生産数量（少ない順）</option>\n        </select>\n      </div>\n    </div>\n\n    <div style=\"margin-bottom: 20px;\">\n      <label style=\"display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 8px;\">含める項目</label>\n      <div style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 8px;\">\n        <label style=\"display: flex; align-items: center; font-size: 13px; color: var(--text);\">\n          <input type=\"checkbox\" value=\"production-quantity\" checked style=\"margin-right: 6px; accent-color: var(--primary);\">\n          生産数量\n        </label>\n        <label style=\"display: flex; align-items: center; font-size: 13px; color: var(--text);\">\n          <input type=\"checkbox\" value=\"quality-rate\" checked style=\"margin-right: 6px; accent-color: var(--primary);\">\n          良品率\n        </label>\n        <label style=\"display: flex; align-items: center; font-size: 13px; color: var(--text);\">\n          <input type=\"checkbox\" value=\"operation-time\" style=\"margin-right: 6px; accent-color: var(--primary);\">\n          稼働時間\n        </label>\n        <label style=\"display: flex; align-items: center; font-size: 13px; color: var(--text);\">\n          <input type=\"checkbox\" value=\"efficiency\" style=\"margin-right: 6px; accent-color: var(--primary);\">\n          効率性指標\n        </label>\n        <label style=\"display: flex; align-items: center; font-size: 13px; color: var(--text);\">\n          <input type=\"checkbox\" value=\"defect-analysis\" style=\"margin-right: 6px; accent-color: var(--primary);\">\n          不良分析\n        </label>\n        <label style=\"display: flex; align-items: center; font-size: 13px; color: var(--text);\">\n          <input type=\"checkbox\" value=\"cost-analysis\" style=\"margin-right: 6px; accent-color: var(--primary);\">\n          コスト分析\n        </label>\n      </div>\n    </div>\n\n    <div style=\"margin-bottom: 20px;\">\n      <label style=\"display: flex; align-items: center; font-size: 13px; color: var(--text);\">\n        <input data-testid=\"include-charts-checkbox\" type=\"checkbox\" id=\"include-charts\" checked style=\"margin-right: 6px; accent-color: var(--primary);\">\n        グラフ・チャートを含める\n      </label>\n    </div>\n\n    <div style=\"display: flex; gap: 8px;\">\n      <button data-testid=\"preview-button\" id=\"btn-preview\" class=\"action-btn secondary\" style=\"flex: 1; padding: 8px 12px; background: transparent; border: 1px solid rgba(255,255,255,0.18); color: var(--text); border-radius: 4px;\">\n        プレビュー\n      </button>\n      <button data-testid=\"generate-button\" id=\"btn-generate\" class=\"action-btn\" style=\"flex: 1; padding: 8px 12px; background: var(--primary); color: #fff; border: none; border-radius: 4px;\">\n        レポート生成\n      </button>\n    </div>\n  </div>\n\n  <!-- 右側: プレビュー・履歴 -->\n  <div class=\"card\" style=\"padding: 16px; overflow-y: auto;\">\n    <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;\">\n      <h2 style=\"margin: 0; font-size: 18px; color: var(--text);\">プレビュー・生成履歴</h2>\n      <button data-testid=\"history-button\" id=\"btn-history\" class=\"action-btn secondary\" style=\"padding: 6px 12px; background: transparent; border: 1px solid rgba(255,255,255,0.18); color: var(--text); border-radius: 4px; font-size: 12px;\" onclick=\"window.showScreen('scr-1780996365387')\">\n        履歴管理\n      </button>\n    </div>\n\n    <!-- プレビューエリア -->\n    <div id=\"preview-area\" style=\"border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; padding: 12px; margin-bottom: 16px; min-height: 200px; background: rgba(0,0,0,0.1);\">\n      <div style=\"text-align: center; color: var(--text-muted); padding: 40px 0;\">\n        <div style=\"font-size: 14px; margin-bottom: 8px;\">プレビューを表示するには</div>\n        <div style=\"font-size: 12px;\">設定を入力して「プレビュー」ボタンをクリックしてください</div>\n      </div>\n    </div>\n\n    <!-- 最近の生成履歴 -->\n    <div>\n      <h3 style=\"margin: 0 0 12px 0; font-size: 14px; color: var(--text);\">最近の生成履歴</h3>\n      <div class=\"table-wrap\">\n        <table data-testid=\"report-history-list\" style=\"width: 100%;\">\n          <thead>\n            <tr>\n              <th style=\"padding: 8px 6px; font-size: 12px; color: var(--text); border-bottom: 1px solid var(--border);\">レポート名</th>\n              <th style=\"padding: 8px 6px; font-size: 12px; color: var(--text); border-bottom: 1px solid var(--border);\">種別</th>\n              <th style=\"padding: 8px 6px; font-size: 12px; color: var(--text); border-bottom: 1px solid var(--border);\">生成日時</th>\n              <th style=\"padding: 8px 6px; font-size: 12px; color: var(--text); border-bottom: 1px solid var(--border);\">操作</th>\n            </tr>\n          </thead>\n          <tbody id=\"history-tbody\">\n            <!-- 履歴データがここに表示される -->\n          </tbody>\n        </table>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- 生成中モーダル -->\n<div id=\"generating-modal\" style=\"display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;\">\n  <div class=\"card\" style=\"padding: 24px; max-width: 400px; text-align: center;\">\n    <div style=\"font-size: 16px; color: var(--text); margin-bottom: 16px;\">レポートを生成中...</div>\n    <div style=\"width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;\"></div>\n    <style>\n      @keyframes spin {\n        0% { transform: rotate(0deg); }\n        100% { transform: rotate(360deg); }\n      }\n    </style>\n  </div>\n</div>",
+      "initJs": "function(container, apiUrl, tables) {\n  // レポート履歴の再描画関数\n  function renderHistory(reports) {\n    const tbody = container.querySelector(\"#history-tbody\");\n    if (!reports || reports.length === 0) {\n      tbody.innerHTML = '<tr><td colspan=\"4\" style=\"padding: 12px; text-align: center; color: var(--text-muted); font-size: 12px;\">履歴がありません</td></tr>';\n      return;\n    }\n    \n    tbody.innerHTML = reports.slice(0, 5).map(report => `\n      <tr data-id=\"${report.id}\">\n        <td style=\"padding: 6px; font-size: 12px; color: var(--text);\">${report.レポート名 || report.reportName || ''}</td>\n        <td style=\"padding: 6px; font-size: 12px; color: var(--text);\">${report.レポート種別 || report.reportType || ''}</td>\n        <td style=\"padding: 6px; font-size: 12px; color: var(--text-muted);\">${report.作成日時 ? new Date(report.作成日時).toLocaleDateString() : ''}</td>\n        <td style=\"padding: 6px;\">\n          <button class=\"action-btn secondary download-btn\" data-id=\"${report.id}\" style=\"padding: 4px 8px; font-size: 11px; background: transparent; border: 1px solid rgba(255,255,255,0.18); color: var(--text); border-radius: 3px;\">\n            ダウンロード\n          </button>\n        </td>\n      </tr>\n    `).join('');\n  }\n\n  // プレビュー表示関数\n  function showPreview() {\n    const reportType = container.querySelector(\"#report-type\").value;\n    const startDate = container.querySelector(\"#start-date\").value;\n    const endDate = container.querySelector(\"#end-date\").value;\n    const title = container.querySelector(\"#report-title\").value;\n    \n    if (!reportType || !startDate || !endDate) {\n      alert(\"レポート種別と対象期間を入力してください\");\n      return;\n    }\n\n    const previewArea = container.querySelector(\"#preview-area\");\n    const selectedLines = Array.from(container.querySelectorAll('#production-lines input[type=\"checkbox\"]:checked')).map(cb => cb.value);\n    const selectedItems = Array.from(container.querySelectorAll('input[type=\"checkbox\"][value^=\"production-\"]:checked, input[type=\"checkbox\"][value^=\"quality-\"]:checked, input[type=\"checkbox\"][value^=\"operation-\"]:checked, input[type=\"checkbox\"][value^=\"efficiency\"]:checked, input[type=\"checkbox\"][value^=\"defect-\"]:checked, input[type=\"checkbox\"][value^=\"cost-\"]:checked')).map(cb => cb.value);\n    \n    previewArea.innerHTML = `\n      <div style=\"border-bottom: 1px solid rgba(255,255,255,0.18); padding-bottom: 12px; margin-bottom: 12px;\">\n        <h4 style=\"margin: 0 0 8px 0; font-size: 16px; color: var(--text);\">${title || 'レポートタイトル未設定'}</h4>\n        <div style=\"font-size: 12px; color: var(--text-muted);\">対象期間: ${startDate} ～ ${endDate}</div>\n        <div style=\"font-size: 12px; color: var(--text-muted);\">種別: ${reportType}</div>\n      </div>\n      <div style=\"margin-bottom: 12px;\">\n        <div style=\"font-size: 13px; color: var(--text); margin-bottom: 6px;\">対象ライン: ${selectedLines.length > 0 ? selectedLines.join(', ') : '未選択'}</div>\n        <div style=\"font-size: 13px; color: var(--text); margin-bottom: 6px;\">含める項目: ${selectedItems.length > 0 ? selectedItems.join(', ') : '基本項目のみ'}</div>\n      </div>\n      <div style=\"background: rgba(255,255,255,0.05); padding: 12px; border-radius: 4px; font-size: 12px; color: var(--text-muted);\">\n        ※ これはプレビューです。実際のレポートには詳細なデータとグラフが含まれます。\n      </div>\n    `;\n  }\n\n  // レポート生成関数\n  async function generateReport() {\n    const reportType = container.querySelector(\"#report-type\").value;\n    const startDate = container.querySelector(\"#start-date\").value;\n    const endDate = container.querySelector(\"#end-date\").value;\n    const title = container.querySelector(\"#report-title\").value;\n    const outputFormat = container.querySelector('input[name=\"output-format\"]:checked').value;\n    \n    if (!reportType || !startDate || !endDate) {\n      alert(\"必須項目を入力してください\");\n      return;\n    }\n\n    const selectedLines = Array.from(container.querySelectorAll('#production-lines input[type=\"checkbox\"]:checked')).map(cb => cb.value);\n    const selectedItems = Array.from(container.querySelectorAll('input[type=\"checkbox\"][value^=\"production-\"]:checked, input[type=\"checkbox\"][value^=\"quality-\"]:checked, input[type=\"checkbox\"][value^=\"operation-\"]:checked, input[type=\"checkbox\"][value^=\"efficiency\"]:checked, input[type=\"checkbox\"][value^=\"defect-\"]:checked, input[type=\"checkbox\"][value^=\"cost-\"]:checked')).map(cb => cb.value);\n    const includeCharts = container.querySelector(\"#include-charts\").checked;\n    const sortOrder = container.querySelector(\"#sort-order\").value;\n\n    // 生成中モーダル表示\n    const modal = container.querySelector(\"#generating-modal\");\n    modal.style.display = \"flex\";\n\n    try {\n      // レポート設定を保存\n      const reportConfig = {\n        レポート名: title || `${reportType}_${new Date().toISOString().split('T')[0]}`,\n        レポート種別: reportType,\n        対象テーブル: \"生産実績\",\n        集計期間種別: \"日次\",\n        フィルタ条件: JSON.stringify({\n          startDate,\n          endDate,\n          lines: selectedLines,\n          category: container.querySelector(\"#product-category\").value\n        }),\n        ソート順: sortOrder,\n        出力形式: outputFormat,\n        自動実行フラグ: false,\n        有効フラグ: true,\n        作成者ID: \"current-user\"\n      };\n\n      const savedConfig = await window.aivicApi.save(5, reportConfig); // レポート設定テーブル\n      \n      if (savedConfig) {\n        // 生成レポートレコードを作成\n        const generatedReport = {\n          レポート設定ID: savedConfig.id,\n          レポート名: reportConfig.レポート名,\n          レポート種別: reportType,\n          対象期間開始: startDate,\n          対象期間終了: endDate,\n          ファイルパス: `/reports/${savedConfig.id}.${outputFormat}`,\n          ファイル形式: outputFormat,\n          ステータス: \"完了\",\n          ファイルサイズ: Math.floor(Math.random() * 1000000) + 100000,\n          作成者ID: \"current-user\",\n          完了日時: new Date().toISOString()\n        };\n\n        await window.aivicApi.save(6, generatedReport); // 生成レポートテーブル\n        \n        // 履歴を再読み込み\n        const reports = await window.aivicApi.list(6);\n        if (reports) {\n          renderHistory(reports);\n        }\n\n        alert(\"レポートが正常に生成されました\");\n      }\n    } catch (error) {\n      alert(\"レポート生成中にエラーが発生しました\");\n    } finally {\n      modal.style.display = \"none\";\n    }\n  }\n\n  // 初期データ読み込み\n  window.aivicApi.list(6).then(reports => {\n    if (reports) {\n      renderHistory(reports);\n    }\n  });\n\n  // イベントリスナー\n  container.querySelector(\"#btn-preview\").addEventListener(\"click\", showPreview);\n  container.querySelector(\"#btn-generate\").addEventListener(\"click\", generateReport);\n\n  // ダウンロードボタンのイベントデリゲーション\n  container.addEventListener(\"click\", async (e) => {\n    const downloadBtn = e.target.closest(\".download-btn\");\n    if (downloadBtn) {\n      const reportId = downloadBtn.dataset.id;\n      alert(`レポート ${reportId} のダウンロードを開始します`);\n    }\n  });\n\n  // デフォルト値設定\n  const today = new Date();\n  const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);\n  const lastMonthEnd = new Date(today.getFullYear(), today.getMonth(), 0);\n  \n  container.querySelector(\"#start-date\").value = lastMonth.toISOString().split('T')[0];\n  container.querySelector(\"#end-date\").value = lastMonthEnd.toISOString().split('T')[0];\n}",
+      "method": "ai"
+    },
+    {
+      "screenId": "scr-1780996401346",
+      "panelHtml": "<div class=\"p-3\">\n  <!-- ヘッダー -->\n  <div class=\"flex items-center justify-between mb-4\">\n    <h1 class=\"text-xl font-semibold\" style=\"color: var(--text);\">市場情報検索</h1>\n    <div class=\"flex gap-2\">\n      <button class=\"action-btn secondary\" data-testid=\"report-button\" onclick=\"window.showScreen('scr-1780996365387')\">\n        レポート設定\n      </button>\n      <button class=\"action-btn secondary\" data-testid=\"analysis-button\" onclick=\"window.showScreen('scr-1780996353810')\">\n        分析画面\n      </button>\n    </div>\n  </div>\n\n  <!-- 検索フィルタエリア -->\n  <div class=\"card mb-4\">\n    <div class=\"grid grid-cols-4 gap-3 mb-3\">\n      <div>\n        <label class=\"block text-sm mb-1\" style=\"color: var(--text-muted);\">市場カテゴリ</label>\n        <select class=\"input w-full\" data-testid=\"category-select\" id=\"category-filter\" style=\"background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.18); color: var(--text);\">\n          <option value=\"\">全カテゴリ</option>\n          <option value=\"製造業\">製造業</option>\n          <option value=\"建設業\">建設業</option>\n          <option value=\"小売業\">小売業</option>\n          <option value=\"サービス業\">サービス業</option>\n          <option value=\"IT・通信\">IT・通信</option>\n        </select>\n      </div>\n      <div>\n        <label class=\"block text-sm mb-1\" style=\"color: var(--text-muted);\">地域</label>\n        <select class=\"input w-full\" data-testid=\"region-select\" id=\"region-filter\" style=\"background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.18); color: var(--text);\">\n          <option value=\"\">全地域</option>\n          <option value=\"関東\">関東</option>\n          <option value=\"関西\">関西</option>\n          <option value=\"中部\">中部</option>\n          <option value=\"九州\">九州</option>\n          <option value=\"東北\">東北</option>\n        </select>\n      </div>\n      <div>\n        <label class=\"block text-sm mb-1\" style=\"color: var(--text-muted);\">期間開始</label>\n        <input type=\"date\" class=\"input w-full\" data-testid=\"start-date\" id=\"start-date\" style=\"background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.18); color: var(--text);\">\n      </div>\n      <div>\n        <label class=\"block text-sm mb-1\" style=\"color: var(--text-muted);\">期間終了</label>\n        <input type=\"date\" class=\"input w-full\" data-testid=\"end-date\" id=\"end-date\" style=\"background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.18); color: var(--text);\">\n      </div>\n    </div>\n    <div class=\"flex gap-3 items-end\">\n      <div class=\"flex-1\">\n        <label class=\"block text-sm mb-1\" style=\"color: var(--text-muted);\">キーワード検索</label>\n        <input type=\"text\" class=\"input w-full\" data-testid=\"keyword-input\" id=\"keyword-search\" placeholder=\"市場動向、競合企業名など\" style=\"background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.18); color: var(--text);\">\n      </div>\n      <button class=\"action-btn\" data-testid=\"search-button\" id=\"btn-search\">検索実行</button>\n      <button class=\"action-btn secondary\" data-testid=\"export-button\" id=\"btn-export\">CSVエクスポート</button>\n    </div>\n  </div>\n\n  <!-- メインコンテンツ：左右分割レイアウト -->\n  <div class=\"grid grid-cols-3 gap-4\">\n    <!-- 左側：検索結果一覧 -->\n    <div class=\"col-span-2\">\n      <div class=\"card\">\n        <div class=\"flex items-center justify-between mb-3\">\n          <h2 class=\"text-lg font-medium\" style=\"color: var(--text);\">市場情報一覧</h2>\n          <span class=\"text-sm\" style=\"color: var(--text-muted);\" id=\"result-count\">0件</span>\n        </div>\n        <div class=\"table-wrap\">\n          <table data-testid=\"market-info-list\">\n            <thead>\n              <tr>\n                <th>情報タイトル</th>\n                <th>カテゴリ</th>\n                <th>地域</th>\n                <th>発表日</th>\n                <th>信頼度</th>\n                <th>操作</th>\n              </tr>\n            </thead>\n            <tbody id=\"market-info-tbody\">\n            </tbody>\n          </table>\n        </div>\n      </div>\n\n      <!-- 市場トレンドグラフ -->\n      <div class=\"card mt-4\">\n        <h3 class=\"text-md font-medium mb-3\" style=\"color: var(--text);\">市場トレンド</h3>\n        <canvas id=\"trend-chart\" width=\"600\" height=\"200\" style=\"background: var(--bg-card); border-radius: 4px;\"></canvas>\n      </div>\n    </div>\n\n    <!-- 右側：競合情報・需要予測 -->\n    <div>\n      <!-- 競合他社情報パネル -->\n      <div class=\"card mb-4\">\n        <h3 class=\"text-md font-medium mb-3\" style=\"color: var(--text);\">競合他社情報</h3>\n        <div class=\"space-y-3\" id=\"competitor-panel\">\n          <div class=\"p-2 rounded\" style=\"background: rgba(0,0,0,0.15); border-left: 3px solid #ff6a00;\">\n            <div class=\"text-sm font-medium\" style=\"color: var(--text);\">A社</div>\n            <div class=\"text-xs\" style=\"color: var(--text-muted);\">シェア: 25.3% (+2.1%)</div>\n          </div>\n          <div class=\"p-2 rounded\" style=\"background: rgba(0,0,0,0.15); border-left: 3px solid #00a8ff;\">\n            <div class=\"text-sm font-medium\" style=\"color: var(--text);\">B社</div>\n            <div class=\"text-xs\" style=\"color: var(--text-muted);\">シェア: 18.7% (-0.8%)</div>\n          </div>\n          <div class=\"p-2 rounded\" style=\"background: rgba(0,0,0,0.15); border-left: 3px solid #2ed573;\">\n            <div class=\"text-sm font-medium\" style=\"color: var(--text);\">C社</div>\n            <div class=\"text-xs\" style=\"color: var(--text-muted);\">シェア: 15.2% (+1.3%)</div>\n          </div>\n        </div>\n      </div>\n\n      <!-- 需要予測チャート -->\n      <div class=\"card\">\n        <h3 class=\"text-md font-medium mb-3\" style=\"color: var(--text);\">需要予測</h3>\n        <canvas id=\"demand-chart\" width=\"280\" height=\"180\" style=\"background: var(--bg-card); border-radius: 4px;\"></canvas>\n        <div class=\"mt-3 text-center\">\n          <div class=\"text-lg font-semibold\" style=\"color: var(--primary);\">+12.5%</div>\n          <div class=\"text-xs\" style=\"color: var(--text-muted);\">前年同期比予測</div>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <!-- 詳細情報モーダル -->\n  <div id=\"detail-modal\" class=\"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center\" style=\"display: none; z-index: 1000;\">\n    <div class=\"card max-w-2xl w-full mx-4 max-h-96 overflow-y-auto\">\n      <div class=\"flex items-center justify-between mb-4\">\n        <h3 class=\"text-lg font-medium\" style=\"color: var(--text);\" id=\"modal-title\">市場情報詳細</h3>\n        <button class=\"text-xl\" style=\"color: var(--text-muted);\" id=\"close-modal\">&times;</button>\n      </div>\n      <div id=\"modal-content\" style=\"color: var(--text);\">\n        <!-- 詳細内容がここに表示される -->\n      </div>\n      <div class=\"flex gap-2 mt-4\">\n        <button class=\"action-btn\" id=\"add-favorite\">お気に入り登録</button>\n        <button class=\"action-btn secondary\" id=\"generate-report\" onclick=\"window.showScreen('scr-1780996391676')\">レポート生成</button>\n      </div>\n    </div>\n  </div>\n</div>",
+      "initJs": "function(container, apiUrl, tables) {\n  const tbody = container.querySelector(\"#market-info-tbody\");\n  const resultCount = container.querySelector(\"#result-count\");\n  const trendChart = container.querySelector(\"#trend-chart\");\n  const demandChart = container.querySelector(\"#demand-chart\");\n  const detailModal = container.querySelector(\"#detail-modal\");\n  const modalTitle = container.querySelector(\"#modal-title\");\n  const modalContent = container.querySelector(\"#modal-content\");\n  \n  // サンプル市場情報データ\n  let marketData = [\n    {\n      id: \"market-001\",\n      title: \"製造業DX市場の成長予測レポート\",\n      category: \"製造業\",\n      region: \"関東\",\n      publishDate: \"2024-01-15\",\n      reliability: \"高\",\n      content: \"製造業におけるデジタルトランスフォーメーション市場は2024年に前年比15%の成長が見込まれる。特にIoT導入とAI活用が牽引役となっている。\",\n      source: \"業界調査機関A\",\n      marketSize: 1250000000\n    },\n    {\n      id: \"market-002\", \n      title: \"建設業界の人材不足と自動化需要\",\n      category: \"建設業\",\n      region: \"全国\",\n      publishDate: \"2024-01-10\",\n      reliability: \"中\",\n      content: \"建設業界では深刻な人材不足により、建設機械の自動化・ロボット化への需要が急速に高まっている。\",\n      source: \"建設業協会\",\n      marketSize: 890000000\n    },\n    {\n      id: \"market-003\",\n      title: \"小売業のオムニチャネル戦略動向\",\n      category: \"小売業\", \n      region: \"関西\",\n      publishDate: \"2024-01-08\",\n      reliability: \"高\",\n      content: \"小売業界ではオンラインとオフラインを統合したオムニチャネル戦略が主流となり、関連システム投資が拡大している。\",\n      source: \"小売業界研究所\",\n      marketSize: 670000000\n    }\n  ];\n\n  // テーブル再描画関数\n  function renderRows(rows) {\n    tbody.innerHTML = rows.map(r => `\n      <tr data-id=\"${r.id}\" class=\"cursor-pointer hover:bg-opacity-50\" style=\"hover:background: rgba(255,255,255,0.05);\">\n        <td class=\"font-medium\">${r.title || \"\"}</td>\n        <td>\n          <span class=\"px-2 py-1 rounded text-xs\" style=\"background: rgba(0,168,255,0.2); color: var(--text);\">\n            ${r.category || \"\"}\n          </span>\n        </td>\n        <td>${r.region || \"\"}</td>\n        <td>${r.publishDate || \"\"}</td>\n        <td>\n          <span class=\"px-2 py-1 rounded text-xs ${r.reliability === '高' ? 'bg-green-100 text-green-800' : r.reliability === '中' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}\" \n                style=\"background: ${r.reliability === '高' ? 'rgba(46,213,115,0.2)' : r.reliability === '中' ? 'rgba(255,165,0,0.2)' : 'rgba(255,107,107,0.2)'}; color: var(--text);\">\n            ${r.reliability || \"\"}\n          </span>\n        </td>\n        <td>\n          <button class=\"action-btn secondary detail-btn text-xs px-2 py-1\" data-id=\"${r.id}\">詳細</button>\n        </td>\n      </tr>\n    `).join(\"\");\n    \n    resultCount.textContent = `${rows.length}件`;\n  }\n\n  // トレンドチャート描画\n  function drawTrendChart() {\n    const ctx = trendChart.getContext('2d');\n    const width = trendChart.width;\n    const height = trendChart.height;\n    \n    ctx.clearRect(0, 0, width, height);\n    \n    // グリッド線\n    ctx.strokeStyle = '#444';\n    ctx.lineWidth = 1;\n    for (let i = 1; i < 5; i++) {\n      const y = (height / 5) * i;\n      ctx.beginPath();\n      ctx.moveTo(40, y);\n      ctx.lineTo(width - 20, y);\n      ctx.stroke();\n    }\n    \n    // トレンドライン\n    const data = [120, 135, 142, 158, 171, 189, 205, 218, 235, 248, 265, 280];\n    ctx.strokeStyle = '#00a8ff';\n    ctx.lineWidth = 3;\n    ctx.beginPath();\n    \n    for (let i = 0; i < data.length; i++) {\n      const x = 40 + (width - 60) * (i / (data.length - 1));\n      const y = height - 20 - (height - 40) * (data[i] - 100) / 200;\n      \n      if (i === 0) {\n        ctx.moveTo(x, y);\n      } else {\n        ctx.lineTo(x, y);\n      }\n    }\n    ctx.stroke();\n    \n    // ラベル\n    ctx.fillStyle = '#9fb0d1';\n    ctx.font = '12px sans-serif';\n    ctx.fillText('市場規模推移', 10, 20);\n  }\n\n  // 需要予測チャート描画\n  function drawDemandChart() {\n    const ctx = demandChart.getContext('2d');\n    const width = demandChart.width;\n    const height = demandChart.height;\n    \n    ctx.clearRect(0, 0, width, height);\n    \n    // 棒グラフ\n    const data = [85, 92, 98, 105, 112];\n    const labels = ['Q1', 'Q2', 'Q3', 'Q4', 'Q1予測'];\n    const barWidth = (width - 60) / data.length;\n    \n    for (let i = 0; i < data.length; i++) {\n      const x = 30 + i * barWidth + 5;\n      const barHeight = (height - 60) * (data[i] / 120);\n      const y = height - 30 - barHeight;\n      \n      ctx.fillStyle = i === data.length - 1 ? '#ff6a00' : '#2ed573';\n      ctx.fillRect(x, y, barWidth - 10, barHeight);\n      \n      // ラベル\n      ctx.fillStyle = '#9fb0d1';\n      ctx.font = '10px sans-serif';\n      ctx.textAlign = 'center';\n      ctx.fillText(labels[i], x + (barWidth - 10) / 2, height - 10);\n      ctx.fillText(data[i], x + (barWidth - 10) / 2, y - 5);\n    }\n  }\n\n  // 初期データ描画\n  renderRows(marketData);\n  drawTrendChart();\n  drawDemandChart();\n\n  // 検索機能\n  container.querySelector(\"#btn-search\").addEventListener(\"click\", () => {\n    const category = container.querySelector(\"#category-filter\").value;\n    const region = container.querySelector(\"#region-filter\").value;\n    const startDate = container.querySelector(\"#start-date\").value;\n    const endDate = container.querySelector(\"#end-date\").value;\n    const keyword = container.querySelector(\"#keyword-search\").value;\n    \n    let filtered = marketData.filter(item => {\n      if (category && item.category !== category) return false;\n      if (region && item.region !== region && item.region !== \"全国\") return false;\n      if (startDate && item.publishDate < startDate) return false;\n      if (endDate && item.publishDate > endDate) return false;\n      if (keyword && !JSON.stringify(item).toLowerCase().includes(keyword.toLowerCase())) return false;\n      return true;\n    });\n    \n    renderRows(filtered);\n  });\n\n  // CSVエクスポート\n  container.querySelector(\"#btn-export\").addEventListener(\"click\", () => {\n    const headers = [\"情報タイトル\", \"カテゴリ\", \"地域\", \"発表日\", \"信頼度\", \"情報源\", \"市場規模\"];\n    const csvContent = \"\\uFEFF\" + [\n      headers.join(\",\"),\n      ...marketData.map(row => [\n        `\"${row.title}\"`,\n        `\"${row.category}\"`, \n        `\"${row.region}\"`,\n        row.publishDate,\n        `\"${row.reliability}\"`,\n        `\"${row.source}\"`,\n        row.marketSize\n      ].join(\",\"))\n    ].join(\"\\n\");\n    \n    const blob = new Blob([csvContent], { type: \"text/csv;charset=utf-8;\" });\n    const link = document.createElement(\"a\");\n    link.href = URL.createObjectURL(blob);\n    link.download = \"market_info_export.csv\";\n    link.click();\n  });\n\n  // 詳細表示モーダル\n  container.addEventListener(\"click\", (e) => {\n    const detailBtn = e.target.closest(\".detail-btn\");\n    if (detailBtn) {\n      const id = detailBtn.dataset.id;\n      const item = marketData.find(m => m.id === id);\n      if (item) {\n        modalTitle.textContent = item.title;\n        modalContent.innerHTML = `\n          <div class=\"space-y-3\">\n            <div><strong>カテゴリ:</strong> ${item.category}</div>\n            <div><strong>地域:</strong> ${item.region}</div>\n            <div><strong>発表日:</strong> ${item.publishDate}</div>\n            <div><strong>信頼度:</strong> ${item.reliability}</div>\n            <div><strong>情報源:</strong> ${item.source}</div>\n            <div><strong>市場規模:</strong> ${item.marketSize.toLocaleString()}円</div>\n            <div><strong>内容:</strong><br>${item.content}</div>\n          </div>\n        `;\n        detailModal.style.display = \"flex\";\n      }\n    }\n  });\n\n  // モーダル閉じる\n  container.querySelector(\"#close-modal\").addEventListener(\"click\", () => {\n    detailModal.style.display = \"none\";\n  });\n\n  // お気に入り登録\n  container.querySelector(\"#add-favorite\").addEventListener(\"click\", () => {\n    alert(\"お気に入りに登録しました\");\n    detailModal.style.display = \"none\";\n  });\n\n  // モーダル外クリックで閉じる\n  detailModal.addEventListener(\"click\", (e) => {\n    if (e.target === detailModal) {\n      detailModal.style.display = \"none\";\n    }\n  });\n}",
+      "method": "ai"
+    }
+  ],
+  "tableDefinitions": [
+    {
+      "tableName": "ユーザー",
+      "purpose": "生産管理システムを利用するユーザーの基本情報と認証情報を管理する",
+      "columns": [
+        {
+          "name": "ユーザーID",
+          "type": "uuid",
+          "required": true,
+          "description": "ユーザーを一意に識別するID"
+        },
+        {
+          "name": "ユーザー名",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "システムログイン用のユーザー名"
+        },
+        {
+          "name": "パスワードハッシュ",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "暗号化されたパスワード"
+        },
+        {
+          "name": "氏名",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "ユーザーの実名"
+        },
+        {
+          "name": "メールアドレス",
+          "type": "varchar(100)",
+          "required": false,
+          "description": "連絡用メールアドレス"
+        },
+        {
+          "name": "部署",
+          "type": "varchar(100)",
+          "required": false,
+          "description": "所属部署名"
+        },
+        {
+          "name": "役職",
+          "type": "varchar(100)",
+          "required": false,
+          "description": "役職名"
+        },
+        {
+          "name": "権限レベル",
+          "type": "integer",
+          "required": true,
+          "description": "システム操作権限レベル（1:参照のみ、2:入力、3:管理者等）"
+        },
+        {
+          "name": "有効フラグ",
+          "type": "boolean",
+          "required": true,
+          "description": "アカウントの有効/無効状態"
+        },
+        {
+          "name": "最終ログイン日時",
+          "type": "timestamp",
+          "required": false,
+          "description": "最後にログインした日時"
+        },
+        {
+          "name": "作成日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード作成日時"
+        },
+        {
+          "name": "更新日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード最終更新日時"
+        },
+        {
+          "name": "作成者",
+          "type": "uuid",
+          "required": true,
+          "description": "レコードを作成したユーザーのID"
+        }
+      ]
+    },
+    {
+      "tableName": "生産ライン",
+      "purpose": "製品の生産を行う生産ラインの管理。生産計画の実行単位として使用され、各ラインの稼働状況や生産能力を管理する",
+      "columns": [
+        {
+          "name": "生産ラインID",
+          "type": "uuid",
+          "required": true,
+          "description": "生産ラインの一意識別子（主キー）"
+        },
+        {
+          "name": "ライン名",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "生産ラインの名称"
+        },
+        {
+          "name": "ライン番号",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "生産ラインの管理番号"
+        },
+        {
+          "name": "製品ID",
+          "type": "uuid",
+          "required": false,
+          "description": "このラインで生産可能な製品（製品テーブルへの外部キー）"
+        },
+        {
+          "name": "生産能力",
+          "type": "integer",
+          "required": true,
+          "description": "1日あたりの最大生産可能数量"
+        },
+        {
+          "name": "稼働状況",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "稼働中/停止中/メンテナンス中等のステータス"
+        },
+        {
+          "name": "場所",
+          "type": "varchar(100)",
+          "required": false,
+          "description": "生産ラインの設置場所"
+        },
+        {
+          "name": "備考",
+          "type": "text",
+          "required": false,
+          "description": "生産ラインに関する補足情報"
+        },
+        {
+          "name": "作成日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード作成日時"
+        },
+        {
+          "name": "更新日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード最終更新日時"
+        },
+        {
+          "name": "作成者",
+          "type": "uuid",
+          "required": true,
+          "description": "レコード作成者（ユーザーテーブルへの外部キー）"
+        }
+      ]
+    },
+    {
+      "tableName": "製品",
+      "purpose": "営業活動で扱う製品・サービスの基本情報を管理し、見積もりや提案書作成、売上分析に使用する",
+      "columns": [
+        {
+          "name": "製品ID",
+          "type": "uuid",
+          "required": true,
+          "description": "製品の一意識別子（主キー）"
+        },
+        {
+          "name": "製品コード",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "社内管理用の製品コード（検索・絞り込みで使用）"
+        },
+        {
+          "name": "製品名",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "製品・サービスの名称"
+        },
+        {
+          "name": "製品説明",
+          "type": "text",
+          "required": false,
+          "description": "製品の詳細説明（提案書作成時に使用）"
+        },
+        {
+          "name": "カテゴリ",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "製品分類（売上分析での集計軸として使用）"
+        },
+        {
+          "name": "標準価格",
+          "type": "integer",
+          "required": true,
+          "description": "標準販売価格（見積もり作成時の基準価格）"
+        },
+        {
+          "name": "原価",
+          "type": "integer",
+          "required": false,
+          "description": "製品原価（利益率計算で使用）"
+        },
+        {
+          "name": "販売開始日",
+          "type": "timestamp",
+          "required": false,
+          "description": "販売開始日（販売可能期間の判定で使用）"
+        },
+        {
+          "name": "販売終了日",
+          "type": "timestamp",
+          "required": false,
+          "description": "販売終了日（販売可能期間の判定で使用）"
+        },
+        {
+          "name": "販売状態",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "販売状態（販売中/販売停止/廃止等、見積もり対象製品の絞り込みで使用）"
+        },
+        {
+          "name": "作成日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード作成日時"
+        },
+        {
+          "name": "更新日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード最終更新日時"
+        },
+        {
+          "name": "作成者ID",
+          "type": "uuid",
+          "required": true,
+          "description": "レコード作成者のユーザーID"
+        }
+      ]
+    },
+    {
+      "tableName": "生産計画",
+      "purpose": "製品の生産スケジュールと数量を管理し、受注に対する生産能力と納期を計画する",
+      "columns": [
+        {
+          "name": "生産計画ID",
+          "type": "uuid",
+          "required": true,
+          "description": "生産計画の一意識別子"
+        },
+        {
+          "name": "製品ID",
+          "type": "uuid",
+          "required": true,
+          "description": "生産対象製品への参照"
+        },
+        {
+          "name": "計画年月",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "生産計画の対象年月（YYYY-MM形式）"
+        },
+        {
+          "name": "計画数量",
+          "type": "integer",
+          "required": true,
+          "description": "計画生産数量"
+        },
+        {
+          "name": "生産開始予定日",
+          "type": "timestamp",
+          "required": true,
+          "description": "生産開始予定日時"
+        },
+        {
+          "name": "生産完了予定日",
+          "type": "timestamp",
+          "required": true,
+          "description": "生産完了予定日時"
+        },
+        {
+          "name": "ステータス",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "計画ステータス（計画中/承認済/生産中/完了/中止）"
+        },
+        {
+          "name": "優先度",
+          "type": "integer",
+          "required": true,
+          "description": "生産優先度（1が最高優先）"
+        },
+        {
+          "name": "備考",
+          "type": "text",
+          "required": false,
+          "description": "生産計画に関する備考・注意事項"
+        },
+        {
+          "name": "作成日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード作成日時"
+        },
+        {
+          "name": "更新日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード最終更新日時"
+        },
+        {
+          "name": "作成者ID",
+          "type": "uuid",
+          "required": true,
+          "description": "計画作成者のユーザーID"
+        }
+      ]
+    },
+    {
+      "tableName": "生産実績",
+      "purpose": "生産ラインでの製品生産の実績データを記録し、生産計画との対比や生産効率の分析に使用する",
+      "columns": [
+        {
+          "name": "生産実績ID",
+          "type": "uuid",
+          "required": true,
+          "description": "生産実績の一意識別子"
+        },
+        {
+          "name": "生産ラインID",
+          "type": "uuid",
+          "required": true,
+          "description": "生産を行った生産ラインの識別子"
+        },
+        {
+          "name": "製品ID",
+          "type": "uuid",
+          "required": true,
+          "description": "生産した製品の識別子"
+        },
+        {
+          "name": "生産計画ID",
+          "type": "uuid",
+          "required": false,
+          "description": "関連する生産計画の識別子"
+        },
+        {
+          "name": "生産開始日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "生産作業の開始日時"
+        },
+        {
+          "name": "生産終了日時",
+          "type": "timestamp",
+          "required": false,
+          "description": "生産作業の終了日時"
+        },
+        {
+          "name": "生産数量",
+          "type": "integer",
+          "required": true,
+          "description": "実際に生産された製品数量"
+        },
+        {
+          "name": "良品数量",
+          "type": "integer",
+          "required": true,
+          "description": "品質基準を満たした製品数量"
+        },
+        {
+          "name": "不良品数量",
+          "type": "integer",
+          "required": true,
+          "description": "品質基準を満たさなかった製品数量"
+        },
+        {
+          "name": "作業時間",
+          "type": "integer",
+          "required": false,
+          "description": "実際の作業時間（分）"
+        },
+        {
+          "name": "稼働率",
+          "type": "integer",
+          "required": false,
+          "description": "生産ラインの稼働率（パーセント）"
+        },
+        {
+          "name": "備考",
+          "type": "text",
+          "required": false,
+          "description": "生産実績に関する特記事項や問題点"
+        },
+        {
+          "name": "作成日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード作成日時"
+        },
+        {
+          "name": "更新日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レコード最終更新日時"
+        },
+        {
+          "name": "作成者ID",
+          "type": "uuid",
+          "required": true,
+          "description": "レコード作成者のユーザーID"
+        }
+      ]
+    },
+    {
+      "tableName": "レポート設定",
+      "purpose": "経営情報システムで使用するレポートの設定情報を管理する",
+      "columns": [
+        {
+          "name": "レポート設定ID",
+          "type": "uuid",
+          "required": true,
+          "description": "レポート設定の一意識別子"
+        },
+        {
+          "name": "レポート名",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "レポートの名称"
+        },
+        {
+          "name": "レポート種別",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "生産実績、計画対実績、品質管理等のレポート分類"
+        },
+        {
+          "name": "対象テーブル",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "レポートのデータソースとなるテーブル名"
+        },
+        {
+          "name": "集計期間種別",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "日次、週次、月次等の集計期間"
+        },
+        {
+          "name": "フィルタ条件",
+          "type": "text",
+          "required": false,
+          "description": "レポート抽出時の条件設定"
+        },
+        {
+          "name": "ソート順",
+          "type": "text",
+          "required": false,
+          "description": "レポート出力時の並び順設定"
+        },
+        {
+          "name": "出力形式",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "PDF、Excel、CSV等の出力フォーマット"
+        },
+        {
+          "name": "自動実行フラグ",
+          "type": "boolean",
+          "required": true,
+          "description": "定期自動実行の有無"
+        },
+        {
+          "name": "実行スケジュール",
+          "type": "varchar(100)",
+          "required": false,
+          "description": "自動実行時のスケジュール設定"
+        },
+        {
+          "name": "有効フラグ",
+          "type": "boolean",
+          "required": true,
+          "description": "レポート設定の有効無効状態"
+        },
+        {
+          "name": "作成者ID",
+          "type": "uuid",
+          "required": true,
+          "description": "レポート設定を作成したユーザーID"
+        },
+        {
+          "name": "作成日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レポート設定の作成日時"
+        },
+        {
+          "name": "更新者ID",
+          "type": "uuid",
+          "required": false,
+          "description": "レポート設定を最後に更新したユーザーID"
+        },
+        {
+          "name": "更新日時",
+          "type": "timestamp",
+          "required": false,
+          "description": "レポート設定の最終更新日時"
+        }
+      ]
+    },
+    {
+      "tableName": "生成レポート",
+      "purpose": "システムで生成されたレポートの管理と履歴保持",
+      "columns": [
+        {
+          "name": "レポートID",
+          "type": "uuid",
+          "required": true,
+          "description": "生成レポートの一意識別子"
+        },
+        {
+          "name": "レポート設定ID",
+          "type": "uuid",
+          "required": true,
+          "description": "使用されたレポート設定への参照"
+        },
+        {
+          "name": "レポート名",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "生成されたレポートの名称"
+        },
+        {
+          "name": "レポート種別",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "生産実績、計画対実績、品質分析等のレポート分類"
+        },
+        {
+          "name": "対象期間開始",
+          "type": "timestamp",
+          "required": true,
+          "description": "レポート対象データの開始日時"
+        },
+        {
+          "name": "対象期間終了",
+          "type": "timestamp",
+          "required": true,
+          "description": "レポート対象データの終了日時"
+        },
+        {
+          "name": "ファイルパス",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "生成されたレポートファイルの保存場所"
+        },
+        {
+          "name": "ファイル形式",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "PDF、Excel、CSV等の出力形式"
+        },
+        {
+          "name": "ステータス",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "生成中、完了、エラー等の処理状況"
+        },
+        {
+          "name": "エラーメッセージ",
+          "type": "text",
+          "required": false,
+          "description": "生成失敗時のエラー内容"
+        },
+        {
+          "name": "ファイルサイズ",
+          "type": "integer",
+          "required": false,
+          "description": "生成されたファイルのサイズ（バイト）"
+        },
+        {
+          "name": "作成者ID",
+          "type": "uuid",
+          "required": true,
+          "description": "レポートを生成したユーザー"
+        },
+        {
+          "name": "作成日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "レポート生成開始日時"
+        },
+        {
+          "name": "完了日時",
+          "type": "timestamp",
+          "required": false,
+          "description": "レポート生成完了日時"
+        }
+      ]
+    },
+    {
+      "tableName": "操作履歴",
+      "purpose": "システム内でのユーザー操作を記録し、監査証跡とセキュリティ管理を提供する",
+      "columns": [
+        {
+          "name": "操作履歴ID",
+          "type": "uuid",
+          "required": true,
+          "description": "操作履歴の一意識別子"
+        },
+        {
+          "name": "ユーザーID",
+          "type": "uuid",
+          "required": true,
+          "description": "操作を実行したユーザーの識別子"
+        },
+        {
+          "name": "操作種別",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "実行された操作の種類（作成/更新/削除/参照/ログイン/ログアウト等）"
+        },
+        {
+          "name": "対象テーブル",
+          "type": "varchar(100)",
+          "required": false,
+          "description": "操作対象となったテーブル名"
+        },
+        {
+          "name": "対象レコードID",
+          "type": "varchar(100)",
+          "required": false,
+          "description": "操作対象となったレコードの識別子"
+        },
+        {
+          "name": "操作内容",
+          "type": "text",
+          "required": false,
+          "description": "操作の詳細内容や変更前後の値"
+        },
+        {
+          "name": "IPアドレス",
+          "type": "varchar(100)",
+          "required": false,
+          "description": "操作元のIPアドレス"
+        },
+        {
+          "name": "ユーザーエージェント",
+          "type": "text",
+          "required": false,
+          "description": "操作に使用されたブラウザやアプリケーション情報"
+        },
+        {
+          "name": "実行結果",
+          "type": "varchar(100)",
+          "required": true,
+          "description": "操作の実行結果（成功/失敗/エラー等）"
+        },
+        {
+          "name": "エラーメッセージ",
+          "type": "text",
+          "required": false,
+          "description": "操作失敗時のエラー詳細"
+        },
+        {
+          "name": "操作日時",
+          "type": "timestamp",
+          "required": true,
+          "description": "操作が実行された日時"
+        }
+      ]
+    }
+  ],
+  "presetSeedData": {}
+}
